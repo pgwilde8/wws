@@ -1,0 +1,77 @@
+{% extends "layout/base.html" %}
+{% block header %}{% endblock %}
+{% block footer %}{% endblock %}
+{% block title %}Your Orders & Subscriptions{% endblock %}
+{% block content %}
+<div class="max-w-4xl mx-auto p-6">
+  <div class="flex items-center justify-between mb-4">
+    <div>
+      <h1 class="text-2xl font-bold text-gray-900">Orders</h1>
+      <p class="text-sm text-gray-500">Your recent purchases and Stripe IDs.</p>
+    </div>
+  </div>
+
+  {% if orders and orders|length > 0 %}
+    <div class="overflow-x-auto bg-white border border-gray-200 rounded-xl shadow-sm">
+      <table class="min-w-full text-sm">
+        <thead class="bg-gray-50 text-gray-600 uppercase text-xs">
+          <tr>
+            <th class="px-4 py-3 text-left">Plan</th>
+            <th class="px-4 py-3 text-left">Status</th>
+            <th class="px-4 py-3 text-left">Buyer Email</th>
+            <th class="px-4 py-3 text-left">Stripe Session</th>
+            <th class="px-4 py-3 text-left">Payment Intent</th>
+            <th class="px-4 py-3 text-left">Created</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100">
+          {% for order in orders %}
+            <tr class="hover:bg-gray-50">
+              <td class="px-4 py-3 font-semibold text-gray-900 capitalize">
+                {{ order.plan or '—' }}
+              </td>
+              <td class="px-4 py-3 text-gray-800">
+                {{ order.status or '—' }}
+              </td>
+              <td class="px-4 py-3 text-gray-700">
+                {{ order.buyer_email or '—' }}
+              </td>
+              <td class="px-4 py-3 text-gray-700">
+                <div class="truncate max-w-[160px]" title="{{ order.stripe_session_id }}">
+                  {{ order.stripe_session_id or '—' }}
+                </div>
+              </td>
+              <td class="px-4 py-3 text-gray-700">
+                <div class="truncate max-w-[160px]" title="{{ order.stripe_payment_intent_id }}">
+                  {{ order.stripe_payment_intent_id or '—' }}
+                </div>
+              </td>
+              <td class="px-4 py-3 text-gray-600">
+                {{ order.created_at or '—' }}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    {% if total_pages and total_pages > 1 %}
+      <div class="flex justify-between items-center mt-4 text-sm text-gray-600">
+        <div>Page {{ page }} of {{ total_pages }}</div>
+        <div class="space-x-2">
+          {% if page > 1 %}
+            <a href="?page={{ page - 1 }}" class="px-3 py-1 border rounded-lg hover:bg-gray-50">Prev</a>
+          {% endif %}
+          {% if page < total_pages %}
+            <a href="?page={{ page + 1 }}" class="px-3 py-1 border rounded-lg hover:bg-gray-50">Next</a>
+          {% endif %}
+        </div>
+      </div>
+    {% endif %}
+  {% else %}
+    <div class="mt-4 bg-white border border-dashed border-gray-300 rounded-xl p-6 text-gray-500 text-sm">
+      No orders yet. Complete a checkout to see it here.
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

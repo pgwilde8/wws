@@ -1,0 +1,59 @@
+{% extends "layout/base.html" %}
+{% block title %}Login{% endblock %}
+{% block content %}
+<div class="min-h-screen bg-gray-50 py-12">
+  <div class="max-w-md mx-auto bg-white shadow-lg rounded-2xl p-8 border border-gray-100">
+    <div class="text-center mb-6">
+      <h1 class="text-2xl font-extrabold text-gray-900">Welcome back</h1>
+      <p class="text-sm text-gray-500">Log in with the email and temporary password we sent you.</p>
+    </div>
+
+    {% set error_code = request.query_params.get('error') %}
+    {% if error_code %}
+    <div class="mb-4 rounded-lg border {% if error_code == 'reset' %}border-blue-200 bg-blue-50 text-blue-800{% else %}border-red-200 bg-red-50 text-red-800{% endif %} px-3 py-2 text-sm">
+      {% if error_code == 'reset' %}
+        We couldn’t find your account, so we just sent a fresh temporary password. Check your email (and spam) for the new login details.
+      {% else %}
+        Invalid email or password. Double-check and try again.
+      {% endif %}
+    </div>
+    {% endif %}
+
+    <form method="post" action="/login" class="space-y-4">
+      <div>
+        <label class="block text-sm font-semibold text-gray-700 mb-1">Email</label>
+        <input
+          type="email"
+          name="email"
+          required
+          class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          placeholder="you@example.com"
+        />
+      </div>
+
+      <div>
+        <label class="block text-sm font-semibold text-gray-700 mb-1">Password</label>
+        <input
+          type="password"
+          name="password"
+          required
+          class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          placeholder="Temporary password"
+        />
+      </div>
+
+      <button
+        type="submit"
+        class="w-full bg-blue-600 text-white font-semibold py-2.5 rounded-lg hover:bg-blue-700 transition"
+      >
+        Log In
+      </button>
+    </form>
+
+    <p class="text-xs text-gray-500 text-center mt-4">
+      Didn’t get your password? Check spam, or reply to the welcome email to request a reset.
+    </p>
+  </div>
+</div>
+{% endblock %}
+

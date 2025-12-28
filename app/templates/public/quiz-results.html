@@ -1,0 +1,473 @@
+{% extends "layout/base.html" %}
+
+{% block title %}Your Perfect Package - WebWise Solutions{% endblock %}
+
+{% block extra_head %}
+<style>
+body {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+}
+
+.results-container {
+    max-width: 900px;
+    margin: 3rem auto;
+    padding: 0 1rem;
+}
+
+.results-card {
+    background: white;
+    border-radius: 20px;
+    padding: 3rem;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    animation: slideUp 0.5s ease;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.results-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.success-icon {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+    font-size: 2.5rem;
+}
+
+.results-header h1 {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+}
+
+.results-header p {
+    color: #666;
+    font-size: 1.1rem;
+    line-height: 1.6;
+}
+
+.package-showcase {
+    background: linear-gradient(135deg, #f8f9ff 0%, #fff 100%);
+    border: 3px solid #667eea;
+    border-radius: 16px;
+    padding: 2.5rem;
+    margin-bottom: 2.5rem;
+    position: relative;
+}
+
+.recommended-badge {
+    position: absolute;
+    top: -15px;
+    right: 30px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 0.5rem 1.5rem;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.package-showcase h2 {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+}
+
+.package-price {
+    font-size: 3rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 1rem;
+}
+
+.package-description {
+    color: #555;
+    font-size: 1.05rem;
+    line-height: 1.7;
+    margin-bottom: 2rem;
+}
+
+.features-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.feature-item {
+    display: flex;
+    align-items: start;
+    gap: 10px;
+}
+
+.feature-icon {
+    width: 24px;
+    height: 24px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 700;
+    font-size: 14px;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.feature-text {
+    color: #374151;
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+.why-section {
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 2.5rem;
+}
+
+.why-section h3 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.why-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.why-item {
+    display: flex;
+    align-items: start;
+    gap: 12px;
+    padding: 1rem;
+    background: white;
+    border-radius: 8px;
+    border-left: 4px solid #667eea;
+}
+
+.why-item-icon {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+.why-item-text {
+    color: #374151;
+    line-height: 1.6;
+}
+
+.cta-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 2.5rem;
+}
+
+.cta-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 1.2rem 2.5rem;
+    border-radius: 12px;
+    font-size: 1.2rem;
+    font-weight: 700;
+    text-align: center;
+    text-decoration: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.cta-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+}
+
+.cta-secondary {
+    background: white;
+    color: #667eea;
+    padding: 1rem 2rem;
+    border: 2px solid #667eea;
+    border-radius: 12px;
+    font-size: 1.05rem;
+    font-weight: 600;
+    text-align: center;
+    text-decoration: none;
+    transition: all 0.2s;
+}
+
+.cta-secondary:hover {
+    background: #f8f9ff;
+    border-color: #764ba2;
+    color: #764ba2;
+}
+
+.other-packages {
+    text-align: center;
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 2px solid #e0e0e0;
+}
+
+.other-packages h4 {
+    color: #666;
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.other-packages a {
+    color: #667eea;
+    text-decoration: underline;
+    font-weight: 600;
+}
+
+@media (max-width: 768px) {
+    .results-card {
+        padding: 2rem 1.5rem;
+    }
+    
+    .results-header h1 {
+        font-size: 1.8rem;
+    }
+    
+    .package-showcase {
+        padding: 1.5rem;
+    }
+    
+    .package-price {
+        font-size: 2.5rem;
+    }
+    
+    .features-list {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="results-container">
+    <div class="results-card">
+        
+        <!-- Header -->
+        <div class="results-header">
+            <div class="success-icon">✨</div>
+            <h1>Perfect Match Found!</h1>
+            <p>Based on your responses, we've identified the ideal build package for your business needs.</p>
+        </div>
+
+        <!-- Package Showcase -->
+        <div class="package-showcase">
+            <div class="recommended-badge">Recommended for You</div>
+            
+            <h2 id="packageName">Business-in-a-Box</h2>
+            <div class="package-price" id="packagePrice">$3,997</div>
+            <p class="package-description" id="packageDescription">
+                The most popular option — designed for anyone who wants a real, operational digital business with automation built in.
+            </p>
+
+            <!-- Features -->
+            <div class="features-list" id="featuresList">
+                <!-- Features will be inserted here via JavaScript -->
+            </div>
+        </div>
+
+        <!-- Why This Package -->
+        <div class="why-section">
+            <h3>🎯 Why This Package is Perfect for You</h3>
+            <div class="why-list" id="whyList">
+                <!-- Reasons will be inserted here via JavaScript -->
+            </div>
+        </div>
+
+        <!-- CTAs -->
+        <div class="cta-section">
+            <a href="/book-call" class="cta-primary">
+                📞 Book Your Free Discovery Call
+            </a>
+            <a href="/start-your-project" class="cta-secondary">
+                📋 See Our Portfolio & Learn More
+            </a>
+        </div>
+
+        <!-- Other Options -->
+        <div class="other-packages">
+            <h4>Want to see all packages?</h4>
+            <a href="/pricing">View all build packages →</a>
+        </div>
+
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    // Get package from URL parameter
+    const urlParams = new URLSearchParams(window.location.search);
+    const packageType = urlParams.get('package') || 'business-in-a-box';
+    
+    // Package data
+    const packages = {
+        'starter': {
+            name: 'Starter Build',
+            price: '$1,997',
+            description: 'Perfect for new businesses and simple sites. Get a professional online presence without breaking the bank.',
+            features: [
+                'Custom website with professional branding',
+                'Essential pages (Home, About, Services, Contact)',
+                'Simple lead capture forms',
+                'Email list foundation',
+                'Basic automations installed',
+                'Mobile responsive design',
+                'Stripe payment integration',
+                '2-week delivery'
+            ],
+            reasons: [
+                {
+                    icon: '💰',
+                    text: 'Budget-friendly option that delivers professional results'
+                },
+                {
+                    icon: '⚡',
+                    text: 'Quick 2-week turnaround to get you online fast'
+                },
+                {
+                    icon: '🎯',
+                    text: 'Perfect for service businesses, consultants, and local businesses'
+                },
+                {
+                    icon: '🚀',
+                    text: 'Clean foundation you can grow with over time'
+                }
+            ]
+        },
+        'business-in-a-box': {
+            name: 'Business-in-a-Box',
+            price: '$3,997',
+            description: 'The most popular option — designed for anyone who wants a real, operational digital business with automation built in.',
+            features: [
+                'Everything in Starter Build, plus:',
+                'AI assistant chatbot integration',
+                'Advanced email automation sequences',
+                'Full CRM and lead management system',
+                'Multi-page funnels and conversion optimization',
+                'Client dashboard and analytics',
+                'Payment processing with subscriptions',
+                'Advanced booking/scheduling system',
+                '3-4 week delivery'
+            ],
+            reasons: [
+                {
+                    icon: '🤖',
+                    text: 'AI automation handles customer inquiries 24/7'
+                },
+                {
+                    icon: '📊',
+                    text: 'Complete business system with CRM, analytics, and dashboards'
+                },
+                {
+                    icon: '💼',
+                    text: 'Best value — combines website, automation, and management tools'
+                },
+                {
+                    icon: '📈',
+                    text: 'Scales with your business as you grow'
+                }
+            ]
+        },
+        'launch-partner': {
+            name: 'Launch Partner',
+            price: '$5,997',
+            description: 'Best for entrepreneurs who want hands-on collaboration, advanced systems, and a polished launch from day one.',
+            features: [
+                'Everything in Business-in-a-Box, plus:',
+                'Launch strategy and guided planning calls',
+                'Custom API integrations and workflows',
+                'Enterprise-level automation mapping',
+                'Multi-user systems with role management',
+                'Advanced analytics and reporting',
+                'Priority build timeline',
+                'White-glove onboarding and training',
+                '4-6 week delivery with ongoing support'
+            ],
+            reasons: [
+                {
+                    icon: '🏆',
+                    text: 'Hands-on collaboration with our team throughout the build'
+                },
+                {
+                    icon: '⚙️',
+                    text: 'Custom integrations tailored to your exact workflow'
+                },
+                {
+                    icon: '🎓',
+                    text: 'Complete training and white-glove support'
+                },
+                {
+                    icon: '🚀',
+                    text: 'Launch with confidence and a comprehensive system'
+                }
+            ]
+        }
+    };
+
+    const pkg = packages[packageType] || packages['business-in-a-box'];
+
+    // Update content
+    document.getElementById('packageName').textContent = pkg.name;
+    document.getElementById('packagePrice').textContent = pkg.price;
+    document.getElementById('packageDescription').textContent = pkg.description;
+
+    // Populate features
+    const featuresList = document.getElementById('featuresList');
+    featuresList.innerHTML = pkg.features.map(feature => `
+        <div class="feature-item">
+            <div class="feature-icon">✓</div>
+            <div class="feature-text">${feature}</div>
+        </div>
+    `).join('');
+
+    // Populate reasons
+    const whyList = document.getElementById('whyList');
+    whyList.innerHTML = pkg.reasons.map(reason => `
+        <div class="why-item">
+            <div class="why-item-icon">${reason.icon}</div>
+            <div class="why-item-text">${reason.text}</div>
+        </div>
+    `).join('');
+});
+</script>
+
+{% endblock %}

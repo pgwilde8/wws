@@ -1,0 +1,16 @@
+{% extends "layout/base.html" %}
+{% block title %}Thank You - WebWise Solutions{% endblock %}
+{% block content %}
+<div class="max-w-3xl mx-auto p-6 text-center">
+  <h1 class="text-3xl font-extrabold text-gray-900 mb-4">Thank you for your purchase!</h1>
+  <p class="text-gray-600 mb-4">Your payment is confirmed.</p>
+  <p class="text-gray-700 font-semibold mb-6">
+    Check your email for your dashboard login (username & temporary password). If you don’t see it, look in spam/promotions.
+  </p>
+  <div class="space-x-3">
+    <a href="/login" class="inline-block px-5 py-2 bg-blue-600 text-white rounded-full font-semibold">Log in to Dashboard</a>
+    <a href="/book-call" class="inline-block px-5 py-2 bg-gray-900 text-white rounded-full font-semibold">Book a Kickoff Call</a>
+  </div>
+</div>
+{% endblock %}
+

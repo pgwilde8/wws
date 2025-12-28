@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            border-radius: 10px 10px 0 0;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: 700;
+        }
+        .content {
+            background: #f9f9f9;
+            padding: 30px;
+            border-radius: 0 0 10px 10px;
+        }
+        .content p {
+            margin: 0 0 15px 0;
+        }
+        .content ul {
+            margin: 15px 0;
+            padding-left: 20px;
+        }
+        .content li {
+            margin-bottom: 10px;
+        }
+        .package-info {
+            background: #e8f4f8;
+            padding: 15px;
+            border-left: 4px solid #3498db;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        .button {
+            display: inline-block;
+            background: #3498db;
+            color: white;
+            padding: 12px 30px;
+            text-decoration: none;
+            border-radius: 6px;
+            margin-top: 20px;
+            font-weight: 600;
+        }
+        .button:hover {
+            background: #2d86c6;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            color: #666;
+            font-size: 12px;
+        }
+        .footer a {
+            color: #3498db;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <div class="header">
+            <h1>Welcome to WebWise Solutions!</h1>
+        </div>
+        <div class="content">
+            <p>Hi {{ customer_name or 'there' }},</p>
+            
+            <p>Thank you for choosing WebWise Solutions! We're excited to start building your automated business.</p>
+            
+            {% if temp_password %}
+            <div style="background: #fef3e2; border: 2px solid #f17105; border-radius: 8px; padding: 20px; margin: 20px 0;">
+                <h3 style="color: #d11149; margin-top: 0;">Your Account Credentials</h3>
+                <p style="margin: 10px 0;"><strong>Email:</strong> {{ customer_email }}</p>
+                <p style="margin: 10px 0;"><strong>Temporary Password:</strong> <code style="background: white; padding: 4px 8px; border-radius: 4px; font-size: 16px; font-weight: bold; color: #d11149;">{{ temp_password }}</code></p>
+                <p style="color: #d11149; font-weight: bold; margin-top: 15px;">⚠️ IMPORTANT: Please change your password after your first login for security.</p>
+            </div>
+            {% endif %}
+            
+            <p><strong>What happens next?</strong></p>
+            <ul>
+                <li>You'll receive a receipt from Stripe for your payment</li>
+                <li>Our team will review your purchase and reach out within 24-48 hours</li>
+                <li>We'll schedule your onboarding call to discuss your business goals</li>
+                <li>Your build will begin once we have all the details we need</li>
+            </ul>
+            
+            {% if plan_name %}
+            <div class="package-info">
+                <p style="margin: 0;"><strong>Your Package:</strong> {{ plan_name }}</p>
+            </div>
+            {% endif %}
+            
+            {% if dashboard_link %}
+            <div style="text-align: center; margin: 25px 0;">
+                <a href="{{ dashboard_link }}" class="button" style="text-decoration: none;">Access Your Dashboard</a>
+            </div>
+            <p style="text-align: center; color: #666; font-size: 0.9rem; margin-top: 15px;">
+                {% if temp_password %}
+                You can also log in at <a href="https://webwisesolutions.dev/login" style="color: #3498db;">webwisesolutions.dev/login</a> using your email and password above.
+                {% else %}
+                This link will automatically log you in and is valid for 30 days.
+                {% endif %}
+            </p>
+            {% endif %}
+            
+            <p>If you have any questions in the meantime, feel free to reply to this email or visit our <a href="https://webwisesolutions.dev/contact" style="color: #3498db;">contact page</a>.</p>
+            
+            <p>We're here to help you succeed!</p>
+            
+            <p>Best regards,<br>
+            <strong>The WebWise Solutions Team</strong></p>
+        </div>
+        <div class="footer">
+            <p>© 2025 WebWise Solutions LLC | <a href="https://webwisesolutions.dev">webwisesolutions.dev</a></p>
+        </div>
+    </div>
+</body>
+</html>
+

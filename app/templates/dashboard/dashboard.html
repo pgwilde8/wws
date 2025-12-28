@@ -1,0 +1,385 @@
+{% extends "layout/base.html" %}
+{% block header %}{% endblock %}
+{% block footer %}{% endblock %}
+{% block title %}Client Dashboard - WebWise Solutions{% endblock %}
+{% block content %}
+
+<div class="max-w-5xl mx-auto p-4 sm:p-6 space-y-6">
+
+  <!-- Dashboard Header -->
+  <header class="bg-white p-5 rounded-2xl shadow-sm border border-gray-200 flex flex-wrap justify-between items-center gap-3">
+    <div>
+      <h1 class="text-xl sm:text-2xl font-extrabold text-gray-900">Your Dashboard</h1>
+      <p class="text-xs sm:text-sm text-gray-500">Manage your project, integrations, and automated tools</p>
+    </div>
+    <button onclick="handleLogout()" class="px-3 py-2 bg-red-100 text-red-600 text-sm font-bold rounded-xl hover:bg-red-200 transition">
+      Logout
+    </button>
+  </header>
+
+  <div class="grid lg:grid-cols-3 gap-6">
+    <div class="lg:col-span-2 space-y-6">
+      <!-- Project Selector -->
+      <div id="project-selector-container" class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 hidden">
+        <label class="block text-xs font-semibold text-gray-600 mb-1">Your Projects</label>
+        <select id="project_id" name="project_id" class="w-full border rounded-lg p-2 text-sm bg-gray-50"></select>
+      </div>
+
+      <!-- Quick Status Summary -->
+      <div class="grid sm:grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="bg-white border p-4 rounded-xl shadow-sm">
+          <span class="text-xs text-gray-400 uppercase tracking-wide">Project Status</span>
+          <div id="project-status-main" class="text-lg sm:text-xl font-bold text-blue-600 capitalize">Loading…</div>
+          <div id="project-status-sub" class="text-xs text-gray-500">—</div>
+        </div>
+
+        <div class="bg-white border p-4 rounded-xl shadow-sm">
+          <span class="text-xs text-gray-400 uppercase tracking-wide">Build Package</span>
+          {% set plan = latest_order.plan if latest_order else None %}
+          <div id="build-package-main" class="text-lg font-bold text-gray-900">
+            {{ plan|default("Not Set", true)|capitalize }}
+          </div>
+          <div id="build-package-sub" class="text-xs text-gray-500">
+            {% if latest_order %}
+              Linked to your last checkout (status: {{ latest_order.status }})
+            {% else %}
+              Selected at checkout
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="bg-white border p-4 rounded-xl shadow-sm">
+          <span class="text-xs text-gray-400 uppercase tracking-wide">Support Plan</span>
+          <div id="support-plan-main" class="text-lg font-bold text-gray-900">Free</div>
+          <div id="support-plan-sub" class="text-xs text-gray-500">Upgrade anytime</div>
+        </div>
+      </div>
+
+      <!-- Integration Status -->
+      <section class="bg-white border p-5 rounded-2xl shadow-sm">
+        <h2 class="text-lg font-bold text-gray-900 mb-3">Integrations</h2>
+        <ul class="divide-y divide-dashed text-sm">
+          <li class="py-2 flex justify-between"><span>Stripe</span><span id="stripe-status">Checking…</span></li>
+          <li class="py-2 flex justify-between"><span>OpenAI</span><span id="openai-status">Checking…</span></li>
+          <li class="py-2 flex justify-between"><span>Twilio</span><span id="twilio-status">Optional</span></li>
+          <li class="py-2 flex justify-between"><span>Domain</span><span id="domain-status">Pending</span></li>
+        </ul>
+      </section>
+
+      <!-- Support Card -->
+      <section class="bg-white border p-5 rounded-2xl shadow-sm">
+        <div class="flex items-center justify-between">
+          <div>
+            <h2 class="text-lg font-bold text-gray-900">Support</h2>
+            <p class="text-sm text-gray-600">Open tickets or book a support call.</p>
+          </div>
+          <a href="/dashboard/support" class="px-4 py-2 bg-blue-600 text-white text-sm font-bold rounded-full hover:opacity-90 transition">
+            Go to Support
+          </a>
+        </div>
+      </section>
+
+      <!-- Stripe Form -->
+      <section class="bg-white border p-5 rounded-2xl shadow-sm">
+        <h2 class="text-lg font-bold text-gray-900 mb-2">Stripe Keys</h2>
+        <p class="text-sm text-gray-700 mb-3">Top field = Publishable key (starts with pk_), bottom field = Secret key (sk_).</p>
+        <form id="stripe-keys-form" class="space-y-3">
+          <div>
+            <label class="block text-xs text-gray-600 font-semibold mb-1">Publishable key</label>
+            <input type="text" name="stripe_publishable_key" placeholder="pk_live_xxx" class="w-full border rounded-lg p-2 text-sm bg-gray-50">
+          </div>
+          <div>
+            <label class="block text-xs text-gray-600 font-semibold mb-1">Secret key</label>
+            <input type="password" name="stripe_secret_key" placeholder="••••••" class="w-full border rounded-lg p-2 text-sm bg-gray-50">
+          </div>
+          <button type="submit" class="px-4 py-2 bg-blue-600 text-white text-sm font-bold rounded-full">Save Stripe Keys</button>
+        </form>
+      </section>
+
+      <!-- OpenAI Form -->
+      <section class="bg-white border p-5 rounded-2xl shadow-sm">
+        <h2 class="text-lg font-bold text-gray-900 mb-2">OpenAI Key</h2>
+        <form id="openai-key-form" class="space-y-3">
+          <input type="password" name="openai_api_key" placeholder="••••••" class="w-full border rounded-lg p-2 text-sm bg-gray-50">
+          <button type="submit" class="px-4 py-2 bg-gray-900 text-white text-sm font-bold rounded-full">Save OpenAI Key</button>
+        </form>
+      </section>
+
+      <!-- Twilio Form -->
+      <section class="bg-white border p-5 rounded-2xl shadow-sm">
+        <h2 class="text-lg font-bold text-gray-900 mb-2">Twilio</h2>
+        <p class="text-sm text-gray-700 mb-3">Top field = Account SID (starts with AC…), bottom field = Auth Token.</p>
+        <form id="twilio-key-form" class="space-y-3">
+          <div>
+            <label class="block text-xs text-gray-600 font-semibold mb-1">Account SID</label>
+            <input type="text" name="twilio_sid" placeholder="ACxxx" class="w-full border rounded-lg p-2 text-sm bg-gray-50">
+          </div>
+          <div>
+            <label class="block text-xs text-gray-600 font-semibold mb-1">Auth Token</label>
+            <input type="password" name="twilio_token" placeholder="••••••" class="w-full border rounded-lg p-2 text-sm bg-gray-50">
+          </div>
+          <button type="submit" class="px-4 py-2 bg-green-600 text-white text-sm font-bold rounded-full">Save Twilio</button>
+        </form>
+      </section>
+
+      <!-- Domain Form -->
+      <section id="domain-setup" class="bg-white border border-amber-300 p-5 rounded-2xl shadow-sm">
+        <h2 class="text-lg font-bold text-gray-900 mb-2">Domain & DNS Setup</h2>
+        <p class="text-sm text-gray-700 mb-3">
+          After you submit, you’ll see status above and get an email with your Cloudflare nameservers. Update your registrar to those nameservers; propagation can take 24–48 hours, so “Pending” is expected until DNS catches up.
+        </p>
+        <form id="domain-setup-form" class="space-y-5" method="post" action="/api/domain">
+          <input type="text" name="domain_name" placeholder="example.com" class="w-full border rounded-lg px-3 py-2 text-sm">
+          <input type="email" name="cloudflare_email" placeholder="cloudflare email (optional)" class="w-full border rounded-lg px-3 py-2 text-sm">
+          <label class="flex items-center text-sm"><input type="checkbox" name="nameservers_updated" class="mr-2">I've updated my nameservers</label>
+          <button type="submit" class="bg-amber-500 text-white font-semibold px-5 py-2 rounded-lg text-sm">Submit Domain</button>
+        </form>
+      </section>
+
+      <!-- Lead Forwarding -->
+      <section class="bg-white border p-5 rounded-2xl shadow-sm">
+        <h2 class="text-lg font-bold text-gray-900 mb-2">Lead Forwarding Email</h2>
+        <form id="lead-forward-form" class="space-y-3" method="post" action="/api/lead-forwarding">
+          <input type="email" name="forward_email" placeholder="you@yourbusiness.com" required class="w-full border rounded-lg p-2 text-sm bg-gray-50">
+          <button type="submit" class="bg-blue-600 text-white font-semibold px-5 py-2 rounded-lg text-sm">Save Forwarding Email</button>
+        </form>
+      </section>
+
+      <!-- Setup Call CTA -->
+      <div class="text-center border-t pt-5">
+        <p class="text-xs sm:text-sm text-gray-500 mb-3">Need help connecting accounts?</p>
+        <a href="/book-call" class="inline-block px-6 py-2 bg-blue-600 text-white text-sm font-bold rounded-full">Book a Setup Call</a>
+      </div>
+    </div>
+
+    <!-- Sidebar: Partner promos -->
+    <aside class="space-y-4">
+      <div class="bg-white border p-4 rounded-2xl shadow-sm">
+        <h3 class="text-base font-bold text-gray-900">Need a domain?</h3>
+        <p class="text-sm text-gray-600">Register a domain or business email at Namecheap (partner).</p>
+        <a href="https://namecheap.pxf.io/mO6kgD" target="_blank" class="inline-block mt-2 px-4 py-2 bg-amber-500 text-white text-sm font-bold rounded-full hover:opacity-90 transition">
+          Get it at Namecheap
+        </a>
+      </div>
+      <div class="bg-white border p-4 rounded-2xl shadow-sm">
+        <h3 class="text-base font-bold text-gray-900">Power SMS & Voice</h3>
+        <p class="text-sm text-gray-600">Set up SMS/voice with Twilio (partner) to unlock reminders and calling.</p>
+        <a href="https://www.twilio.com/" target="_blank" class="inline-block mt-2 px-4 py-2 bg-purple-600 text-white text-sm font-bold rounded-full hover:opacity-90 transition">
+          Get Twilio
+        </a>
+      </div>
+    </aside>
+  </div>
+
+<!-- Toast -->
+<div id="toast" class="fixed bottom-4 right-4 z-50 hidden px-4 py-2 rounded-lg shadow bg-gray-900 text-white text-sm"></div>
+
+</div>
+
+<script>
+async function fetchJson(url, options = {}) {
+  const res = await fetch(url, { credentials: 'include', ...options });
+  if (!res.ok) throw new Error(`${options.method || 'GET'} ${url} failed ${res.status}`);
+  return res.json();
+}
+
+function showToast(message) {
+  const toast = document.getElementById('toast');
+  if (!toast) return;
+  toast.textContent = message;
+  toast.classList.remove('hidden');
+  toast.style.opacity = '1';
+  setTimeout(() => {
+    toast.style.opacity = '0';
+    setTimeout(() => toast.classList.add('hidden'), 300);
+  }, 2000);
+}
+
+function setStatus(id, text, ok = false) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.textContent = text;
+  el.className = ok ? 'text-green-600 text-sm font-semibold' : 'text-gray-600 text-sm';
+}
+
+async function loadCredentials() {
+  try {
+    const data = await fetchJson('/api/credentials');
+    // Stripe
+    if (data.stripe?.connected) {
+      setStatus('stripe-status', 'Connected', true);
+    } else {
+      setStatus('stripe-status', 'Not connected');
+    }
+    // OpenAI
+    if (data.openai?.connected) {
+      setStatus('openai-status', 'Connected', true);
+    } else {
+      setStatus('openai-status', 'Not connected');
+    }
+    // Twilio
+    if (data.twilio?.connected) {
+      setStatus('twilio-status', 'Connected', true);
+    } else {
+      setStatus('twilio-status', 'Optional');
+    }
+  } catch (e) {
+    console.warn('Credentials fetch failed', e);
+  }
+}
+
+async function loadLeadForwarding() {
+  try {
+    const data = await fetchJson('/api/lead-forwarding');
+    if (data.email) {
+      const input = document.querySelector('input[name="forward_email"]');
+      if (input) input.value = data.email;
+      const status = document.getElementById('lead-forward-status');
+      if (status) status.textContent = 'Forwarding set';
+    }
+  } catch (e) {
+    console.warn('Lead forwarding fetch failed', e);
+  }
+}
+
+async function loadDomain() {
+  try {
+    const data = await fetchJson('/api/domain');
+    if (data.domain) {
+      const statusEl = document.getElementById('domain-status');
+      if (statusEl) statusEl.textContent = data.status || 'pending';
+      const submittedName = document.getElementById('submitted-domain-name');
+      if (submittedName) submittedName.textContent = data.domain;
+      const card = document.getElementById('domain-status-display');
+      if (card) card.classList.remove('hidden');
+    }
+  } catch (e) {
+    console.warn('Domain fetch failed', e);
+  }
+}
+
+function wireLeadForwardForm() {
+  const form = document.getElementById('lead-forward-form');
+  if (!form) return;
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const fd = new FormData(form);
+    const payload = { forward_email: fd.get('forward_email') };
+    const status = document.getElementById('lead-forward-status');
+    try {
+      await fetchJson('/api/lead-forwarding', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      if (status) status.textContent = 'Saved';
+      showToast('Lead forwarding saved');
+      await loadLeadForwarding();
+    } catch (err) {
+      if (status) status.textContent = 'Save failed';
+      console.error('Lead forward save failed', err);
+    }
+  });
+}
+
+function wireDomainForm() {
+  const form = document.getElementById('domain-setup-form');
+  if (!form) return;
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const fd = new FormData(form);
+    const payload = {
+      domain_name: fd.get('domain_name') || '',
+      cloudflare_email: fd.get('cloudflare_email') || null,
+      nameservers_updated: fd.get('nameservers_updated') ? true : false,
+    };
+    try {
+      await fetchJson('/api/domain', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      showToast('Domain submitted. Pending nameserver update.');
+      await loadDomain();
+    } catch (err) {
+      console.error('Domain save failed', err);
+    }
+  });
+}
+
+function wireCredentialForms() {
+  const stripeForm = document.getElementById('stripe-keys-form');
+  if (stripeForm) {
+    stripeForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const fd = new FormData(stripeForm);
+      try {
+        await fetchJson('/api/credentials', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            stripe_publishable_key: fd.get('stripe_publishable_key') || null,
+            stripe_secret_key: fd.get('stripe_secret_key') || null,
+          }),
+        });
+      showToast('Stripe keys saved');
+        await loadCredentials();
+      } catch (err) {
+        console.error('Stripe save failed', err);
+      }
+    });
+  }
+
+  const openaiForm = document.getElementById('openai-key-form');
+  if (openaiForm) {
+    openaiForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const fd = new FormData(openaiForm);
+      try {
+        await fetchJson('/api/credentials', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ openai_api_key: fd.get('openai_api_key') || null }),
+        });
+      showToast('OpenAI key saved');
+        await loadCredentials();
+      } catch (err) {
+        console.error('OpenAI save failed', err);
+      }
+    });
+  }
+
+  const twilioForm = document.getElementById('twilio-key-form');
+  if (twilioForm) {
+    twilioForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const fd = new FormData(twilioForm);
+      try {
+        await fetchJson('/api/credentials', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            twilio_sid: fd.get('twilio_sid') || null,
+            twilio_token: fd.get('twilio_token') || null,
+          }),
+        });
+      showToast('Twilio credentials saved');
+        await loadCredentials();
+      } catch (err) {
+        console.error('Twilio save failed', err);
+      }
+    });
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  loadLeadForwarding();
+  loadDomain();
+  loadCredentials();
+  wireLeadForwardForm();
+  wireDomainForm();
+  wireCredentialForms();
+});
+</script>
+
+{% endblock %}

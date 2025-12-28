@@ -1,0 +1,423 @@
+{% extends "layout/base.html" %}
+
+{% block title %}Pricing | WebWise Solutions{% endblock %}
+
+{% block extra_head %}
+<style>
+    .pricing-hero {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 4rem 1rem;
+        text-align: center;
+    }
+    
+    .pricing-hero h1 {
+        font-size: 3rem;
+        font-weight: 800;
+        margin-bottom: 1rem;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    }
+    
+    .pricing-hero p {
+        font-size: 1.25rem;
+        max-width: 700px;
+        margin: 0 auto;
+        opacity: 0.95;
+    }
+    
+    .pricing-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 4rem 1rem;
+    }
+    
+    .pricing-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 2rem;
+        margin-bottom: 4rem;
+    }
+    
+    .pricing-card {
+        background: white;
+        border-radius: 12px;
+        padding: 2.5rem;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border: 2px solid transparent;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .pricing-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 12px rgba(0,0,0,0.15);
+    }
+    
+    .pricing-card.featured {
+        border-color: #2563eb;
+        transform: scale(1.05);
+    }
+    
+    .pricing-card.featured::before {
+        content: "Most Popular";
+        position: absolute;
+        top: -12px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #2563eb;
+        color: white;
+        padding: 0.4rem 1rem;
+        border-radius: 20px;
+        font-size: 0.875rem;
+        font-weight: 600;
+    }
+    
+    .plan-name {
+        font-size: 1.75rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        color: #1f2937;
+    }
+    
+    .plan-price {
+        font-size: 3rem;
+        font-weight: 800;
+        color: #2563eb;
+        margin-bottom: 0.5rem;
+    }
+    
+    .plan-price span {
+        font-size: 1.25rem;
+        font-weight: 400;
+        color: #6b7280;
+    }
+    
+    .plan-tagline {
+        color: #6b7280;
+        font-size: 1rem;
+        margin-bottom: 2rem;
+        font-weight: 500;
+    }
+    
+    .plan-description {
+        color: #555;
+        line-height: 1.6;
+        margin-bottom: 2rem;
+        font-size: 0.95rem;
+    }
+    
+    .plan-features {
+        list-style: none;
+        padding: 0;
+        margin: 0 0 2rem 0;
+        flex-grow: 1;
+    }
+    
+    .plan-features li {
+        padding: 0.75rem 0;
+        color: #374151;
+        border-bottom: 1px solid #e5e7eb;
+        position: relative;
+        padding-left: 1.75rem;
+    }
+    
+    .plan-features li:last-child {
+        border-bottom: none;
+    }
+    
+    .plan-features li::before {
+        content: "✓";
+        position: absolute;
+        left: 0;
+        color: #10b981;
+        font-weight: bold;
+        font-size: 1.25rem;
+    }
+    
+    .plan-button {
+        display: block;
+        width: 100%;
+        text-align: center;
+        padding: 1rem 2rem;
+        background: #2563eb;
+        color: white;
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 1.1rem;
+        transition: background 0.3s ease;
+        margin-top: auto;
+    }
+    
+    .plan-button:hover {
+        background: #1e40af;
+        color: white;
+    }
+    
+    .plan-button.featured-button {
+        background: #2563eb;
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+    }
+    
+    .plan-button.featured-button:hover {
+        background: #1e40af;
+        box-shadow: 0 6px 16px rgba(37, 99, 235, 0.4);
+    }
+    
+    .comparison-section {
+        background: #f8f9fa;
+        padding: 3rem 2rem;
+        border-radius: 12px;
+        margin-top: 4rem;
+    }
+    
+    .comparison-section h2 {
+        text-align: center;
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 2rem;
+        color: #1f2937;
+    }
+    
+    .faq-item {
+        margin-bottom: 1.5rem;
+        padding: 1.5rem;
+        background: white;
+        border-radius: 8px;
+        border-left: 4px solid #2563eb;
+    }
+    
+    .faq-item h3 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-bottom: 0.75rem;
+        color: #1f2937;
+    }
+    
+    .faq-item p {
+        color: #555;
+        line-height: 1.7;
+    }
+    
+    @media (max-width: 768px) {
+        .pricing-hero h1 {
+            font-size: 2rem;
+        }
+        
+        .pricing-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .pricing-card.featured {
+            transform: scale(1);
+        }
+        
+        .pricing-container {
+            padding: 2rem 1rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- Hero Section -->
+<div class="pricing-hero">
+    <h1>Simple, Transparent Pricing</h1>
+    <p>Choose the build that matches your business needs. No hidden fees, no surprises.</p>
+</div>
+
+<!-- Pricing Cards -->
+<div class="pricing-container">
+    <div class="pricing-grid">
+        <!-- Starter Plan -->
+        <div class="pricing-card">
+            <h2 class="plan-name">Starter</h2>
+            <div class="plan-price">
+                $1,997<span>/one-time</span>
+            </div>
+            <p class="plan-tagline">Clean execution. Real automation. No overbuilding.</p>
+            <p class="plan-description">
+                Starter is for founders who want a real system in place fast using proven patterns that already work. Lead capture, basic automation, and payments or booking — wired correctly and built to run without babysitting. This path is for implementation, not invention. If your idea already exists and just needs to be done right, start here.
+            </p>
+            <ul class="plan-features">
+                <li>Modern custom website (5–7 pages)</li>
+                <li>Branding setup (colors, fonts, layout)</li>
+                <li>Simple lead funnel (opt-in → thank you)</li>
+                <li>Basic email automation</li>
+                <li>Stripe setup for payments</li>
+                <li>Admin dashboard</li>
+                <li>Basic AI assistant</li>
+                <li>Domain & DNS configuration</li>
+                <li>Google SEO & indexing</li>
+            </ul>
+            <form onsubmit="return handleCheckout(event, 'starter')">
+                <div style="margin: 1rem 0; text-align: left;">
+                    <label style="font-size:0.95rem;">
+                        <input type="checkbox" class="tos-checkbox" data-plan="starter" required>
+                        I agree to the <a href="/tos" target="_blank">Terms of Service</a>
+                    </label>
+                </div>
+                <button type="submit" class="plan-button" id="pay-btn-starter" disabled>Pay $1,997 →</button>
+            </form>
+        </div>
+
+        <!-- Growth Plan (Featured) -->
+        <div class="pricing-card featured">
+            <h2 class="plan-name">Growth</h2>
+            <div class="plan-price">
+                $3,997<span>/one-time</span>
+            </div>
+            <p class="plan-tagline">Leverage. Orchestration. A system that works ahead of you.</p>
+            <p class="plan-description">
+                Growth Build is for founders who are done doing everything manually. This is where systems start working together — capturing, responding, following up, routing, and converting without reminders. It includes deeper automation, smarter logic, and CRM-style organization to reduce revenue leakage. Choose Growth when you want leverage, not more effort.
+            </p>
+            <ul class="plan-features">
+                <li>Everything in Starter</li>
+                <li>Multi-step funnels (opt-in, sales, upsell)</li>
+                <li>Deeper automation and workflows</li>
+                <li>Smart follow-up logic</li>
+                <li>CRM-style organization</li>
+                <li>Outbound calling AI for lead follow-up</li>
+                <li>Advanced email nurture campaigns</li>
+                <li>Booking flows + reminders</li>
+                <li>A build designed to grow with you</li>
+            </ul>
+            <form onsubmit="return handleCheckout(event, 'growth')">
+                <div style="margin: 1rem 0; text-align: left;">
+                    <label style="font-size:0.95rem;">
+                        <input type="checkbox" class="tos-checkbox" data-plan="growth" required>
+                        I agree to the <a href="/tos" target="_blank">Terms of Service</a>
+                    </label>
+                </div>
+                <button type="submit" class="plan-button featured-button" id="pay-btn-growth" disabled>Pay $3,997 →</button>
+            </form>
+        </div>
+
+        <!-- Scale Plan -->
+        <div class="pricing-card">
+            <h2 class="plan-name">Scale</h2>
+            <div class="plan-price">
+                $5,997<span>/one-time</span>
+            </div>
+            <p class="plan-tagline">Deeper engineering for systems that must be built carefully.</p>
+            <p class="plan-description">
+                Scale is for systems where engineering decisions matter. Choose this path when what you’re building doesn’t exist off-the-shelf and data, AI, or custom logic are core to the product. Scale includes deeper planning, architecture, and system design to ensure correctness, reliability, and long-term growth. This is infrastructure, not a one-off build.
+            </p>
+            <ul class="plan-features">
+                <li>Everything in Growth</li>
+                <li>More planning and careful execution</li>
+                <li>Deeper logic and system design</li>
+                <li>Custom Python / FastAPI backend</li>
+                <li>Advanced data structures</li>
+                <li>ML integrations & algorithms</li>
+                <li>Multi-user auth & role management</li>
+                <li>Real-time dashboards & analytics</li>
+                <li>Infrastructure, not a one-off project</li>
+            </ul>
+            <form onsubmit="return handleCheckout(event, 'scale')">
+                <div style="margin: 1rem 0; text-align: left;">
+                    <label style="font-size:0.95rem;">
+                        <input type="checkbox" class="tos-checkbox" data-plan="scale" required>
+                        I agree to the <a href="/tos" target="_blank">Terms of Service</a>
+                    </label>
+                </div>
+                <button type="submit" class="plan-button" id="pay-btn-scale" disabled>Pay $5,997 →</button>
+            </form>
+
+        <script src="https://js.stripe.com/v3/"></script>
+        <script>
+        // Stripe publishable key and price IDs from backend context
+        const STRIPE_PUBLISHABLE_KEY = '{{ stripe_publishable_key }}';
+        const PRICE_IDS = {
+            starter: '{{ stripe_price_starter }}',
+            growth: '{{ stripe_price_growth }}',
+            scale: '{{ stripe_price_scale }}'
+        };
+
+        // Enable pay button only if TOS is checked
+        document.querySelectorAll('.tos-checkbox').forEach(function(checkbox) {
+            checkbox.addEventListener('change', function() {
+                const plan = this.getAttribute('data-plan');
+                const btn = document.getElementById('pay-btn-' + plan);
+                btn.disabled = !this.checked;
+            });
+        });
+
+        async function handleCheckout(event, plan) {
+            event.preventDefault();
+            const stripe = Stripe(STRIPE_PUBLISHABLE_KEY);
+            const tosCheckbox = document.querySelector('.tos-checkbox[data-plan="' + plan + '"]');
+            const tosChecked = tosCheckbox && tosCheckbox.checked;
+            if (!tosChecked) {
+                alert('You must agree to the Terms of Service.');
+                return false;
+            }
+            const errorDiv = document.getElementById('checkout-error');
+            if (errorDiv) errorDiv.textContent = '';
+            try {
+                const res = await fetch('/create-checkout-session', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ plan: plan, tos_checked: tosChecked })
+                });
+                const data = await res.json();
+                if (data.id) {
+                    stripe.redirectToCheckout({ sessionId: data.id });
+                } else {
+                    if (errorDiv) errorDiv.textContent = data.detail || 'Error creating Stripe session.';
+                    else alert(data.detail || 'Error creating Stripe session.');
+                }
+            } catch (err) {
+                if (errorDiv) errorDiv.textContent = 'Network error. Please try again.';
+                else alert('Network error. Please try again.');
+            }
+            return false;
+        }
+        </script>
+        <div id="checkout-error" style="color: #b91c1c; font-weight: 600; margin-top: 1rem;"></div>
+        </div>
+    </div>
+
+    <!-- Comparison / FAQ Section -->
+    <div class="comparison-section">
+        <h2>Common Questions</h2>
+        
+        <div class="faq-item">
+            <h3>What's included in support?</h3>
+            <p>
+                Every build includes support to keep your machine running: fixing bugs, maintaining automations and integrations, 
+                and ensuring your system continues operating as designed. Support means keeping the engine healthy, not unlimited design tweaks or content changes.
+            </p>
+        </div>
+        
+        <div class="faq-item">
+            <h3>Can I update content myself?</h3>
+            <p>
+                Yes! We build your site so you can handle basic content updates yourself. You'll have an admin area where you can 
+                update content without opening a ticket or waiting on us. You stay in control of your content, we stay focused on keeping the machine healthy.
+            </p>
+        </div>
+        
+        <div class="faq-item">
+            <h3>Do I own what you build?</h3>
+            <p>
+                Absolutely. You own what we build. This isn't a rented template. You're buying infrastructure — a machine you control. 
+                The code, the database, the system — it's all yours.
+            </p>
+        </div>
+        
+        <div class="faq-item">
+            <h3>Which plan is right for me?</h3>
+            <p>
+                <strong>Starter</strong> if what you want already exists as a product you could buy today.<br>
+                <strong>Growth</strong> if you have traction and need multiple systems working together.<br>
+                <strong>Scale</strong> if what you want doesn't exist yet and requires custom engineering, data, or AI.
+            </p>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

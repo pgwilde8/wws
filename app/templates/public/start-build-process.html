@@ -1,0 +1,211 @@
+{% extends "layout/base.html" %}
+
+{% block title %}Get Started - WebWise Solutions{% endblock %}
+
+{% block extra_head %}
+<style>
+/* ---- styles unchanged ---- */
+.guide-wrapper { max-width:900px; margin:3rem auto; padding:0 2rem 4rem; }
+.guide-header { text-align:center; margin-bottom:3rem; }
+.guide-header h1 { font-size:2.5rem; font-weight:800; color:#2c3e50; }
+.guide-header p { font-size:1.1rem; color:#666; }
+
+.step-card {
+    background:white;
+    border-radius:12px;
+    border:2px solid #e0e0e0;
+    padding:2rem;
+    margin-bottom:2rem;
+    position:relative;
+}
+
+.step-number {
+    position:absolute;
+    top:-20px;
+    left:2rem;
+    width:50px;
+    height:50px;
+    background:#3498db;
+    color:white;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:1.5rem;
+    font-weight:800;
+}
+
+.step-actions { display:flex; gap:1rem; margin-top:1.5rem; flex-wrap:wrap; }
+
+.btn-primary {
+    padding:0.75rem 1.5rem;
+    background:#3498db;
+    color:white;
+    border-radius:8px;
+    font-weight:600;
+    text-decoration:none;
+}
+
+.btn-secondary {
+    padding:0.75rem 1.5rem;
+    background:white;
+    color:#3498db;
+    border-radius:8px;
+    font-weight:600;
+    border:2px solid #3498db;
+    text-decoration:none;
+}
+
+.info-box {
+    background:#f8f9fa;
+    border-left:4px solid #3498db;
+    padding:1rem 1.25rem;
+    border-radius:6px;
+    margin-top:1rem;
+}
+
+.checklist { list-style:none; padding:0; margin:1rem 0; }
+.checklist li { padding-left:2rem; position:relative; }
+.checklist li:before {
+    content:"✓";
+    position:absolute;
+    left:0;
+    color:#27ae60;
+    font-weight:bold;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="guide-wrapper">
+
+<!-- HEADER -->
+<div class="guide-header">
+    <h1>🚀 Your Build Process Guide</h1>
+    <p>Follow these steps to get your business online. We guide you through everything.</p>
+</div>
+
+<!-- STEP 1 -->
+<div class="step-card">
+    <div class="step-number">1</div>
+    <h2>Choose Your Build Package</h2>
+    <p>Select the package that fits your needs.</p>
+
+    <div class="info-box">
+        <ul class="checklist">
+            <li>Starter Build</li>
+            <li>Growth Build</li>
+            <li>Scale Build</li>
+        </ul>
+    </div>
+
+    <div class="step-actions">
+        <a href="/pricing" class="btn-primary">View Pricing →</a>
+    </div>
+</div>
+
+<!-- STEP 2 -->
+<div class="step-card">
+    <div class="step-number">2</div>
+    <h2>Check Your Email & Login</h2>
+    <p>You’ll receive login credentials after payment.</p>
+
+    <div class="step-actions">
+        <a href="/login" class="btn-primary">Login →</a>
+    </div>
+</div>
+
+<!-- STEP 3 -->
+<div class="step-card">
+    <div class="step-number">3</div>
+    <h2>Complete Your Dashboard Setup</h2>
+
+    <!-- 3a -->
+    <h3>3a. Payments (Stripe)</h3>
+    <div class="info-box">
+        <ul class="checklist">
+            <li>Create Stripe account</li>
+            <li>Verify business</li>
+            <li>Paste API keys</li>
+        </ul>
+    </div>
+
+    <!-- 3b -->
+    <h3 style="margin-top:2rem;">3b. AI Features (OpenAI)</h3>
+    <div class="info-box">
+        <ul class="checklist">
+            <li>Create OpenAI account</li>
+            <li>Generate API key</li>
+            <li>Add to dashboard</li>
+        </ul>
+    </div>
+
+    <!-- ✅ FIXED EMAIL SECTION -->
+    <h3 style="margin-top:2rem;">3c. Email Handling (Important)</h3>
+    <p>
+        <strong>We do not manage your company email inbox.</strong>
+        Email is part of your business operations and remains under your control.
+    </p>
+
+    <div class="info-box">
+        <strong>What we handle:</strong>
+        <ul class="checklist">
+            <li>Contact form submissions</li>
+            <li>Transactional emails</li>
+            <li>System notifications</li>
+        </ul>
+        <p>All website emails are forwarded to an address you choose.</p>
+    </div>
+
+    <div class="info-box">
+        <strong>Your options:</strong>
+        <ul class="checklist">
+            <li>Use your existing email provider</li>
+            <li>
+                Use our recommended partner —
+                <a href="https://namecheap.pxf.io/c/6543813/1632743/5618" target="_blank"><strong>Namecheap Email Hosting (click here)</strong></a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- 3d -->
+    <h3 style="margin-top:2rem;">3d. SMS / Phone (Optional)</h3>
+        <div class="info-box">
+            <ul class="checklist">
+                <li>Enable AI agent to send/receive SMS</li>
+                <li>AI agent can make outbound calls or answer inbound calls for your business</li>
+                <li>Automated phone and text reminders, follow-ups, and more</li>
+            </ul>
+            <p style="margin-top:0.75rem; color:#555;">
+                <strong>Note:</strong> To use these features, you'll need an account with our recommended partner <a href="https://www.twilio.com/try-twilio" target="_blank">Twilio</a> (for phone numbers, SMS, and call automation). We'll guide you through setup if you choose this option.
+            </p>
+        </div>
+</div>
+
+<!-- STEP 4 -->
+<div class="step-card">
+    <div class="step-number">4</div>
+    <h2>Setup Your Domain</h2>
+    <p>Choose or connect your domain. Our dashboard makes it super easy for you.</p>
+</div>
+
+<!-- STEP 5 -->
+<div class="step-card" style="border-color:#27ae60;">
+    <div class="step-number" style="background:#27ae60;">5</div>
+    <h2>🎉 Ready-Set-Go!</h2>
+    <p>Once setup is complete, we get started. </p>
+</div>
+
+
+
+
+<!-- QUESTIONS / BOOK A CALL SECTION -->
+<section style="text-align:center; padding:2.5rem 1rem 1.5rem;">
+    <h3 style="font-size:1.4rem; font-weight:700; margin-bottom:0.75rem; color:#2c3e50;">Have Questions?</h3>
+    <p style="max-width:600px; margin:0 auto 1.2rem; color:#555; font-size:1.08rem;">
+        If you have any questions about the build process, features, or what package is right for you, we're happy to help.
+    </p>
+    <a href="/book-call" class="btn-primary" style="font-size:1.1rem; padding:0.85rem 2.2rem;">Book a Call</a>
+</section>
+</div>
+{% endblock %}

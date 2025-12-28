@@ -1,0 +1,52 @@
+{% extends "layout/base.html" %}
+{% block title %}Admin – Support Ticket{% endblock %}
+{% block header %}{% endblock %}
+{% block footer %}{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto p-4 sm:p-6 space-y-5">
+
+  <!-- Ticket Header -->
+  <div class="bg-white p-4 rounded-2xl shadow-sm border">
+    <div class="flex items-center justify-between">
+    <div>
+        <h1 class="text-xl font-extrabold text-gray-900">{{ ticket.subject }}</h1>
+        <p class="text-xs text-gray-500">Ticket #{{ ticket.id }} • Client ID {{ ticket.client_id or "—" }}</p>
+    </div>
+      <span class="px-3 py-1 rounded-full text-xs font-bold
+        {% if ticket.status == 'closed' %}bg-green-100 text-green-700
+        {% else %}bg-blue-100 text-blue-700{% endif %}">
+        {{ ticket.status }}
+      </span>
+    </div>
+    <p class="text-xs text-gray-500 mt-2">Priority: {{ ticket.priority or "normal" }} • Created: {{ ticket.created_at }}</p>
+  </div>
+
+  <!-- Messages -->
+  <section class="bg-white p-4 rounded-2xl shadow-sm border space-y-3">
+    <h2 class="text-lg font-bold text-gray-900 mb-1">Messages</h2>
+    {% if messages %}
+      {% for m in messages %}
+      <div class="border rounded-xl p-3 {{ 'bg-gray-50' if m.sender=='admin' else 'bg-white' }}">
+        <div class="text-xs text-gray-500 mb-1">{{ m.sender|title }} • {{ m.created_at }}</div>
+        <div class="text-sm text-gray-900 whitespace-pre-line">{{ m.message }}</div>
+    </div>
+    {% endfor %}
+    {% else %}
+      <p class="text-sm text-gray-500">No messages yet.</p>
+    {% endif %}
+  </section>
+
+  <!-- Reply -->
+  <section class="bg-white p-4 rounded-2xl shadow-sm border">
+    <h2 class="text-lg font-bold text-gray-900 mb-2">Add Reply</h2>
+    <form method="post" action="/admin/support/tickets/{{ ticket.id }}/reply" class="space-y-3">
+      <textarea name="message" required rows="4" class="w-full border rounded-lg px-3 py-2 text-sm bg-gray-50" placeholder="Type your reply to the client"></textarea>
+      <button type="submit" class="px-4 py-2 bg-blue-600 text-white text-sm font-bold rounded-full hover:opacity-90 transition">
+        Send Reply
+      </button>
+    </form>
+  </section>
+
+</div>
+{% endblock %}

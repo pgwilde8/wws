@@ -1,0 +1,55 @@
+{% extends "layout/base.html" %}
+{% block title %}Admin – Support Inbox{% endblock %}
+{% block header %}{% endblock %}
+{% block footer %}{% endblock %}
+{% block content %}
+
+<div class="max-w-5xl mx-auto p-4 sm:p-6 space-y-4">
+
+  <h1 class="text-2xl font-bold">Support Inbox</h1>
+
+  <!-- Search -->
+  <form method="GET" class="flex gap-2 bg-white p-3 rounded-xl border shadow-sm">
+    <input type="text" name="search" placeholder="Search by email..."
+           value="{{ search }}" class="flex-1 border rounded-lg px-3 py-2 text-sm bg-gray-50"/>
+    <button class="px-4 py-2 bg-blue-600 text-white text-sm font-semibold rounded-lg hover:opacity-90">Search</button>
+  </form>
+
+  <!-- Tickets -->
+  <div class="grid sm:grid-cols-1 md:grid-cols-2 gap-3">
+    {% for t in tickets %}
+    <div class="bg-white p-4 rounded-2xl border shadow-sm hover:border-blue-500 transition">
+      <a href="/admin/support/tickets/{{ t.id }}" class="block space-y-1">
+        <p class="font-semibold text-sm">{{ t.subject }}</p>
+        <p class="text-xs text-gray-500 capitalize">Priority: {{ t.priority }}</p>
+        <p class="text-[10px] text-gray-400">{{ t.updated_at.strftime('%b %d, %Y %H:%M') if t.updated_at else t.created_at.strftime('%b %d, %Y %H:%M') }}</p>
+        <span class="inline-block px-2 py-1 rounded-full text-[10px] font-bold
+          {% if t.status == 'open' %}bg-blue-100 text-blue-700
+          {% elif t.status == 'closed' %}bg-green-100 text-green-700
+          {% else %}bg-gray-100 text-gray-700{% endif %}">
+          {{ t.status }}
+        </span>
+      </a>
+    </div>
+    {% endfor %}
+  </div>
+
+  {% if not tickets %}
+  <p class="text-sm text-gray-500 text-center p-4">No support tickets found.</p>
+  {% endif %}
+
+  <!-- Pagination -->
+  <div class="flex justify-center items-center gap-3 text-sm">
+    <button disabled class="px-3 py-1 bg-gray-200 text-gray-500 rounded-lg">Prev</button>
+    {% for i in range(1, total_pages+1) %}
+    <a href="?page={{ i }}&search={{ search }}"
+       class="px-2 {% if i == page %}text-blue-600 font-bold{% else %}text-gray-500{% endif %}">
+       {{ i }}
+    </a>
+    {% endfor %}
+    <button disabled class="px-3 py-1 bg-gray-200 text-gray-500 rounded-lg">Next</button>
+  </div>
+
+</div>
+
+{% endblock %}

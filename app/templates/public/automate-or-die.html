@@ -1,0 +1,506 @@
+{% extends "layout/base.html" %}
+
+{% block title %}Automate or Die — Build Your Own Machine | WebWise Solutions{% endblock %}
+
+{% block extra_head %}
+<style>
+    .sales-letter {
+        max-width: 850px;
+        margin: 0 auto;
+        padding: 2rem 1rem 4rem;
+        line-height: 1.75;
+        color: #333;
+        font-size: 1.05rem;
+    }
+
+    .hero-section {
+        text-align: center;
+        padding: 3rem 1rem;
+        background: linear-gradient(135deg, #1a1a1a 0%, #2c3e50 100%);
+        color: white;
+        border-radius: 10px;
+        margin-bottom: 3rem;
+    }
+
+    .hero-section h1 {
+        font-size: 2.5rem;
+        font-weight: 800;
+        margin-bottom: 1rem;
+        color: #ffffff;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .hero-section .subtitle {
+        font-size: 1.3rem;
+        font-weight: 500;
+        color: #e0e0e0;
+        max-width: 700px;
+        margin: 0 auto;
+    }
+
+    .intro-box {
+        background: #f8f9fa;
+        padding: 1.5rem;
+        border-left: 4px solid #e74c3c;
+        border-radius: 8px;
+        margin: 2rem 0;
+        font-size: 1.1rem;
+    }
+
+    .intro-box strong {
+        font-size: 1.2rem;
+        display: block;
+        margin-bottom: 0.5rem;
+        color: #2c3e50;
+    }
+
+    .section-title {
+        font-size: 2rem;
+        font-weight: 800;
+        margin: 3rem 0 1.5rem;
+        color: #2c3e50;
+    }
+
+    .section-title.emoji {
+        font-size: 1.8rem;
+    }
+
+    .highlight-box {
+        background: #fff3cd;
+        border: 2px solid #ffc107;
+        border-radius: 8px;
+        padding: 1.5rem;
+        margin: 2rem 0;
+    }
+
+    .highlight-box strong {
+        color: #856404;
+        font-size: 1.15rem;
+    }
+
+    .feature-list {
+        list-style: none;
+        padding: 0;
+        margin: 1.5rem 0;
+    }
+
+    .feature-list li {
+        padding: 0.75rem 0;
+        padding-left: 2rem;
+        position: relative;
+        font-size: 1.05rem;
+    }
+
+    .feature-list li:before {
+        content: "✅";
+        position: absolute;
+        left: 0;
+    }
+
+    .feature-list.negative li:before {
+        content: "❌";
+    }
+
+    .proof-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.5rem;
+        margin: 2rem 0;
+    }
+
+    .proof-grid-bottom {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.5rem;
+        margin: 2rem 0;
+    }
+
+    .proof-card {
+        background: #ffffff;
+        border: 1px solid #e0e0e0;
+        border-radius: 10px;
+        padding: 1.5rem;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    .proof-card h3 {
+        font-size: 1.3rem;
+        font-weight: 700;
+        margin-bottom: 0.75rem;
+        color: #2c3e50;
+    }
+
+    .proof-card h3 a:hover {
+        color: #3498db;
+        border-bottom-color: #2563eb;
+    }
+
+    .proof-card p {
+        color: #666;
+        line-height: 1.6;
+        font-size: 0.95rem;
+    }
+
+    .proof-card-large {
+        background: #ffffff;
+        border: 1px solid #e0e0e0;
+        border-radius: 10px;
+        padding: 2rem;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    .proof-card-large h3 {
+        font-size: 1.4rem;
+        font-weight: 700;
+        margin-bottom: 0.75rem;
+        color: #2c3e50;
+    }
+
+    .proof-card-large h3 a:hover {
+        color: #3498db;
+        border-bottom-color: #2563eb;
+    }
+
+    .proof-card-large p {
+        color: #666;
+        line-height: 1.7;
+        font-size: 1rem;
+    }
+
+    .quote-box {
+        background: #1a1a1a;
+        color: #ffffff;
+        padding: 2rem;
+        border-left: 4px solid #3498db;
+        border-radius: 8px;
+        margin: 2rem 0;
+        font-style: italic;
+        font-size: 1.15rem;
+        line-height: 1.7;
+    }
+
+    .quote-box strong {
+        display: block;
+        margin-top: 1rem;
+        font-style: normal;
+        color: #3498db;
+    }
+
+    .cta-section {
+        text-align: center;
+        padding: 3rem 1rem;
+        background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+        border-radius: 10px;
+        margin: 4rem 0 2rem;
+        color: white;
+    }
+
+    .cta-section h2 {
+        font-size: 2rem;
+        font-weight: 800;
+        margin-bottom: 1rem;
+        color: #ffffff;
+    }
+
+    .cta-section p {
+        font-size: 1.15rem;
+        margin-bottom: 2rem;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .cta-button {
+        display: inline-block;
+        padding: 1rem 2.5rem;
+        font-size: 1.2rem;
+        font-weight: 700;
+        background: #27ae60;
+        color: white;
+        text-decoration: none;
+        border-radius: 6px;
+        transition: background 0.3s, transform 0.15s;
+        margin: 0.5rem;
+    }
+
+    .cta-button:hover {
+        background: #229954;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+
+    .cta-button.secondary {
+        background: #ffffff;
+        color: #2563eb;
+    }
+
+    .cta-button.secondary:hover {
+        background: #f0f0f0;
+    }
+
+    @media (max-width: 768px) {
+        .sales-letter {
+            padding: 1rem 0.75rem 3rem;
+            font-size: 1rem;
+        }
+
+        .hero-section h1 {
+            font-size: 1.8rem;
+        }
+
+        .hero-section .subtitle {
+            font-size: 1.1rem;
+        }
+
+        .section-title {
+            font-size: 1.6rem;
+        }
+
+        .proof-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .proof-grid-bottom {
+            grid-template-columns: 1fr;
+        }
+
+        .cta-section h2 {
+            font-size: 1.6rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="sales-letter">
+
+    <!-- HERO SECTION -->
+    <div class="hero-section">
+        <h1>🧨 A Rude Awakening from the Founder</h1>
+        <p class="subtitle">(Yes, I Said It)</p>
+    </div>
+
+    <!-- INTRO -->
+    <div class="intro-box">
+        <p><strong>Hi — I'm Paul.</strong></p>
+        <p>Founder of <strong>WebWise Solutions</strong>.<br>
+        Professional builder of automated business machines.<br>
+        Amateur hater of online fluff.</p>
+    </div>
+
+    <p>This isn't a webinar.<br>
+    It's not a "value bomb."<br>
+    And no, I'm not here to whisper sweet nothings about "7-figure freedom."</p>
+
+    <p>I'm just a guy who got tired of watching smart people get crushed by tech they can't build…<br>
+    and advice they never asked for.</p>
+
+    <!-- SECTION: THE ECONOMY -->
+    <h2 class="section-title emoji">🚨 The Economy's on Fire. Nobody Brought Marshmallows.</h2>
+
+    <p>People with "good jobs"? <strong>Getting axed.</strong></p>
+
+    <p>Offices? Being replaced by <strong>ChatGPT and a leftover intern</strong>.</p>
+
+    <p>Sales departments? Replaced by silence.</p>
+
+    <p>The new American dream?<br>
+    Survive long enough for the algorithm to skip you <em>this quarter</em>.</p>
+
+    <div class="quote-box">
+        <strong>It's not just job loss. It's leverage loss.</strong>
+    </div>
+
+    <p>You adapt. You hustle. You grind.<br>
+    And still feel like a walking LinkedIn post waiting to happen.</p>
+
+    <p>It's not your fault.<br>
+    <strong>The game changed.</strong></p>
+
+    <p>So… <strong>change the board.</strong></p>
+
+    <!-- SECTION: BUILD YOUR MACHINE -->
+    <h2 class="section-title emoji">👇 The Only Move Left: Build Your Own Money Making Machine</h2>
+
+    <p>Not a side hustle.<br>
+    Not a "DM me for mentorship" scheme.<br>
+    Not selling leggings on Instagram.</p>
+
+    <p>I mean a <strong>24/7 business machine</strong> that:</p>
+
+    <ul class="feature-list">
+        <li>Answers leads while you sleep</li>
+        <li>Follows up without you remembering</li>
+        <li>Books calls while you're watching Netflix</li>
+        <li>Takes payments, sends reminders, and</li>
+        <li>YES — <em>calls people</em> and sounds better than your cousin in sales</li>
+    </ul>
+
+    <div class="highlight-box">
+        <p><strong>You stay human.</strong><br>
+        <strong>It runs the show.</strong></p>
+    </div>
+
+    <!-- SECTION: AI ISN'T REPLACING YOU -->
+    <h2 class="section-title emoji">🧠 AI Isn't Replacing You — Just the Crap You Hate</h2>
+
+    <p>AI doesn't want your job.<br>
+    It wants your <strong>to-do list</strong>.</p>
+
+    <p>It'll gladly:</p>
+
+    <ul class="feature-list">
+        <li>Chase leads</li>
+        <li>Send texts</li>
+        <li>Schedule calls</li>
+        <li>Repeat the same info 400 times</li>
+        <li>Handle admin</li>
+        <li>Even tell a joke (if you're into that)</li>
+    </ul>
+
+    <p>Let it do the robotic stuff.<br>
+    <strong>You focus on being the brain, not the bandwidth.</strong></p>
+
+    <!-- SECTION: WHAT WE BUILD -->
+    <h2 class="section-title">So What Does WebWise Actually Build?</h2>
+
+    <p>We don't do "websites."</p>
+
+    <p><strong>We engineer automated digital machines</strong> — from scratch.</p>
+
+    <p>Here's what's inside the box:</p>
+
+    <ul class="feature-list">
+        <li><strong>🚀 High-converting website</strong> (no Wix shame)</li>
+        <li><strong>🔁 Funnels</strong> that work harder than you</li>
+        <li><strong>📞 AI</strong> that chats, calls, books, and follows up</li>
+        <li><strong>💳 Payment systems</strong>, CRMs, dashboards</li>
+        <li><strong>📲 Text + Email + Phone</strong> automations</li>
+        <li><strong>🤖 Optional AI phone agents</strong> that:
+            <ul style="margin-top: 0.5rem; padding-left: 1.5rem;">
+                <li>Sound human</li>
+                <li>Qualify leads</li>
+                <li>Follow scripts</li>
+                <li>Handle objections</li>
+                <li>Book meetings while you're at brunch</li>
+            </ul>
+        </li>
+    </ul>
+
+    <div class="highlight-box">
+        <p><strong>No duct tape. No Zapier jungle. No chaos.</strong><br>
+        Just one clean, powerful system that handles business while you live life.</p>
+    </div>
+
+    <!-- SECTION: BUT I COULD USE WIX -->
+    <h2 class="section-title">"But I Could Just Use Wix…"</h2>
+
+    <p>You <em>could</em>. And you <em>should</em> —<br>
+    <strong>if</strong> all you want is a static brochure and a contact form from 2015.</p>
+
+    <p>But Wix won't:</p>
+
+    <ul class="feature-list negative">
+        <li>Call leads</li>
+        <li>Close deals</li>
+        <li>Follow up automatically</li>
+        <li>Adapt on behavior</li>
+        <li>Scale like a machine</li>
+    </ul>
+
+    <p>We don't sell <em>pages</em>.<br>
+    We sell <strong>performance</strong>.</p>
+
+    <!-- SECTION: PROOF -->
+    <h2 class="section-title">You Want Proof? Here's What We've Built:</h2>
+
+    <!-- Top Row: 3 Cards -->
+    <div class="proof-grid">
+        <div class="proof-card">
+            <h3>🎯 <a href="https://jerseycash5-picker.webwisesolutions.dev/" target="_blank" rel="noopener noreferrer" style="color: #2c3e50; text-decoration: none; border-bottom: 2px solid #3498db; transition: color 0.3s;">NJ Cash 5 Predictor</a></h3>
+            <p>ML-powered number prediction platform — because some people <em>do</em> want to beat the odds.</p>
+        </div>
+
+        <div class="proof-card">
+            <h3>💳 <a href="https://ezclub.app" target="_blank" rel="noopener noreferrer" style="color: #2c3e50; text-decoration: none; border-bottom: 2px solid #3498db; transition: color 0.3s;">EZClub</a></h3>
+            <p>Membership platform printing monthly income like a broken ATM (except legal).</p>
+        </div>
+
+        <div class="proof-card">
+            <h3>📈 <a href="https://myalgoagent.com" target="_blank" rel="noopener noreferrer" style="color: #2c3e50; text-decoration: none; border-bottom: 2px solid #3498db; transition: color 0.3s;">MyAlgoAgent</a></h3>
+            <p>Automation system for traders who don't trust their own emotions.</p>
+        </div>
+    </div>
+
+    <!-- Bottom Row: 3 Cards -->
+    <div class="proof-grid-bottom">
+        <div class="proof-card-large">
+            <h3>🤖 <a href="https://crewassistai.com" target="_blank" rel="noopener noreferrer" style="color: #2c3e50; text-decoration: none; border-bottom: 2px solid #3498db; transition: color 0.3s;">CrewAssistAI</a></h3>
+            <p>AI-powered CRM, SMS, call handler & review bot — basically your whole ops team in one.</p>
+        </div>
+
+        <div class="proof-card-large">
+            <h3>🏠 <a href="https://ezrealtor.app" target="_blank" rel="noopener noreferrer" style="color: #2c3e50; text-decoration: none; border-bottom: 2px solid #3498db; transition: color 0.3s;">EZRealtor</a></h3>
+            <p>AI-powered real estate lead generation platform with instant lead capture, auto-qualification, and smart follow-up. Real estate agents get their own websites that work 24/7 to capture and convert leads — from click to conversation, instantly.</p>
+        </div>
+
+        <div class="proof-card-large">
+            <h3>📇 <a href="https://ezdirectory.app" target="_blank" rel="noopener noreferrer" style="color: #2c3e50; text-decoration: none; border-bottom: 2px solid #3498db; transition: color 0.3s;">EZDirectory</a></h3>
+            <p>White-label business directory platform. Upload your logo, customize branding, add businesses, and launch your own branded directory in minutes. Monetize with premium listings, ads, and sponsorships.</p>
+        </div>
+    </div>
+
+    <p style="text-align: center; color: #666; font-style: italic; margin-top: 1rem;">
+        Real platforms.<br>
+        Real users.<br>
+        No Canva mockups or "coming soon" footers.
+    </p>
+
+    <!-- SECTION: WHY I BUILT THIS -->
+    <h2 class="section-title">Why I Built This</h2>
+
+    <p>I've been coding since the internet ran on AOL CDs.</p>
+
+    <p>Over time, I watched sharp, talented people fail — not because their ideas sucked, but because they couldn't <em>build the tech</em>.</p>
+
+    <p>So I started building it <strong>for them.</strong></p>
+
+    <p>WebWise exists so entrepreneurs can stop duct-taping plugins together and finally get something that works.</p>
+
+    <!-- SECTION: THE REAL GOAL -->
+    <h2 class="section-title">The Real Goal? Not "Get Rich."</h2>
+
+    <p>It's…</p>
+
+    <div class="quote-box">
+        <strong>Create your own economy.</strong><br>
+        That runs itself.<br>
+        Doesn't ask for PTO.<br>
+        And grows without begging for likes.
+    </div>
+
+    <p>Whether it replaces a job, funds your freedom, or just lets you breathe?</p>
+
+    <p><strong>That's a win.</strong></p>
+
+    <!-- CTA SECTION -->
+    <div class="cta-section">
+        <h2>🎤 What Happens Now?</h2>
+        <p>Easy.</p>
+        <p><strong>Book a Call</strong></p>
+        <p style="font-size: 1rem; margin-top: 1rem;">No pitch deck.<br>
+        No script.<br>
+        Just a conversation.</p>
+        <p style="font-size: 1rem; margin-top: 1rem;">You bring your idea (or none — that's fine).<br>
+        I'll bring clarity, options, and maybe a sarcastic AI assistant who takes notes.</p>
+        <p style="font-size: 1rem; margin-top: 1rem; margin-bottom: 2rem;">If it clicks, we build.<br>
+        If not, no hard feelings. At least we didn't waste time on a "live training replay."</p>
+        
+        <a href="/book-call" class="cta-button">Book a Call</a>
+        <a href="/start-build-process" class="cta-button secondary">Learn More</a>
+    </div>
+
+</div>
+
+{% endblock %}

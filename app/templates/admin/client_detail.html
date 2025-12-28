@@ -1,0 +1,108 @@
+{% extends "layout/base.html" %}
+{% block title %}Admin – Call Booking: {{ call.id }}{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto p-4 sm:p-6 space-y-6">
+
+  <!-- Header -->
+  <div class="bg-white p-5 rounded-2xl shadow-sm border">
+    <h1 class="text-xl font-bold text-gray-900">Call Booking</h1>
+    <p class="text-xs text-gray-500 font-mono">{{ call.id }}</p>
+  </div>
+
+  <!-- Client + Project Links -->
+  <div class="grid sm:grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+    
+    <!-- Client Panel -->
+    <div class="bg-white border p-4 rounded-xl shadow-sm">
+      <h2 class="text-sm font-bold mb-2">Client</h2>
+      {% if call.client_id %}
+        <a href="/admin/clients/{{ call.client_id }}" class="text-blue-600 hover:underline font-semibold">
+          View Client →
+        </a>
+      {% else %}
+        <p class="text-xs text-gray-500">No client linked</p>
+      {% endif %}
+      <p class="text-xs text-gray-400 mt-1">Name: {{ call.client_name or "—" }}</p>
+    </div>
+
+    <!-- Project Panel -->
+    <div class="bg-white border p-4 rounded-xl shadow-sm">
+      <h2 class="text-sm font-bold mb-2">Project</h2>
+      {% if call.project_id %}
+        <a href="/admin/projects/{{ call.project_id }}" class="text-blue-600 hover:underline font-semibold">
+          View Project →
+        </a>
+        <p class="text-xs text-gray-400 mt-1">Project: {{ call.project_name or "—" }}</p>
+      {% else %}
+        <p class="text-xs text-gray-500">General Inquiry</p>
+      {% endif %}
+    </div>
+
+  </div>
+
+  <!-- Transcript -->
+  <section class="bg-white border p-4 rounded-xl shadow-sm">
+    <h2 class="text-sm font-bold mb-2">Transcript</h2>
+    {% if call.transcript %}
+    <div class="bg-gray-900 text-gray-100 text-xs font-mono p-3 rounded-lg whitespace-pre-wrap max-h-[300px] overflow-y-auto">
+      {{ call.transcript }}
+    </div>
+    {% else %}
+      <p class="text-xs text-gray-500">No transcript available yet.</p>
+    {% endif %}
+  </section>
+
+  <!-- API Credentials (Masked Preview) -->
+  <section class="bg-white border p-4 rounded-xl shadow-sm">
+    <h2 class="text-sm font-bold mb-3">Related API Credentials</h2>
+    <div class="grid sm:grid-cols-1 md:grid-cols-2 gap-3 text-xs font-mono">
+
+      <div class="border p-3 rounded-lg bg-gray-50">
+        <div class="flex justify-between"><span>Twilio SID</span><span class="text-green-600">Saved</span></div>
+        <p>{{ call.twilio_sid[:6] + "••" if call.twilio_sid else "—" }}</p>
+      </div>
+
+      <div class="border p-3 rounded-lg bg-gray-50">
+        <div class="flex justify-between"><span>OpenAI Key</span><span class="text-blue-600">Masked</span></div>
+        <p>{{ call.openai_api_key[:8] + "••••••" if call.openai_api_key else "—" }}</p>
+      </div>
+
+      <div class="border p-3 rounded-lg bg-gray-50">
+        <div class="flex justify-between"><span>Domain</span><span class="text-amber-600">Pending</span></div>
+        <p>{{ call.domain_name or "—" }}</p>
+      </div>
+
+      <div class="border p-3 rounded-lg bg-gray-50">
+        <div class="flex justify-between"><span>Tier</span><span class="text-gray-400">—</span></div>
+        <p>{{ call.plan_tier or "Not set" }}</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Booking Meta -->
+  <section class="bg-white border p-4 rounded-xl shadow-sm grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 text-xs">
+    <div><span class="text-gray-400">Booked</span><p>{{ call.booked_at.strftime('%b %d, %Y %H:%M') if call.booked_at else "—" }}</p></div>
+    <div><span class="text-gray-400">Received</span><p>{{ call.received_at.strftime('%b %d, %Y %H:%M') if call.received_at else "—" }}</p></div>
+    <div><span class="text-gray-400">Status</span><p class="capitalize">{{ call.status }}</p></div>
+    <div><span class="text-gray-400">Project Linked</span><p>{{ call.project_id or "—" }}</p></div>
+  </section>
+
+  <!-- Admin Actions (future-ready) -->
+  <section class="bg-white border p-4 rounded-xl shadow-sm">
+    <h2 class="text-sm font-bold mb-3">Admin Actions</h2>
+    <div class="flex flex-wrap gap-2">
+      <button disabled class="px-3 py-2 bg-gray-200 text-gray-500 rounded-lg text-sm font-semibold">Cancel Booking (future)</button>
+      <button disabled class="px-3 py-2 bg-gray-200 text-gray-500 rounded-lg text-sm font-semibold">Export Transcript (future)</button>
+      <button disabled class="px-3 py-2 bg-gray-100 text-gray-500 rounded-lg text-sm font-semibold">Send to Client (future)</button>
+    </div>
+  </section>
+
+  <!-- Back -->
+  <div class="pt-3">
+    <a href="/admin/calls" class="text-blue-600 text-sm font-semibold hover:underline">← Back to Calls</a>
+  </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,362 @@
+{% extends "layout/base.html" %}
+
+{% block title %}Home - WebWise Solutions{% endblock %}
+
+{% block content %}
+
+<!-- THEME SONG -->
+<audio id="themeSong" autoplay loop style="display:none;">
+    <source src="/static/(Countdown... 3... 2... 1...).mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+</audio>
+<script>
+    // Music control functionality
+    let isPlaying = false;
+    
+    function toggleMusic() {
+        const audio = document.getElementById('themeSong');
+        const icon = document.getElementById('musicIcon');
+        const button = document.getElementById('musicToggle');
+        
+        if (!audio) return;
+        
+        if (isPlaying) {
+            audio.pause();
+            icon.textContent = '🔇';
+            button.style.background = 'rgba(255,255,255,0.1)';
+            isPlaying = false;
+        } else {
+            audio.play().then(() => {
+                icon.textContent = '🎵';
+                button.style.background = 'rgba(255,255,255,0.3)';
+                isPlaying = true;
+            }).catch(function(error) {
+                console.log('Playback failed:', error);
+                icon.textContent = '🔇';
+            });
+        }
+    }
+    
+    // Handle autoplay with user interaction
+    document.addEventListener('DOMContentLoaded', function() {
+        const audio = document.getElementById('themeSong');
+        if (audio) {
+            // Try to play, but handle autoplay restrictions
+            audio.play().then(() => {
+                isPlaying = true;
+                document.getElementById('musicIcon').textContent = '🎵';
+                document.getElementById('musicToggle').style.background = 'rgba(255,255,255,0.3)';
+            }).catch(function(error) {
+                // Autoplay was prevented, user will need to click button
+                console.log('Autoplay prevented. Click the music button to play.');
+                isPlaying = false;
+            });
+            
+            // Update icon when audio ends (shouldn't happen with loop, but just in case)
+            audio.addEventListener('ended', function() {
+                isPlaying = false;
+                document.getElementById('musicIcon').textContent = '🔇';
+            });
+        }
+    });
+</script>
+
+<!-- HERO -->
+<div class="hero" style="text-align:center; padding:4rem 1rem; background: linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.1)), url('/static/img/logo4.png') center/cover no-repeat; position: relative;">
+    <!-- Music Control Button -->
+    <div style="position:absolute; top:20px; right:20px; z-index:10;">
+        <button id="musicToggle" onclick="toggleMusic()" style="background:rgba(255,255,255,0.2); border:2px solid rgba(255,255,255,0.5); border-radius:50%; width:50px; height:50px; cursor:pointer; color:white; font-size:1.5rem; backdrop-filter:blur(10px); transition:all 0.3s;" title="Toggle Theme Song">
+            <span id="musicIcon">🎵</span>
+        </button>
+    </div>
+    <h2 style="font-size:2.5rem; font-weight:700; margin-bottom:2rem; color:#ffffff; text-shadow: 2px 2px 6px rgba(0,0,0,1); letter-spacing: 2px; text-transform: uppercase;">
+        WebWise Solutions
+    </h2>
+    <h1 style="font-size:2.8rem; font-weight:800; margin-bottom:0.5rem; color:#ffffff; text-shadow: 2px 2px 4px rgba(0,0,0,1);">
+        We Build Fully Automated, AI-Powered Businesses
+    </h1>
+    <p style="font-size:1.25rem; color:#ffffff; max-width:720px; margin:0 auto 1.5rem; text-shadow: 3px 3px 3px rgba(0,0,0,0.5);">
+        Not Just Websites—A Complete Digital Business Built For YOU.  
+        Website, Funnels, AI, Automation, Email, CRM, Payments, Bookings, Support and More… All Done-For-YOU!
+    </p>
+
+    <a href="/the-shift" class="cta-button" 
+       style="padding:0.9rem 2rem; font-size:1.2rem; margin-right:0.5rem;">
+        Discover The Truth →
+    </a>
+
+    <a href="/book-call" class="cta-button" 
+       style="background:#27ae60; padding:0.9rem 2rem; font-size:1.2rem;">
+        Book a Call
+    </a>
+</div>
+
+<!-- SECTION: WHAT WE DO -->
+<section style="padding:3rem 1rem; max-width:1050px; margin:auto; background-image: url('/static/img/logo4.png'); background-size: contain; background-position: center; background-repeat: no-repeat; background-opacity: 0.1; position: relative; min-height: 300px;">
+    <div style="position: relative; z-index: 1; background-color: rgba(255, 255, 255, 0.8); padding: 2rem; border-radius: 10px;">
+    <h2 style="text-align:center; font-size:2rem; font-weight:700; margin-bottom:1rem;">
+        What We Dox
+    </h2>
+    <p style="text-align:center; color:#555; max-width:750px; margin:0 auto 2rem;">
+        xWebWise Solutions creates ready-to-launch digital businesses designed to help entrepreneurs 
+        start fast, operate with ease, and scale without technical headaches.
+    </p>
+
+    <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:1.5rem;">
+
+        <div class="feature-card" style="width:300px; padding:1.5rem; background:white; border:1px solid #e0e0e0; border-radius:10px;">
+            <h3 style="font-size:1.4rem; margin-bottom:0.5rem;">Build</h3>
+            <p>We create your entire digital business: site, brand, funnels, onboarding, and more.</p>
+        </div>
+
+        <div class="feature-card" style="width:300px; padding:1.5rem; background:white; border:1px solid #e0e0e0; border-radius:10px;">
+            <h3 style="font-size:1.4rem; margin-bottom:0.5rem;">Automate</h3>
+            <p>AI systems, email sequences, CRM workflows, and customer journeys done-for-you.</p>
+        </div>
+
+        <div class="feature-card" style="width:300px; padding:1.5rem; background:white; border:1px solid #e0e0e0; border-radius:10px;">
+            <h3 style="font-size:1.4rem; margin-bottom:0.5rem;">Support</h3>
+            <p>We maintain, optimize, update, and evolve your business as you grow.</p>
+        </div>
+
+    </div>
+    </div>
+</section>
+
+<!-- SECTION: BUSINESS-IN-A-BOX FEATURES -->
+<section style="padding:3rem 1rem; background:#fafafa; position: relative;">
+    <div style="position: relative; z-index: 1;">
+        <h2 style="text-align:center; font-size:2rem; font-weight:700; margin-bottom:1rem;">
+            Everything Your Business Needs, Built for You
+        </h2>
+
+    <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:1.25rem; max-width:1100px; margin:auto;">
+
+        <div class="feature-card" style="width:250px; padding:1.3rem; background:white; border-radius:8px;">
+            <h3>✔ Custom Website + Brandingk</h3>
+            <p>Your entire brand and online presence professionally built from scratch.</p>
+        </div>
+
+        <div class="feature-card" style="width:250px; padding:1.3rem; background:white; border-radius:8px;">
+            <h3>✔ Funnels That Convert</h3>
+            <p>Lead capture, sales funnels, CTAs, landing pages — ready to run.</p>
+        </div>
+
+        <div class="feature-card" style="width:250px; padding:1.3rem; background:white; border-radius:8px;">
+            <h3>✔ AI Systems Installed</h3>
+            <p>AI chat, content automation, email sequences, onboarding flows.</p>
+        </div>
+
+        <div class="feature-card" style="width:250px; padding:1.3rem; background:white; border-radius:8px;">
+            <h3>✔ Email + CRM Setup</h3>
+            <p>Your business can message, track, nurture, and close clients automatically.</p>
+        </div>
+
+        <div class="feature-card" style="width:250px; padding:1.3rem; background:white; border-radius:8px;">
+            <h3>✔ Payment Integration</h3>
+            <p>Stripe installed for selling products, services, memberships, or subscriptions.</p>
+        </div>
+
+        <div class="feature-card" style="width:250px; padding:1.3rem; background:white; border-radius:8px;">
+            <h3>✔ Lead-Gen Tools</h3>
+            <p>Popups, forms, exit-intent, referral tools, and high-converting capture systems.</p>
+        </div>
+
+        <div class="feature-card" style="width:250px; padding:1.3rem; background:white; border-radius:8px;">
+            <h3>✔ Admin Dashboard</h3>
+            <p>See your data, customers, leads, and business performance at a glance.</p>
+        </div>
+
+        <div class="feature-card" style="width:250px; padding:1.3rem; background:white; border-radius:8px;">
+            <h3>✔ Full Support</h3>
+            <p>We don't leave you alone — we support, maintain, and evolve your system.</p>
+        </div>
+
+        <div class="feature-card" style="width:250px; padding:1.3rem; background:white; border-radius:8px;">
+            <h3>✔ SEO & Search Ready</h3>
+            <p>Fully optimized for search engines, submitted to Google, and ready to rank immediately.</p>
+        </div>
+
+        <div class="feature-card" style="width:250px; padding:1.3rem; background:white; border-radius:8px;">
+            <h3>✔ AI Sales Team</h3>
+            <p>AI-powered agents making outbound calls, booking appointments, qualifying leads, and nurturing prospects 24/7.</p>
+        </div>
+
+        <div class="feature-card" style="width:250px; padding:1.3rem; background:white; border-radius:8px;">
+            <h3>✔ <a href="/blog" style="color: inherit; text-decoration: none;">Blog & Content Publishing</a></h3>
+            <p>Full-featured blog system with post management, rich text editor, categories, and SEO optimization built right in.</p>
+        </div>
+
+        <div class="feature-card" style="width:250px; padding:1.3rem; background:white; border-radius:8px;">
+            <h3>✔ Advanced Analytics & Reporting</h3>
+            <p>Real-time dashboards, conversion tracking, customer insights, and business intelligence at your fingertips.</p>
+        </div>
+
+    </div>
+    </div>
+</section>
+
+<!-- SECTION: FEATURED PROJECTS -->
+<section style="padding:3rem 1rem; background:#111111; position: relative;">
+    <div style="position: relative; z-index: 1;">
+    <h2 style="text-align:center; font-size:2rem; font-weight:700; margin-bottom:1rem; color:#ffffff;">
+        Live Systems Built & Deployed by WebWise
+    </h2>
+    <p style="text-align:center; color:#fff; max-width:750px; margin:0 auto 2rem; line-height:1.6;">
+        These are real, production-grade platforms built, launched, and maintained by our team — not demos, templates, or experiments.
+    </p>
+
+    <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:1.5rem; max-width:1200px; margin:auto;">
+        
+        <div class="project-card" style="width:280px; padding:1.5rem; background:#f8f9fa; border:1px solid #e0e0e0; border-radius:10px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+            <h3 style="font-size:1.3rem; font-weight:700; margin-bottom:0.5rem; color:#2c3e50;">
+                🧠 <a href="https://jerseycash5-picker.webwisesolutions.dev" target="_blank" rel="noopener noreferrer" style="color:#3498db; text-decoration:none;">NJ Cash 5 Predictor</a>
+            </h3>
+            <p style="color:#555; font-weight:600; font-size:0.9rem; margin-bottom:0.75rem;">
+                AI-Powered Data Analytics Platform
+            </p>
+            <p style="color:#666; line-height:1.6; font-size:0.95rem;">
+                An advanced machine-learning system that analyzes over 20 years of NJ Cash 5 historical data using <strong>XGBoost and statistical modeling</strong>. Includes real-time prediction outputs, secure user access, admin dashboards, and API-driven architecture — demonstrating our ability to build <strong>data-intensive, logic-driven applications</strong> from the ground up.
+            </p>
+        </div>
+
+        <div class="project-card" style="width:280px; padding:1.5rem; background:#f8f9fa; border:1px solid #e0e0e0; border-radius:10px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+            <h3 style="font-size:1.3rem; font-weight:700; margin-bottom:0.5rem; color:#2c3e50;">
+                💳 <a href="https://ezclub.app" target="_blank" rel="noopener noreferrer" style="color:#3498db; text-decoration:none;">EZClub.app</a>
+            </h3>
+            <p style="color:#555; font-weight:600; font-size:0.9rem; margin-bottom:0.75rem;">
+                Membership & Subscription Platform
+            </p>
+            <p style="color:#666; line-height:1.6; font-size:0.95rem;">
+                A full-scale membership platform designed for creators and communities. Features include <strong>Stripe Connect payments</strong>, subscription management, member dashboards, gated content, automated onboarding, and revenue tracking — showcasing our expertise in <strong>payment systems, multi-user platforms, and monetization infrastructure</strong>.
+            </p>
+        </div>
+
+        <div class="project-card" style="width:280px; padding:1.5rem; background:#f8f9fa; border:1px solid #e0e0e0; border-radius:10px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+            <h3 style="font-size:1.3rem; font-weight:700; margin-bottom:0.5rem; color:#2c3e50;">
+                📈 <a href="https://myalgoagent.com" target="_blank" rel="noopener noreferrer" style="color:#3498db; text-decoration:none;">MyAlgoAgent.com</a>
+            </h3>
+            <p style="color:#555; font-weight:600; font-size:0.9rem; margin-bottom:0.75rem;">
+                Automated Trading & Strategy Engine
+            </p>
+            <p style="color:#666; line-height:1.6; font-size:0.95rem;">
+                A sophisticated algorithmic trading platform featuring a <strong>session-based breakout strategy</strong> with ATR-driven risk management, trailing stops, broker integrations, and real-time execution logic. Built to handle <strong>high-stakes automation, complex rule sets, and live data flows</strong> reliably.
+            </p>
+        </div>
+
+        <div class="project-card" style="width:280px; padding:1.5rem; background:#f8f9fa; border:1px solid #e0e0e0; border-radius:10px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+            <h3 style="font-size:1.3rem; font-weight:700; margin-bottom:0.5rem; color:#2c3e50;">
+                🤖 <a href="https://crewassistai.com" target="_blank" rel="noopener noreferrer" style="color:#3498db; text-decoration:none;">CrewAssistAI.com</a>
+            </h3>
+            <p style="color:#555; font-weight:600; font-size:0.9rem; margin-bottom:0.75rem;">
+                AI Automation SaaS for Service Businesses
+            </p>
+            <p style="color:#666; line-height:1.6; font-size:0.95rem;">
+                A 24/7 AI-powered automation platform for service-based businesses. Includes missed-call AI replies, SMS workflows, CRM conversation tracking, appointment reminders, review automation, chat widgets, and performance analytics — demonstrating our strength in <strong>AI integrations, Twilio messaging, and scalable SaaS systems</strong>.
+            </p>
+        </div>
+
+    </div>
+    
+    <div style="max-width:900px; margin:2.5rem auto 0; padding:1.5rem; background:#1a1a1a; border-left:4px solid #3498db; border-radius:5px;">
+        <p style="color:#fff; font-style:italic; line-height:1.7; font-size:1rem; margin:0; text-align:center;">
+            These platforms represent the same systems, infrastructure, and expertise we deploy for our clients — customized to their business, goals, and market.
+        </p>
+    </div>
+    </div>
+</section>
+
+
+<!-- ⭐ NEW SECTION INSERTED HERE: WHY NOT USE WIX / SHOPIFY? ⭐ -->
+<section style="padding:3rem 1rem; background:#eef3f7;">
+    <div style="max-width:900px; margin:0 auto; text-align:center;">
+
+        <h2 style="font-size:2rem; font-weight:700; margin-bottom:1rem; color:#2c3e50;">
+            Why Not Just Use Wix, Shopify, or a $300 Website?
+        </h2>
+
+        <p style="font-size:1.05rem; color:#555; max-width:750px; margin:0 auto 2rem; line-height:1.7;">
+            Platforms like Wix and Shopify are great for simple websites — but our clients aren’t looking 
+            for a basic website. They need a <strong>fully automated business engine</strong> that handles leads, 
+            payments, AI workflows, onboarding, customer management, and real growth. That’s where WebWise comes in.
+        </p>
+
+        <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:1.5rem;">
+
+            <div style="background:white; border-radius:10px; padding:1.5rem; border:1px solid #e0e0e0; width:280px;">
+                <h3 style="font-size:1.25rem; margin-bottom:0.5rem; color:#2c3e50;">
+                    Wix / Shopify
+                </h3>
+                <ul style="text-align:left; line-height:1.6; color:#666; font-size:0.95rem;">
+                    <li>Great for simple websites</li>
+                    <li>Templates and drag-and-drop tools</li>
+                    <li>Monthly fees + app fees</li>
+                    <li>No advanced AI or automation</li>
+                    <li>Limited backend customizations</li>
+                </ul>
+            </div>
+
+            <div style="background:white; border-radius:10px; padding:1.5rem; border:1px solid #e0e0e0; width:280px;">
+                <h3 style="font-size:1.25rem; margin-bottom:0.5rem; color:#2c3e50;">
+                    WebWise Solutions
+                </h3>
+                <ul style="text-align:left; line-height:1.6; color:#666; font-size:0.95rem;">
+                    <li>A full business system — not just a website</li>
+                    <li>AI automations, funnels, CRM, payments, SMS</li>
+                    <li>Custom backend, dashboards, analytics</li>
+                    <li>Real developers building real applications</li>
+                    <li>Ongoing support and optimization</li>
+                </ul>
+            </div>
+        </div>
+
+        <p style="font-size:1.1rem; font-weight:600; color:#2c3e50; margin-top:2rem;">
+            If you just need a basic website, Wix is perfect.  
+            If you want an <strong>automated business</strong> that actually earns money — that's what we build.
+        </p>
+
+    </div>
+</section>
+<!-- ⭐ END NEW SECTION ⭐ -->
+
+
+<!-- WHAT'S YOUR IDEA SECTION -->
+<section style="padding:3rem 1rem; background:#f8f9fa;">
+    <div style="max-width:900px; margin:0 auto; text-align:center;">
+        <h2 style="font-size:2rem; font-weight:700; margin-bottom:1rem; color:#2c3e50;">
+            What's Your Idea?
+        </h2>
+        <p style="font-size:1.1rem; color:#666; max-width:700px; margin:0 auto 2rem; line-height:1.7;">
+            Have a business idea you want to bring to life? We can build it. Don't have an idea yet? 
+            Book a call and let's brainstorm together—we'll help you discover opportunities and create 
+            a custom solution that fits your goals.
+        </p>
+        <div style="display:flex; gap:1rem; justify-content:center; flex-wrap:wrap;">
+            <a href="/start-your-project" class="cta-button" 
+               style="padding:0.9rem 2rem; font-size:1.1rem;">
+                I Have an Idea →
+            </a>
+            <a href="/book-call" class="cta-button" 
+               style="background:#27ae60; padding:0.9rem 2rem; font-size:1.1rem;">
+                Book a Call
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- FINAL CTA -->
+<section style="text-align:center; padding:3rem 1rem;">
+    <h2 style="font-size:2rem; font-weight:700; margin-bottom:1rem;">
+        Discover How Automation Changes Everything
+    </h2>
+    <p style="max-width:700px; margin:0 auto 1.5rem; color:#555;">
+        See the blunt, no-fluff sales letter that explains exactly how we build automated business machines—and why it matters now more than ever.
+    </p>
+
+    <a href="/automate-or-die" class="cta-button" 
+       style="padding:1rem 2.5rem; font-size:1.2rem; font-weight:700;">
+        Read the Sales Letter →
+    </a>
+</section>
+
+{% endblock %}

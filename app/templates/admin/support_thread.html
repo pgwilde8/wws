@@ -1,0 +1,55 @@
+{% extends "layout/base.html" %}
+{% block title %}Support – {{ client_email }}{% endblock %}
+{% block content %}
+
+<div class="max-w-4xl mx-auto p-4 sm:p-6 flex flex-col h-[80vh]">
+
+  <!-- Header -->
+  <div class="bg-white p-4 rounded-2xl border shadow-sm mb-4">
+    <h1 class="text-xl font-bold text-blue-600">Support Thread</h1>
+    <p class="text-xs font-mono text-gray-500">{{ client_email }}</p>
+  </div>
+
+  <!-- Messages -->
+  <div class="flex-1 overflow-y-auto space-y-3 pr-2">
+
+    {% for m in messages %}
+      {% if m.sender == "client" %}
+      <!-- Client bubble -->
+      <div class="flex justify-start">
+        <div class="bg-gray-100 text-gray-900 px-3 py-2 rounded-xl max-w-[72%] text-sm shadow-sm border">
+          {{ m.message }}
+          <p class="text-[9px] text-gray-400 mt-1">{{ m.created_at.strftime('%b %d, %H:%M') }}</p>
+        </div>
+      </div>
+
+      {% else %}
+      <!-- Admin bubble -->
+      <div class="flex justify-end">
+        <div class="bg-blue-600 text-white px-3 py-2 rounded-xl max-w-[72%] text-sm shadow-md">
+          {{ m.message }}
+          <p class="text-[9px] text-blue-200 mt-1">{{ m.created_at.strftime('%b %d, %H:%M') }}</p>
+        </div>
+      </div>
+      {% endif %}
+    {% endfor %}
+
+    {% if not messages %}
+    <p class="text-sm text-gray-500 text-center p-4">No support messages yet.</p>
+    {% endif %}
+
+  </div>
+
+  <!-- Reply Box (admin only) -->
+  <form method="POST" class="bg-white border-t p-3 mt-4 rounded-xl shadow-sm">
+    <textarea name="reply" placeholder="Write a reply..."
+              class="w-full border rounded-lg p-2 text-sm bg-gray-50" rows="3"></textarea>
+    <button disabled
+      class="mt-2 px-4 py-2 bg-gray-200 text-gray-500 rounded-lg text-sm font-semibold">
+      Reply feature coming soon
+    </button>
+  </form>
+
+</div>
+
+{% endblock %}

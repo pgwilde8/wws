@@ -1,0 +1,59 @@
+{% extends "layout/base.html" %}
+
+{% block title %}Contact Us - WebWise Solutions{% endblock %}
+
+{% block content %}
+<!-- HERO -->
+<div class="hero" style="text-align:center; padding:4rem 1rem; background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('/static/img/logo2.png') center/cover no-repeat; position: relative;">
+    <h2 style="font-size:2.5rem; font-weight:700; margin-bottom:2rem; color:#ffffff; text-shadow: 2px 2px 6px rgba(0,0,0,0.7); letter-spacing: 2px; text-transform: uppercase;">
+        WebWise Solutions
+    </h2>
+    <h1 style="font-size:2.8rem; font-weight:800; margin-bottom:0.5rem; color:#ffffff; text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">
+        Let's Start a Conversation
+    </h1>
+    <p style="font-size:1.25rem; color:#ffffff; max-width:720px; margin:0 auto 1.5rem; text-shadow: 1px 1px 3px rgba(0,0,0,0.5);">
+        Have questions about building your automated business? We're here to help. 
+        Reach out and let's discuss how we can bring your vision to life.
+    </p>
+</div>
+
+<div class="contact-page">
+    
+    <form method="POST" action="/contact/" class="contact-form">
+        {% if package and amount %}
+        <input type="hidden" name="package" value="{{ package }}">
+        <input type="hidden" name="amount" value="{{ amount }}">
+        <div style="background: #e8f4f8; padding: 1rem; border-radius: 6px; margin-bottom: 1.5rem; border-left: 4px solid #3498db;">
+            <strong>Package Selected:</strong> {{ package|replace('-', ' ')|title }} - ${{ amount }}
+        </div>
+        {% endif %}
+        <div class="form-group">
+            <label for="name">Name *</label>
+            <input type="text" id="name" name="name" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="email">Email *</label>
+            <input type="email" id="email" name="email" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="phone">Phone</label>
+            <input type="tel" id="phone" name="phone">
+        </div>
+        
+        <div class="form-group">
+            <label for="subject">Subject</label>
+            <input type="text" id="subject" name="subject">
+        </div>
+        
+        <div class="form-group">
+            <label for="message">Message *</label>
+            <textarea id="message" name="message" rows="5" required></textarea>
+        </div>
+        
+        <button type="submit" class="submit-button">Send Message</button>
+    </form>
+</div>
+{% endblock %}
+

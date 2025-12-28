@@ -1,0 +1,15 @@
+Here’s a simple way to take emails from your quiz_submissions table and send them outbound via Brevo (Sendinblue) API.
+Overview
+Query your DB for the target emails (e.g., all from quiz_submissions).
+(Optional but recommended) Add them to a Brevo list via the Contacts API, then send a campaign or transactional email.
+Use Brevo’s API key (BREVO_API_KEY) and either their official SDK (sib-api-v3-sdk) or plain HTTP requests.
+Step 1: Install Brevo SDK (inside venv)
+pip install sib-api-v3-sdk
+Step 2: Example Python script to pull emails and add/update contacts, then send an email
+import osimport psycopgimport sib_api_v3_sdkfrom sib_api_v3_sdk.rest import ApiExceptionfrom sib_api_v3_sdk.models import CreateContact, SendSmtpEmailBREVO_API_KEY = os.environ["BREVO_API_KEY"]BREVO_LIST_ID = 123456  # optional: your Brevo list IDSMTP_TEMPLATE_ID = 789012  # optional: a Brevo transactional template ID# 1) Fetch emails from DBconn = psycopg.connect(os.environ["DATABASE_URL"])with conn, conn.cursor() as cur:    cur.execute("SELECT DISTINCT email FROM quiz_submissions WHERE email <> ''")    emails = [row[0] for row in cur.fetchall()]# 2) Configure Brevo clientconfiguration = sib_api_v3_sdk.Configuration()configuration.api_key['api-key'] = BREVO_API_KEYapi_client = sib_api_v3_sdk.ApiClient(configuration)contacts_api = sib_api_v3_sdk.ContactsApi(api_client)smtp_api = sib_api_v3_sdk.TransactionalEmailsApi(api_client)# 3) Upsert contacts (optionally into a list)for email in emails:    try:        contact = CreateContact(email=email, list_ids=[BREVO_LIST_ID] if BREVO_LIST_ID else None)        contacts_api.create_contact(contact)    except ApiException as e:        # If contact exists, you can ignore or update; 400 with "duplicate parameter" is normal for existing contacts        if e.status != 400:            print(f"Contact error for {email}: {e}")# 4) Send a transactional email to all (or loop per email)#    Using a template is best; here’s a simple per-email send:for email in emails:    try:        send_smtp_email = SendSmtpEmail(            to=[{"email": email}],            template_id=SMTP_TEMPLATE_ID,  # or use subject/htmlContent if not using templates            params={"cta_link": "https://webwisesolutions.dev/book-call"}        )        smtp_api.send_transac_email(send_smtp_email)    except ApiException as e:        print(f"Send error for {email}: {e}")
+Notes
+Set env vars: BREVO_API_KEY and DATABASE_URL (already in your app).
+If you prefer campaigns, add contacts to a list and send via Brevo’s campaign UI instead of transactional sends.
+If you don’t have a template, you can set subject and htmlContent in SendSmtpEmail directly.
+Handle unsubscribe and compliance: include an unsubscribe link in your template, and send only to opted-in contacts.
+To avoid re-sending to the same people, filter or track sends (e.g., add a “last_sent_at” column or query only new rows).

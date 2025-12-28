@@ -1,0 +1,360 @@
+{% extends "layout/base.html" %}
+
+{% block title %}Choose Your Build | WebWise Solutions{% endblock %}
+
+{% block content %}
+<div class="page-wrapper" style="max-width:780px; margin:auto; padding:3rem 1rem;">
+
+    <!-- HEADER -->
+    <header style="text-align:center; margin-bottom:3rem;">
+        <h1 style="font-size:2.4rem; font-weight:800; line-height:1.2; margin-bottom:1rem;">
+            Choose Your Build
+        </h1>
+        <p style="font-size:1.3rem; color:#555; margin-bottom:1rem; font-weight:600;">
+            Starter. Growth. Scale.
+        </p>
+        <p style="font-size:1.1rem; color:#555; margin-top:1rem;">
+            By now you understand the difference between a website…<br>
+            …and a machine.
+        </p>
+    </header>
+
+    <!-- INTRO SECTION -->
+    <section style="margin-bottom:3rem; text-align:center;">
+        <p style="color:#555; line-height:1.7; margin-bottom:1rem;">
+            So this isn't about "how many pages you get."
+        </p>
+        <p style="color:#555; line-height:1.7; margin-bottom:1rem; font-weight:600;">
+            It's about how deep your system needs to go right now.
+        </p>
+        <p style="color:#555; line-height:1.7; margin-bottom:2rem; font-weight:600;">
+            Pick the path that matches your reality.
+        </p>
+    </section>
+
+    <!-- PATH 1 - STARTER -->
+    <section id="starter" style="margin-bottom:4rem; padding:2rem; background:#f8f9fa; border-radius:8px; border-left:4px solid #2563eb;">
+        <div style="margin-bottom:1.5rem;">
+            <h2 style="font-size:1.8rem; font-weight:700; margin-bottom:0.5rem; color:#2563eb;">
+                Path #1 — Starter — $1,997
+            </h2>
+            <p style="color:#555; line-height:1.7; font-weight:600; margin-bottom:1rem;">
+                Clean execution. Real automation. No overbuilding.
+            </p>
+        </div>
+        
+        <p style="color:#555; line-height:1.7; margin-bottom:1.5rem;">
+            Starter is for founders who want a professional system in place — fast — using proven patterns that already work.
+        </p>
+        
+        <p style="color:#555; line-height:1.7; margin-bottom:1rem; font-weight:600;">
+            If you can say:
+        </p>
+        <p style="color:#555; line-height:1.7; margin-bottom:1.5rem; font-style:italic; padding-left:1rem; border-left:3px solid #2563eb;">
+            "What I want already exists somewhere… I just need it done correctly."
+        </p>
+        <p style="color:#555; line-height:1.7; margin-bottom:1.5rem; font-weight:600;">
+            You're in the right place.
+        </p>
+        
+        <p style="color:#555; line-height:1.7; margin-bottom:1rem; font-weight:600;">
+            Starter is designed for:
+        </p>
+        <ul style="list-style:none; padding:0; margin:1.5rem 0;">
+            <li style="padding:0.5rem 0; color:#555;">A credible web presence that converts</li>
+            <li style="padding:0.5rem 0; color:#555;">Lead capture + basic automation</li>
+            <li style="padding:0.5rem 0; color:#555;">Payments or booking wired correctly</li>
+            <li style="padding:0.5rem 0; color:#555;">A simple business engine that runs without babysitting</li>
+        </ul>
+        
+        <p style="color:#555; line-height:1.7; margin-bottom:1rem; font-weight:600;">
+            Starter is NOT for:
+        </p>
+        <ul style="list-style:none; padding:0; margin:1.5rem 0;">
+            <li style="padding:0.5rem 0; color:#555;">New platforms, tools, or complex workflows</li>
+            <li style="padding:0.5rem 0; color:#555;">Heavy customization or novel logic</li>
+            <li style="padding:0.5rem 0; color:#555;">Anything that requires invention</li>
+        </ul>
+        
+        <form style="text-align:center; margin-top:2rem;" onsubmit="return handleOffer3Checkout(event, 'starter')">
+            <label style="font-size:0.95rem; display:block; margin-bottom:0.5rem;">
+                <input type="checkbox" class="tos-checkbox-offer3" data-plan="starter" required>
+                I agree to the <a href="/tos" target="_blank">Terms of Service</a>
+            </label>
+            <button type="submit" class="cta-button" id="pay-btn-offer3-starter" style="font-size:1.1rem; padding:0.9rem 2rem;" disabled>Start Starter →</button>
+        </form>
+    </section>
+
+    <!-- PATH 2 - GROWTH -->
+    <section id="growth" style="margin-bottom:4rem; padding:2rem; background:#eef6ff; border-radius:8px; border-left:4px solid #2563eb;">
+        <div style="margin-bottom:1.5rem;">
+            <h2 style="font-size:1.8rem; font-weight:700; margin-bottom:0.5rem; color:#2563eb;">
+                Path #2 — Growth (Most Popular) — $3,997
+            </h2>
+            <p style="color:#555; line-height:1.7; font-weight:600; margin-bottom:1rem;">
+                Leverage. Orchestration. A system that works ahead of you.
+            </p>
+        </div>
+        
+        <p style="color:#555; line-height:1.7; margin-bottom:1.5rem;">
+            Growth is for founders who are done doing everything manually.
+        </p>
+        
+        <p style="color:#555; line-height:1.7; margin-bottom:1rem;">
+            This is where the machine becomes a quiet operator:
+        </p>
+        <ul style="list-style:none; padding:0; margin:1.5rem 0;">
+            <li style="padding:0.5rem 0; color:#555; font-weight:600;">capturing</li>
+            <li style="padding:0.5rem 0; color:#555; font-weight:600;">responding</li>
+            <li style="padding:0.5rem 0; color:#555; font-weight:600;">following up</li>
+            <li style="padding:0.5rem 0; color:#555; font-weight:600;">routing</li>
+            <li style="padding:0.5rem 0; color:#555; font-weight:600;">converting</li>
+        </ul>
+        
+        <p style="color:#555; line-height:1.7; margin-bottom:1rem; font-weight:600;">
+            Growth is right if:
+        </p>
+        <ul style="list-style:none; padding:0; margin:1.5rem 0;">
+            <li style="padding:0.5rem 0; color:#555;">You have traction (or you're serious about getting it)</li>
+            <li style="padding:0.5rem 0; color:#555;">Multiple systems need to work together</li>
+            <li style="padding:0.5rem 0; color:#555;">Follow-up needs logic, not reminders</li>
+            <li style="padding:0.5rem 0; color:#555;">You want a system that reduces revenue leakage</li>
+        </ul>
+        
+        <p style="color:#555; line-height:1.7; margin-bottom:1rem; font-weight:600;">
+            Growth includes:
+        </p>
+        <ul style="list-style:none; padding:0; margin:1.5rem 0;">
+            <li style="padding:0.5rem 0; color:#555;">Everything in Starter</li>
+            <li style="padding:0.5rem 0; color:#555;">Deeper automation and workflows</li>
+            <li style="padding:0.5rem 0; color:#555;">Smarter follow-up logic</li>
+            <li style="padding:0.5rem 0; color:#555;">CRM-style organization and routing</li>
+            <li style="padding:0.5rem 0; color:#555;">A build designed to grow with you</li>
+        </ul>
+        
+        <p style="color:#555; line-height:1.7; margin-bottom:1.5rem;">
+            This is the most popular path because it's the sweet spot:<br>
+            not too small, not overbuilt — just powerful.
+        </p>
+        
+        <form style="text-align:center; margin-top:2rem;" onsubmit="return handleOffer3Checkout(event, 'growth')">
+            <label style="font-size:0.95rem; display:block; margin-bottom:0.5rem;">
+                <input type="checkbox" class="tos-checkbox-offer3" data-plan="growth" required>
+                I agree to the <a href="/tos" target="_blank">Terms of Service</a>
+            </label>
+            <button type="submit" class="cta-button" id="pay-btn-offer3-growth" style="font-size:1.1rem; padding:0.9rem 2rem;" disabled>Start Growth →</button>
+        </form>
+    </section>
+
+    <!-- PATH 3 - SCALE -->
+    <section id="scale" style="margin-bottom:4rem; padding:2rem; background:#f0f9ff; border-radius:8px; border-left:4px solid #2563eb;">
+        <div style="margin-bottom:1.5rem;">
+            <h2 style="font-size:1.8rem; font-weight:700; margin-bottom:0.5rem; color:#2563eb;">
+                Path #3 — Scale — $5,997
+            </h2>
+            <p style="color:#555; line-height:1.7; font-weight:600; margin-bottom:1rem;">
+                Deeper engineering for systems that must be built carefully.
+            </p>
+        </div>
+        
+        <p style="color:#555; line-height:1.7; margin-bottom:1.5rem;">
+            Scale is for ideas where engineering decisions matter.
+        </p>
+        
+        <p style="color:#555; line-height:1.7; margin-bottom:1rem; font-weight:600;">
+            You're here if:
+        </p>
+        <ul style="list-style:none; padding:0; margin:1.5rem 0;">
+            <li style="padding:0.5rem 0; color:#555;">What you want doesn't exist off-the-shelf</li>
+            <li style="padding:0.5rem 0; color:#555;">Data / AI / algorithms are part of the product</li>
+            <li style="padding:0.5rem 0; color:#555;">The system must be correct, not just functional</li>
+            <li style="padding:0.5rem 0; color:#555;">You want architecture, not assumptions</li>
+        </ul>
+        
+        <p style="color:#555; line-height:1.7; margin-bottom:1rem; font-weight:600;">
+            Scale includes:
+        </p>
+        <ul style="list-style:none; padding:0; margin:1.5rem 0;">
+            <li style="padding:0.5rem 0; color:#555;">Everything in Growth</li>
+            <li style="padding:0.5rem 0; color:#555;">More planning and careful execution</li>
+            <li style="padding:0.5rem 0; color:#555;">Deeper logic, data structure, and system design</li>
+            <li style="padding:0.5rem 0; color:#555;">A build meant to become infrastructure — not a one-off project</li>
+        </ul>
+        
+        <form style="text-align:center; margin-top:2rem;" onsubmit="return handleOffer3Checkout(event, 'scale')">
+            <label style="font-size:0.95rem; display:block; margin-bottom:0.5rem;">
+                <input type="checkbox" class="tos-checkbox-offer3" data-plan="scale" required>
+                I agree to the <a href="/tos" target="_blank">Terms of Service</a>
+            </label>
+            <button type="submit" class="cta-button" id="pay-btn-offer3-scale" style="font-size:1.1rem; padding:0.9rem 2rem;" disabled>Start Scale →</button>
+        </form>
+    <script>
+    // Enable pay button only if TOS is checked
+    document.querySelectorAll('.tos-checkbox-offer3').forEach(function(checkbox) {
+        checkbox.addEventListener('change', function() {
+            const plan = this.getAttribute('data-plan');
+            const btn = document.getElementById('pay-btn-offer3-' + plan);
+            btn.disabled = !this.checked;
+        });
+    });
+
+    async function handleOffer3Checkout(event, plan) {
+        event.preventDefault();
+        const stripe = Stripe('{{ stripe_publishable_key }}');
+        const tosCheckbox = document.querySelector('.tos-checkbox-offer3[data-plan="' + plan + '"]');
+        const tosChecked = tosCheckbox && tosCheckbox.checked;
+        const errorDiv = document.getElementById('checkout-error-offer3');
+        if (errorDiv) errorDiv.textContent = '';
+        if (!tosChecked) {
+            if (errorDiv) errorDiv.textContent = 'You must agree to the Terms of Service.';
+            else alert('You must agree to the Terms of Service.');
+            return false;
+        }
+        try {
+            const res = await fetch('/create-checkout-session', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ plan: plan, tos_checked: tosChecked })
+            });
+            const data = await res.json();
+            if (data.id) {
+                stripe.redirectToCheckout({ sessionId: data.id });
+            } else {
+                if (errorDiv) errorDiv.textContent = data.detail || 'Error creating Stripe session.';
+                else alert(data.detail || 'Error creating Stripe session.');
+            }
+        } catch (err) {
+            if (errorDiv) errorDiv.textContent = 'Network error. Please try again.';
+            else alert('Network error. Please try again.');
+        }
+        return false;
+    }
+    <div id="checkout-error-offer3" style="color: #b91c1c; font-weight: 600; margin-top: 1rem;"></div>
+    </script>
+    </section>
+
+    <!-- SIMPLE RULE SECTION -->
+    <section style="margin-bottom:3rem; padding:1.5rem; background:#fff9e6; border-radius:8px; border-left:4px solid #f59e0b;">
+        <h2 style="font-size:1.6rem; font-weight:700; margin-bottom:1rem;">
+            A Simple Rule of Thumb (Read This)
+        </h2>
+        <p style="color:#555; line-height:1.7; margin-bottom:1rem;">
+            If what you want already exists as a product you could buy today, Starter is usually enough.
+        </p>
+        <p style="color:#555; line-height:1.7; margin-bottom:1rem;">
+            If it doesn't exist yet, Starter is off the table — and the decision becomes Growth vs Scale based on complexity, not pressure.
+        </p>
+        <p style="color:#555; line-height:1.7; margin-bottom:1rem;">
+            No tricks.
+        </p>
+        <p style="color:#555; line-height:1.7; margin-bottom:1rem;">
+            No upsells.
+        </p>
+        <p style="color:#555; line-height:1.7; font-weight:600;">
+            Just the right depth for the job.
+        </p>
+    </section>
+
+    <!-- SUPPORT SECTION -->
+    <section style="margin-bottom:3rem;">
+        <h2 style="font-size:1.8rem; font-weight:700; margin-bottom:1.5rem;">
+            Support Is Included — Here's What That Means
+        </h2>
+        <p style="color:#555; line-height:1.7; margin-bottom:1rem;">
+            Every build includes support because a business machine shouldn't break the moment it goes live.
+        </p>
+        <p style="color:#555; line-height:1.7; margin-bottom:1.5rem;">
+            But we're going to be crystal clear here — because clarity prevents frustration on both sides.
+        </p>
+        
+        <p style="color:#555; line-height:1.7; margin-bottom:1rem; font-weight:600;">
+            Support included means:
+        </p>
+        <ul style="list-style:none; padding:0; margin:1.5rem 0;">
+            <li style="padding:0.5rem 0; color:#555;">Keeping the machine running</li>
+            <li style="padding:0.5rem 0; color:#555;">Fixing bugs or failures</li>
+            <li style="padding:0.5rem 0; color:#555;">Maintaining automations and integrations</li>
+            <li style="padding:0.5rem 0; color:#555;">Ensuring your system continues operating as designed</li>
+        </ul>
+        
+        <p style="color:#555; line-height:1.7; margin-bottom:1rem; font-weight:600;">
+            In short:
+        </p>
+        <p style="color:#555; line-height:1.7; margin-bottom:1.5rem; font-weight:600; font-size:1.1rem;">
+            We support the engine.
+        </p>
+        
+        <p style="color:#555; line-height:1.7; margin-bottom:1rem; font-weight:600;">
+            Support does NOT mean:
+        </p>
+        <ul style="list-style:none; padding:0; margin:1.5rem 0;">
+            <li style="padding:0.5rem 0; color:#555;">Unlimited design tweaks</li>
+            <li style="padding:0.5rem 0; color:#555;">Endless copy rewrites</li>
+            <li style="padding:0.5rem 0; color:#555;">Content creation or marketing management</li>
+            <li style="padding:0.5rem 0; color:#555;">"Can you swap this image every few days?" requests</li>
+        </ul>
+        
+        <p style="color:#555; line-height:1.7; margin-bottom:1rem;">
+            Those aren't support issues.
+        </p>
+        <p style="color:#555; line-height:1.7; margin-bottom:1.5rem; font-weight:600;">
+            That's new work.
+        </p>
+        <p style="color:#555; line-height:1.7; margin-bottom:2rem;">
+            And treating new work like "support" is how systems become unstable.
+        </p>
+    </section>
+
+    <!-- OWNERSHIP SECTION -->
+    <section style="margin-bottom:3rem;">
+        <h2 style="font-size:1.8rem; font-weight:700; margin-bottom:1.5rem;">
+            Want to Change Images Without Asking Us? Good.
+        </h2>
+        <p style="color:#555; line-height:1.7; margin-bottom:1rem;">
+            To make this easy, we build your site so you can handle basic content updates yourself.
+        </p>
+        <p style="color:#555; line-height:1.7; margin-bottom:1rem;">
+            For example:
+        </p>
+        <p style="color:#555; line-height:1.7; margin-bottom:1rem;">
+            You'll have an /admin area where you can update a gallery page (add/remove images) without opening a ticket or waiting on us.
+        </p>
+        <p style="color:#555; line-height:1.7; margin-bottom:2rem;">
+            That means you stay in control of your content — and we stay focused on keeping the machine healthy.
+        </p>
+        
+        <h2 style="font-size:1.8rem; font-weight:700; margin-bottom:1.5rem;">
+            Ownership, Always.
+        </h2>
+        <p style="color:#555; line-height:1.7; margin-bottom:1rem; font-weight:600;">
+            You own what we build.
+        </p>
+        <p style="color:#555; line-height:1.7; margin-bottom:1rem;">
+            This isn't a rented template.
+        </p>
+        <p style="color:#555; line-height:1.7; margin-bottom:2rem; font-weight:600;">
+            You're buying infrastructure — a machine you control.
+        </p>
+    </section>
+
+    <!-- FINAL NOTE SECTION -->
+    <section style="margin-bottom:3rem; padding:1.5rem; background:#f0fdf4; border-radius:8px; border-left:4px solid #10b981;">
+        <h2 style="font-size:1.6rem; font-weight:700; margin-bottom:1rem;">
+            Final Note Before You Choose
+        </h2>
+        <p style="color:#555; line-height:1.7; margin-bottom:1rem;">
+            The goal isn't to "pick the perfect plan."
+        </p>
+        <p style="color:#555; line-height:1.7; margin-bottom:1rem; font-weight:600;">
+            The goal is to stop living in manual mode and start building an economy you own.
+        </p>
+        <p style="color:#555; line-height:1.7; margin-bottom:1rem;">
+            Choose the depth that matches where you are today.
+        </p>
+        <p style="color:#555; line-height:1.7; font-weight:600;">
+            The machine can evolve when the business does.
+        </p>
+    </section>
+
+</div>
+{% endblock %}

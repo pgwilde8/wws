@@ -1,0 +1,458 @@
+{% extends "layout/base.html" %}
+
+{% block title %}Book a Call - WebWise Solutions{% endblock %}
+
+{% block extra_head %}
+<style>
+    /* Modal Styles */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 2000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.5);
+        animation: fadeIn 0.3s;
+    }
+
+    .modal.active {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    .modal-content {
+        background-color: #fff;
+        margin: auto;
+        padding: 2rem;
+        border-radius: 8px;
+        width: 90%;
+        max-width: 600px;
+        max-height: 90vh;
+        overflow-y: auto;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        animation: slideDown 0.3s;
+        position: relative;
+    }
+
+    @keyframes slideDown {
+        from {
+            transform: translateY(-50px);
+            opacity: 0;
+        }
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    .close-modal {
+        position: absolute;
+        right: 1rem;
+        top: 1rem;
+        font-size: 2rem;
+        font-weight: bold;
+        color: #999;
+        cursor: pointer;
+        border: none;
+        background: none;
+        line-height: 1;
+        padding: 0;
+        width: 30px;
+        height: 30px;
+    }
+
+    .close-modal:hover {
+        color: #333;
+    }
+
+    .modal-header {
+        margin-bottom: 1.5rem;
+    }
+
+    .modal-header h2 {
+        color: #2c3e50;
+        margin-bottom: 0.5rem;
+    }
+
+    .book-call-btn {
+        background-color: #27ae60;
+        color: #fff;
+        padding: 0.75rem 1.5rem;
+        border-radius: 4px;
+        text-decoration: none;
+        display: inline-block;
+        transition: background-color 0.3s;
+        border: none;
+        cursor: pointer;
+        font-size: 1rem;
+    }
+
+    .book-call-btn:hover {
+        background-color: #229954;
+    }
+
+    .alternative-links {
+        margin-top: 2rem;
+        padding-top: 2rem;
+        border-top: 1px solid #ecf0f1;
+        text-align: center;
+    }
+
+    .alternative-links p {
+        color: #7f8c8d;
+        margin-bottom: 1rem;
+    }
+
+    .alternative-links a {
+        display: inline-block;
+        margin: 0 0.5rem;
+        color: #3498db;
+        text-decoration: none;
+    }
+
+    .alternative-links a:hover {
+        text-decoration: underline;
+    }
+
+
+    .content-section {
+        padding: 3rem 1rem;
+    }
+
+    .container {
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    .info-box {
+        background: #f8f9fa;
+        border-left: 4px solid #3498db;
+        padding: 1.5rem;
+        margin: 2rem 0;
+        border-radius: 4px;
+    }
+
+    .info-box h3 {
+        margin-top: 0;
+        color: #2c3e50;
+    }
+
+    .service-list {
+        list-style: none;
+        padding-left: 0;
+    }
+
+    .service-list li {
+        padding: 0.5rem 0;
+        padding-left: 1.5rem;
+        position: relative;
+    }
+
+    .service-list li::before {
+        content: "✓";
+        position: absolute;
+        left: 0;
+        color: #27ae60;
+        font-weight: bold;
+    }
+
+    .contact-form {
+        margin-top: 1.5rem;
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+        color: #2c3e50;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 1rem;
+        box-sizing: border-box;
+    }
+
+    .form-group textarea {
+        resize: vertical;
+    }
+
+    .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+    }
+
+    .btn {
+        background: #e74c3c;
+        color: white;
+        padding: 0.9rem 2rem;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 1rem;
+        font-weight: bold;
+        transition: background 0.3s;
+    }
+
+    .btn:hover {
+        background: #c0392b;
+    }
+
+    .btn-large {
+        width: 100%;
+        padding: 1rem;
+        font-size: 1.1rem;
+    }
+
+    .alert {
+        padding: 1.25rem;
+        border-radius: 6px;
+        margin-bottom: 1.5rem;
+        animation: slideDown 0.3s ease-out;
+    }
+
+    .alert-success {
+        background: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+        box-shadow: 0 2px 4px rgba(21, 87, 36, 0.1);
+    }
+
+    .alert-error {
+        background: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+        box-shadow: 0 2px 4px rgba(114, 28, 36, 0.1);
+    }
+
+    .alert strong {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-size: 1.1rem;
+    }
+
+    .text-center {
+        text-align: center;
+    }
+
+    @media (max-width: 768px) {
+        .form-row {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- HERO -->
+<div class="hero" style="text-align:center; padding:4rem 1rem; background:#f7faff;">
+    <h1 style="font-size:2.8rem; font-weight:800; margin-bottom:0.5rem; color:#1a1a1a;">
+        Let's Talk About Your Business
+    </h1>
+    <p style="font-size:1.25rem; color:#555; max-width:720px; margin:0 auto 1.5rem;">
+        Schedule a call to discuss your vision, explore our solutions, and get personalized recommendations for your automated business.
+    </p>
+</div>
+
+<section class="content-section">
+    <div class="container">
+        <div class="text-center" style="margin-bottom: 3rem;">
+            <button class="book-call-btn" onclick="openModal()">Book a Call Now</button>
+        </div>
+
+        <div class="info-box">
+            <h3>Why Book a Call?</h3>
+            <ul class="service-list">
+                <li>Discuss your business idea and requirements</li>
+                <li>Get personalized recommendations for your build package</li>
+                <li>Learn about our support plans and platform options</li>
+                <li>Ask questions about our services and process</li>
+                <li>Plan your automated business with our expert team</li>
+            </ul>
+        </div>
+
+        <div class="alternative-links">
+            <p>Prefer to contact us another way?</p>
+            <a href="/contact">Contact Us</a> |
+            <a href="/intro2">Learn More</a>
+        </div>
+    </div>
+</section>
+
+<!-- Modal -->
+<div id="callModal" class="modal">
+    <div class="modal-content">
+        <button class="close-modal" onclick="closeModal()">&times;</button>
+        <div class="modal-header">
+            <h2>Book a Call</h2>
+            <p>Fill out the form below and we'll contact you to confirm your call time.</p>
+        </div>
+
+        {% if success %}
+        <div class="alert alert-success">
+            <strong>✓ Success!</strong><br>
+            {{ message }}
+        </div>
+        <div class="text-center" style="margin-top: 2rem;">
+            <button onclick="closeModal()" class="btn">Close</button>
+        </div>
+        {% elif error %}
+        <div class="alert alert-error">
+            <strong>⚠ Error</strong><br>
+            {{ message }}
+        </div>
+        {% endif %}
+
+        {% if not success %}
+        <form method="POST" action="/book-call/submit" class="contact-form">
+            <div class="form-group">
+                <label for="name">Your Name *</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="email">Email *</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Phone *</label>
+                    <input type="tel" id="phone" name="phone" required>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="preferred_date">Preferred Date *</label>
+                    <input type="date" id="preferred_date" name="preferred_date" required min="{{ today }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="preferred_time">Preferred Time *</label>
+                    <select id="preferred_time" name="preferred_time" required>
+                        <option value="">Select Time</option>
+                        <option value="9:00 AM">9:00 AM</option>
+                        <option value="10:00 AM">10:00 AM</option>
+                        <option value="11:00 AM">11:00 AM</option>
+                        <option value="12:00 PM">12:00 PM</option>
+                        <option value="1:00 PM">1:00 PM</option>
+                        <option value="2:00 PM">2:00 PM</option>
+                        <option value="3:00 PM">3:00 PM</option>
+                        <option value="4:00 PM">4:00 PM</option>
+                        <option value="5:00 PM">5:00 PM</option>
+                        <option value="6:00 PM">6:00 PM</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="timezone">Timezone</label>
+                <select id="timezone" name="timezone">
+                    <option value="PST">Pacific Standard Time (PST)</option>
+                    <option value="MST">Mountain Standard Time (MST)</option>
+                    <option value="CST">Central Standard Time (CST)</option>
+                    <option value="EST" selected>Eastern Standard Time (EST)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="message">Message (Optional)</label>
+                <textarea id="message" name="message" rows="4" placeholder="Tell us about your business idea or any specific questions you'd like to discuss..."></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-large" id="submitBtn">Submit Booking Request</button>
+        </form>
+        {% endif %}
+
+        <div class="alternative-links" style="margin-top: 2rem; padding-top: 1.5rem;">
+            <p>Prefer to contact us another way?</p>
+            <a href="/contact">Contact Us</a> |
+            <a href="/intro2">Learn More</a>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Get today's date in YYYY-MM-DD format for min date
+    document.addEventListener('DOMContentLoaded', function() {
+        const today = new Date().toISOString().split('T')[0];
+        const dateInput = document.getElementById('preferred_date');
+        if (dateInput) {
+            dateInput.setAttribute('min', today);
+        }
+    });
+
+    function openModal() {
+        document.getElementById('callModal').classList.add('active');
+        document.body.style.overflow = 'hidden'; // Prevent background scrolling
+    }
+
+    function closeModal() {
+        document.getElementById('callModal').classList.remove('active');
+        document.body.style.overflow = 'auto'; // Restore scrolling
+    }
+
+    // Close modal when clicking outside
+    window.onclick = function(event) {
+        const modal = document.getElementById('callModal');
+        if (event.target == modal) {
+            closeModal();
+        }
+    }
+
+    // Close modal with Escape key
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+            closeModal();
+        }
+    });
+
+    // Auto-open modal if there's a success or error message
+    {% if success or error %}
+    document.addEventListener('DOMContentLoaded', function() {
+        openModal();
+        // Scroll to top of modal content to show the message
+        setTimeout(function() {
+            const modalContent = document.querySelector('.modal-content');
+            if (modalContent) {
+                modalContent.scrollTop = 0;
+            }
+        }, 100);
+    });
+    {% endif %}
+
+    // Handle form submission with better UX
+    const form = document.querySelector('.contact-form');
+    const submitBtn = document.getElementById('submitBtn');
+    if (form && submitBtn) {
+        form.addEventListener('submit', function(e) {
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Submitting...';
+            submitBtn.style.opacity = '0.7';
+            submitBtn.style.cursor = 'not-allowed';
+        });
+    }
+</script>
+{% endblock %}
+
+    

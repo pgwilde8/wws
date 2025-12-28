@@ -1,0 +1,88 @@
+{% extends "layout/base.html" %}
+{% block header %}{% endblock %}
+{% block footer %}{% endblock %}
+{% block title %}Domain & DNS Setup{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto p-4 sm:p-6 space-y-6">
+
+  <!-- Header -->
+  <header class="bg-white p-5 rounded-2xl shadow-sm border border-gray-200">
+    <h1 class="text-xl sm:text-2xl font-extrabold text-gray-900">Domain & DNS Setup</h1>
+    <p class="text-xs sm:text-sm text-gray-500 mt-1 uppercase tracking-wider">Connect your Cloudflare DNS to go live</p>
+  </header>
+
+  <!-- Current Domain Status -->
+  {% if domain %}
+  <div class="bg-blue-50 border-l-4 border-blue-600 p-3 rounded-xl text-sm text-blue-800 font-semibold">
+    Managing domain: <strong>{{ domain }}</strong>
+    {% if domain_connected %}
+      <span class="ml-2 text-green-600">(DNS Connected)</span>
+    {% else %}
+      <span class="ml-2 text-amber-600">(Pending DNS)</span>
+    {% endif %}
+  </div>
+  {% endif %}
+
+  <!-- Domain Form -->
+  <section class="bg-white p-4 rounded-2xl border shadow-sm">
+    <h2 class="text-lg font-bold text-gray-900 mb-3">Submit or Update Domain</h2>
+    <form method="POST" action="/admin/domain/save">
+      
+      <div class="form-group mb-4">
+        <label class="block text-xs font-bold text-gray-500 mb-1 uppercase">Domain Name</label>
+        <input type="text" name="domain_name" 
+          value="{{ domain or '' }}"
+          placeholder="yourbrand.com"
+          class="w-full border rounded-lg px-3 py-2 text-sm bg-gray-50"/>
+        <p class="text-xs text-gray-400 mt-1">Do not include www or https/http</p>
+      </div>
+
+      <div class="form-group mb-4">
+        <label class="block text-xs font-bold text-gray-500 mb-1 uppercase">Cloudflare Account Email</label>
+        <input type="email" name="cloudflare_email" 
+          value="{{ cloudflare_email or '' }}"
+          placeholder="you@example.com"
+          class="w-full border rounded-lg px-3 py-2 text-sm bg-gray-50"/>
+        <p class="text-xs text-gray-400 mt-1">Optional unless your domain is already inside Cloudflare</p>
+      </div>
+
+      <div class="form-group mb-4">
+        <label class="block text-xs font-bold text-gray-500 mb-1 uppercase">Nameservers Updated?</label>
+        <div class="p-3 border rounded-xl bg-gray-50 text-sm">
+          <label class="flex items-center gap-2 text-gray-700">
+            <input type="checkbox" name="nameservers_updated" {% if domain %}checked{% endif %}/>
+            I have updated my nameservers to Cloudflare
+          </label>
+        </div>
+      </div>
+
+      <button type="submit" class="px-5 py-2 bg-blue-600 text-white text-sm font-bold rounded-full hover:opacity-90 transition">
+        Save Domain
+      </button>
+
+    </form>
+  </section>
+
+  <!-- Cloudflare DNS Info Card -->
+  <section class="bg-white p-4 rounded-2xl border shadow-sm">
+    <h2 class="text-lg font-bold text-gray-900 mb-3">Cloudflare DNS Will Handle:</h2>
+    <ul class="text-sm space-y-1 text-gray-700">
+      <li>✔ A / AAAA records</li>
+      <li>✔ MX email routing</li>
+      <li>✔ CDN caching & DDoS protection</li>
+      <li>✔ SSL/TLS provisioning</li>
+      <li>✔ Uptime + routing status</li>
+    </ul>
+  </section>
+
+  <!-- Support CTA -->
+  <div class="text-center border-t pt-5">
+    <p class="text-xs sm:text-sm text-gray-500 mb-3">Need help connecting Cloudflare DNS?</p>
+    <a href="/book-call" class="inline-block px-6 py-2 bg-green-600 text-white text-sm font-bold rounded-full shadow-sm hover:opacity-90 transition">
+      Book a Setup Call
+    </a>
+  </div>
+
+</div>
+{% endblock %}

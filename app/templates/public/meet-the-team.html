@@ -1,0 +1,162 @@
+{% extends "layout/base.html" %}
+
+{% block title %}Meet The Team - WebWise Solutions{% endblock %}
+
+{% block extra_head %}
+<style>
+    :root {
+        --ink: #0f172a;
+        --muted: #475569;
+        --card: #ffffff;
+        --bg: #f8fafc;
+        --accent: #2563eb;
+    }
+    .team-hero {
+        text-align: center;
+        padding: 4rem 1rem;
+        background: linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.1)), url('/static/img/logo4.png') center/cover no-repeat;
+        position: relative;
+    }
+    .team-hero h2 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 2rem;
+        color: #ffffff;
+        text-shadow: 2px 2px 6px rgba(0,0,0,1);
+        letter-spacing: 2px;
+        text-transform: uppercase;
+    }
+    .team-hero h1 {
+        font-size: 2.8rem;
+        font-weight: 800;
+        margin-bottom: 0.5rem;
+        color: #ffffff;
+        text-shadow: 2px 2px 4px rgba(0,0,0,1);
+    }
+    .team-hero p {
+        font-size: 1.25rem;
+        color: #ffffff;
+        max-width: 720px;
+        margin: 0 auto 1.5rem;
+        text-shadow: 3px 3px 3px rgba(0,0,0,0.5);
+    }
+    .team-hero .cta-button {
+        padding: 0.9rem 2rem;
+        font-size: 1.2rem;
+        margin: 0.5rem;
+        display: inline-block;
+        background: #2563eb;
+        color: white;
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: 600;
+    }
+    .team-hero .cta-button.green {
+        background: #27ae60;
+    }
+    .team-page {
+        max-width: 1080px;
+        margin: 0 auto;
+        padding: 2.5rem 1.25rem 3rem;
+    }
+    .team-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1.5rem;
+    }
+    .team-card {
+        background: var(--card);
+        border-radius: 14px;
+        padding: 1.5rem;
+        box-shadow: 0 14px 40px rgba(15, 23, 42, 0.08);
+        border: 1px solid #e2e8f0;
+    }
+    .team-card img {
+        width: 100%;
+        height: 220px;
+        object-fit: cover;
+        border-radius: 12px;
+        margin-bottom: 1rem;
+        background: #e2e8f0;
+    }
+    .team-card h3 {
+        margin: 0 0 0.35rem 0;
+        font-size: 1.2rem;
+        color: var(--ink);
+    }
+    .team-role {
+        color: var(--accent);
+        font-weight: 600;
+        margin-bottom: 0.35rem;
+    }
+    .team-location {
+        color: var(--muted);
+        font-size: 0.95rem;
+        margin-bottom: 0.75rem;
+    }
+    .team-bio {
+        color: #334155;
+        line-height: 1.6;
+        font-size: 0.98rem;
+    }
+    .team-closing {
+        margin-top: 2.75rem;
+        text-align: center;
+        font-size: 1.15rem;
+        font-weight: 700;
+        color: var(--ink);
+        line-height: 1.5;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- HERO -->
+<div class="team-hero">
+    <h2>WebWise Solutions</h2>
+    <h1>Meet The Team</h1>
+    <p>Your two person army building your digital empire!</p>
+
+    <a href="/intro2" class="cta-button">Start Your Build</a>
+    <a href="/book-call" class="cta-button green">Book a Call</a>
+</div>
+
+<div class="team-page">
+    <h1 style="margin-top: 0; text-align: center; font-size: 2rem; margin-bottom: 2rem;">Meet The Team</h1>
+    <div class="team-grid">
+        <div class="team-card">
+            <img src="/static/img/team-paul.jpg" alt="Photo of Paul G Wilde">
+            <h3>Paul G Wilde</h3>
+            <div class="team-role">Founder &amp; Business Specialist</div>
+            <div class="team-location">New Jersey, USA</div>
+            <p class="team-bio">
+                Entrepreneur and tech enthusiast with<br>
+                over 15 years building digital businesses.<br>
+                Started coding in 2008 with raw HTML;<br>
+                now deep in VMs, cloud, and Python.<br>
+                US Navy veteran (1987-1991, VA-196)<br>
+                — disciplined, detail-focused.<br>
+                Based in New Jersey with my wife,<br>
+                building real automated assets you own.
+            </p>
+        </div>
+        <div class="team-card">
+            <img src="/static/img/team-camillio.jpg" alt="Photo of Camillio Philips">
+            <h3>Camillio Philips</h3>
+            <div class="team-role">Senior Systems Architect &amp; Python Wizard</div>
+            <div class="team-location">Philippines</div>
+            <p class="team-bio">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer
+                vitae justo sapien. Nulla facilisi. Maecenas tincidunt justo quis
+                tortor dictum, in mattis lorem molestie. Cras a sapien a turpis
+                accumsan consequat ac ac erat.
+            </p>
+        </div>
+    </div>
+
+    <div class="team-closing">
+        We only take on clients we genuinely believe can produce results for — your success literally pays our bills.
+    </div>
+</div>
+{% endblock %}
+
