@@ -106,9 +106,20 @@ async def dashboard_home(request: Request, db: AsyncSession = Depends(get_sessio
     latest_order = (
         await db.execute(select(Order).order_by(Order.created_at.desc()).limit(1))
     ).scalar_one_or_none()
+    user_email = None
+    user = getattr(request.state, "user", None)
+    if user and getattr(user, "id", None):
+        try:
+            res = await db.execute(
+                text("SELECT email FROM users WHERE id = :uid LIMIT 1"),
+                {"uid": user.id},
+            )
+            user_email = res.scalar_one_or_none()
+        except Exception:
+            user_email = None
     return templates.TemplateResponse(
         "dashboard/dashboard.html",
-        {"request": request, "latest_order": latest_order},
+        {"request": request, "latest_order": latest_order, "user_email": user_email},
     )
 
 

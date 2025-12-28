@@ -11,6 +11,11 @@
     <div>
       <h1 class="text-xl sm:text-2xl font-extrabold text-gray-900">Your Dashboard</h1>
       <p class="text-xs sm:text-sm text-gray-500">Manage your project, integrations, and automated tools</p>
+      {% if user_email %}
+      <div class="inline-flex items-center mt-2 px-3 py-1 bg-gray-100 text-xs font-semibold text-gray-700 rounded-full">
+        Signed in as {{ user_email }}
+      </div>
+      {% endif %}
     </div>
     <button onclick="handleLogout()" class="px-3 py-2 bg-red-100 text-red-600 text-sm font-bold rounded-xl hover:bg-red-200 transition">
       Logout
@@ -81,8 +86,20 @@
 
       <!-- Stripe Form -->
       <section class="bg-white border p-5 rounded-2xl shadow-sm">
-        <h2 class="text-lg font-bold text-gray-900 mb-2">Stripe Keys</h2>
-        <p class="text-sm text-gray-700 mb-3">Top field = Publishable key (starts with pk_), bottom field = Secret key (sk_).</p>
+        <div class="flex items-start justify-between gap-3">
+          <div>
+            <h2 class="text-lg font-bold text-gray-900 mb-1">Stripe Keys</h2>
+            <p class="text-sm text-gray-700 mb-1">Top field = Publishable key (starts with pk_), bottom field = Secret key (sk_).</p>
+            <p class="text-xs text-gray-500">Don’t have Stripe yet? Create an account first.</p>
+          </div>
+          <a
+            href="https://dashboard.stripe.com/register"
+            target="_blank"
+            class="px-3 py-2 bg-purple-700 text-white text-xs font-bold rounded-full hover:opacity-90 transition"
+          >
+            Create Stripe Account
+          </a>
+        </div>
         <form id="stripe-keys-form" class="space-y-3">
           <div>
             <label class="block text-xs text-gray-600 font-semibold mb-1">Publishable key</label>
@@ -98,7 +115,16 @@
 
       <!-- OpenAI Form -->
       <section class="bg-white border p-5 rounded-2xl shadow-sm">
-        <h2 class="text-lg font-bold text-gray-900 mb-2">OpenAI Key</h2>
+        <div class="flex items-start justify-between gap-3">
+          <h2 class="text-lg font-bold text-gray-900 mb-2">OpenAI Key</h2>
+          <a
+            href="https://platform.openai.com/signup"
+            target="_blank"
+            class="px-3 py-2 bg-slate-800 text-white text-xs font-bold rounded-full hover:opacity-90 transition"
+          >
+            Create OpenAI Account
+          </a>
+        </div>
         <form id="openai-key-form" class="space-y-3">
           <input type="password" name="openai_api_key" placeholder="••••••" class="w-full border rounded-lg p-2 text-sm bg-gray-50">
           <button type="submit" class="px-4 py-2 bg-gray-900 text-white text-sm font-bold rounded-full">Save OpenAI Key</button>
@@ -107,8 +133,19 @@
 
       <!-- Twilio Form -->
       <section class="bg-white border p-5 rounded-2xl shadow-sm">
-        <h2 class="text-lg font-bold text-gray-900 mb-2">Twilio</h2>
-        <p class="text-sm text-gray-700 mb-3">Top field = Account SID (starts with AC…), bottom field = Auth Token.</p>
+        <div class="flex items-start justify-between gap-3">
+          <div>
+            <h2 class="text-lg font-bold text-gray-900 mb-1">Twilio</h2>
+            <p class="text-sm text-gray-700 mb-1">Top field = Account SID (starts with AC…), bottom field = Auth Token.</p>
+          </div>
+          <a
+            href="https://www.twilio.com/try-twilio"
+            target="_blank"
+            class="px-3 py-2 bg-purple-600 text-white text-xs font-bold rounded-full hover:opacity-90 transition"
+          >
+            Create Twilio Account
+          </a>
+        </div>
         <form id="twilio-key-form" class="space-y-3">
           <div>
             <label class="block text-xs text-gray-600 font-semibold mb-1">Account SID</label>
@@ -124,10 +161,21 @@
 
       <!-- Domain Form -->
       <section id="domain-setup" class="bg-white border border-amber-300 p-5 rounded-2xl shadow-sm">
-        <h2 class="text-lg font-bold text-gray-900 mb-2">Domain & DNS Setup</h2>
-        <p class="text-sm text-gray-700 mb-3">
-          After you submit, you’ll see status above and get an email with your Cloudflare nameservers. Update your registrar to those nameservers; propagation can take 24–48 hours, so “Pending” is expected until DNS catches up.
-        </p>
+        <div class="flex items-start justify-between gap-3">
+          <div>
+            <h2 class="text-lg font-bold text-gray-900 mb-2">Domain & DNS Setup</h2>
+            <p class="text-sm text-gray-700 mb-3">
+              After you submit, you’ll see status above and get an email with your Cloudflare nameservers. Update your registrar to those nameservers; propagation can take 24–48 hours, so “Pending” is expected until DNS catches up.
+            </p>
+          </div>
+          <a
+            href="https://www.namecheap.com/domains/registration/"
+            target="_blank"
+            class="px-3 py-2 bg-amber-500 text-white text-xs font-bold rounded-full hover:opacity-90 transition"
+          >
+            Get a Domain
+          </a>
+        </div>
         <form id="domain-setup-form" class="space-y-5" method="post" action="/api/domain">
           <input type="text" name="domain_name" placeholder="example.com" class="w-full border rounded-lg px-3 py-2 text-sm">
           <input type="email" name="cloudflare_email" placeholder="cloudflare email (optional)" class="w-full border rounded-lg px-3 py-2 text-sm">
@@ -138,7 +186,15 @@
 
       <!-- Lead Forwarding -->
       <section class="bg-white border p-5 rounded-2xl shadow-sm">
-        <h2 class="text-lg font-bold text-gray-900 mb-2">Lead Forwarding Email</h2>
+        <div class="flex items-start justify-between gap-3">
+          <h2 class="text-lg font-bold text-gray-900 mb-2">Lead Forwarding Email</h2>
+          <a
+            href="https://namecheap.pxf.io/q4O2y3" target="_blank"
+            class="px-3 py-2 bg-amber-500 text-white text-xs font-bold rounded-full hover:opacity-90 transition"
+          >
+            Get business email
+          </a>
+        </div>
         <form id="lead-forward-form" class="space-y-3" method="post" action="/api/lead-forwarding">
           <input type="email" name="forward_email" placeholder="you@yourbusiness.com" required class="w-full border rounded-lg p-2 text-sm bg-gray-50">
           <button type="submit" class="bg-blue-600 text-white font-semibold px-5 py-2 rounded-lg text-sm">Save Forwarding Email</button>
@@ -166,6 +222,20 @@
         <p class="text-sm text-gray-600">Set up SMS/voice with Twilio (partner) to unlock reminders and calling.</p>
         <a href="https://www.twilio.com/" target="_blank" class="inline-block mt-2 px-4 py-2 bg-purple-600 text-white text-sm font-bold rounded-full hover:opacity-90 transition">
           Get Twilio
+        </a>
+      </div>
+      <div class="bg-white border p-4 rounded-2xl shadow-sm">
+        <h3 class="text-base font-bold text-gray-900">Need Stripe?</h3>
+        <p class="text-sm text-gray-600">Create your Stripe account to enable payments and Connect onboarding.</p>
+        <a href="https://dashboard.stripe.com/register" target="_blank" class="inline-block mt-2 px-4 py-2 bg-purple-700 text-white text-sm font-bold rounded-full hover:opacity-90 transition">
+          Create Stripe Account
+        </a>
+      </div>
+      <div class="bg-white border p-4 rounded-2xl shadow-sm">
+        <h3 class="text-base font-bold text-gray-900">Get OpenAI</h3>
+        <p class="text-sm text-gray-600">Create an OpenAI account to use AI features in your build.</p>
+        <a href="https://platform.openai.com/signup" target="_blank" class="inline-block mt-2 px-4 py-2 bg-gray-900 text-white text-sm font-bold rounded-full hover:opacity-90 transition">
+          Create OpenAI Account
         </a>
       </div>
     </aside>

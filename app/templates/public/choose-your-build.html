@@ -188,6 +188,10 @@
             </label>
             <button type="submit" class="cta-button" id="pay-btn-offer3-scale" style="font-size:1.1rem; padding:0.9rem 2rem;" disabled>Start Scale →</button>
         </form>
+    <div id="checkout-error-offer3" style="color: #b91c1c; font-weight: 600; margin-top: 1rem;"></div>
+    </section>
+
+    <script src="https://js.stripe.com/v3/"></script>
     <script>
     // Enable pay button only if TOS is checked
     document.querySelectorAll('.tos-checkbox-offer3').forEach(function(checkbox) {
@@ -229,9 +233,7 @@
         }
         return false;
     }
-    <div id="checkout-error-offer3" style="color: #b91c1c; font-weight: 600; margin-top: 1rem;"></div>
     </script>
-    </section>
 
     <!-- SIMPLE RULE SECTION -->
     <section style="margin-bottom:3rem; padding:1.5rem; background:#fff9e6; border-radius:8px; border-left:4px solid #f59e0b;">
