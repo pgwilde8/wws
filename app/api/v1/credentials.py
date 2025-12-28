@@ -16,6 +16,7 @@ class CredentialsPayload(BaseModel):
     openai_api_key: Optional[str] = None
     twilio_sid: Optional[str] = None
     twilio_token: Optional[str] = None
+    twilio_from_number: Optional[str] = None
     dns_api_key: Optional[str] = None
 
 
@@ -36,7 +37,7 @@ async def get_credentials(
         text(
             """
             SELECT stripe_publishable_key, stripe_secret_key,
-                   openai_api_key, twilio_sid, twilio_token, dns_api_key
+                   openai_api_key, twilio_sid, twilio_token, twilio_from_number, dns_api_key
             FROM credentials
             WHERE client_id = :cid
             LIMIT 1
@@ -67,6 +68,7 @@ async def get_credentials(
             "connected": bool(row.get("twilio_sid") or row.get("twilio_token")),
             "sid": _mask(row.get("twilio_sid")),
             "token": _mask(row.get("twilio_token")),
+            "from_number": row.get("twilio_from_number"),
         },
         "dns": {
             "connected": bool(row.get("dns_api_key")),
@@ -88,6 +90,7 @@ async def upsert_credentials(
         "oak": payload.openai_api_key,
         "tsid": payload.twilio_sid,
         "ttok": payload.twilio_token,
+        "tfrom": payload.twilio_from_number,
         "dns": payload.dns_api_key,
     }
 
@@ -97,7 +100,7 @@ async def upsert_credentials(
                 """
                 SELECT id,
                        stripe_publishable_key, stripe_secret_key,
-                       openai_api_key, twilio_sid, twilio_token, dns_api_key
+                       openai_api_key, twilio_sid, twilio_token, twilio_from_number, dns_api_key
                 FROM credentials
                 WHERE client_id = :cid
                 LIMIT 1
@@ -117,6 +120,7 @@ async def upsert_credentials(
                         openai_api_key = COALESCE(:oak, openai_api_key),
                         twilio_sid = COALESCE(:tsid, twilio_sid),
                         twilio_token = COALESCE(:ttok, twilio_token),
+                        twilio_from_number = COALESCE(:tfrom, twilio_from_number),
                         dns_api_key = COALESCE(:dns, dns_api_key),
                         updated_at = NOW()
                     WHERE client_id = :cid
@@ -131,13 +135,13 @@ async def upsert_credentials(
                     INSERT INTO credentials (
                         client_id,
                         stripe_publishable_key, stripe_secret_key,
-                        openai_api_key, twilio_sid, twilio_token, dns_api_key,
+                        openai_api_key, twilio_sid, twilio_token, twilio_from_number, dns_api_key,
                         created_at, updated_at
                     )
                     VALUES (
                         :cid,
                         :spk, :ssk,
-                        :oak, :tsid, :ttok, :dns,
+                        :oak, :tsid, :ttok, :tfrom, :dns,
                         NOW(), NOW()
                     )
                     """

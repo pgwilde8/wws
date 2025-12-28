@@ -39,34 +39,38 @@ echo "CREATE TABLE IF NOT EXISTS lead_forward_emails (
   support:
   psql -U webadmin -h localhost -d wwsdev_db -c "SELECT id, client_id, project_id, subject, status, priority, created_at FROM support_tickets ORDER BY created_at DESC LIMIT 5;"
 
-  psql -U webadmin -h localhost -d wwsdev_db -c "SELECT id, ticket_id, sender, message, created_at FROM support_messages ORDER BY created_at DESC LIMIT 5;"
+  psql -U webadmin -h localhost -d wwsdev_db -c "SELECT id, ticket_id, sender, message, created_at FROM support_messages lead_forward_emails BY created_at DESC LIMIT 5;"
 
-               List of relations
- Schema |        Name        | Type  |  Owner   
---------+--------------------+-------+----------
- public | chat_messages      | table | webadmin
- public | chat_sessions      | table | webadmin
- public | clients            | table | webadmin
- public | coupon_redemptions | table | webadmin
- public | coupon_tier_rules  | table | webadmin
- public | coupons            | table | webadmin
- public | credentials        | table | webadmin
- public | domains            | table | webadmin
- public | invoices           | table | webadmin
- public | milestones         | table | webadmin
- public | orders             | table | webadmin
- public | plan_events        | table | webadmin
- public | product_prices     | table | webadmin
- public | products           | table | webadmin
- public | projects           | table | webadmin
- public | quiz_submissions   | table | webadmin
- public | rentals            | table | webadmin
- public | service_prices     | table | webadmin
- public | services           | table | webadmin
- public | support_calls      | table | webadmin
- public | support_messages   | table | webadmin
- public | support_tickets    | table | webadmin
- public | testimonials       | table | webadmin
- public | users              | table | webadmin
- public | webhook_events     | table | webadmin
-(25 rows)
+  psql -U webadmin -h localhost -d wwsdev_db -c "SELECT id, client_id, email, created_at FROM lead_forward_emails ORDER BY created_at DESC LIMIT 10;"
+
+                List of relations
+ Schema |        Name         | Type  |  Owner   
+--------+---------------------+-------+----------
+ public | chat_messages       | table | webadmin
+ public | chat_sessions       | table | webadmin
+ public | clients             | table | webadmin
+ public | coupon_redemptions  | table | webadmin
+ public | coupon_tier_rules   | table | webadmin
+ public | coupons             | table | webadmin
+ public | credentials         | table | webadmin
+ public | domains             | table | webadmin
+ public | invoices            | table | webadmin
+ public | lead_forward_emails | table | webadmin
+ public | milestones          | table | webadmin
+ public | orders              | table | webadmin
+ public | plan_events         | table | webadmin
+ public | portfolio_files     | table | webadmin
+ public | product_prices      | table | webadmin
+ public | products            | table | webadmin
+ public | projects            | table | webadmin
+ public | quiz_submissions    | table | webadmin
+ public | rentals             | table | webadmin
+ public | service_prices      | table | webadmin
+ public | services            | table | webadmin
+ public | support_calls       | table | webadmin
+ public | support_messages    | table | webadmin
+ public | support_tickets     | table | webadmin
+ public | testimonials        | table | webadmin
+ public | users               | table | webadmin
+ public | webhook_events      | table | webadmin
+(27 rows)
