@@ -1,108 +1,213 @@
 {% extends "layout/base.html" %}
-{% block title %}Admin – Call Booking: {{ call.id }}{% endblock %}
+{% block title %}Client Detail | WebWise Solutions{% endblock %}
+{% block header %}{% endblock %}
+{% block footer %}{% endblock %}
 
 {% block content %}
 <div class="max-w-4xl mx-auto p-4 sm:p-6 space-y-6">
 
-  <!-- Header -->
-  <div class="bg-white p-5 rounded-2xl shadow-sm border">
-    <h1 class="text-xl font-bold text-gray-900">Call Booking</h1>
-    <p class="text-xs text-gray-500 font-mono">{{ call.id }}</p>
-  </div>
-
-  <!-- Client + Project Links -->
-  <div class="grid sm:grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-    
-    <!-- Client Panel -->
-    <div class="bg-white border p-4 rounded-xl shadow-sm">
-      <h2 class="text-sm font-bold mb-2">Client</h2>
-      {% if call.client_id %}
-        <a href="/admin/clients/{{ call.client_id }}" class="text-blue-600 hover:underline font-semibold">
-          View Client →
-        </a>
-      {% else %}
-        <p class="text-xs text-gray-500">No client linked</p>
-      {% endif %}
-      <p class="text-xs text-gray-400 mt-1">Name: {{ call.client_name or "—" }}</p>
+  <!-- Client Identity Header -->
+  <header class="bg-white p-5 rounded-2xl shadow-sm border border-gray-200">
+    <div class="flex items-start justify-between gap-4">
+      <div>
+        <h1 class="text-2xl font-extrabold text-gray-900">
+          {{ onboarding.business_name if onboarding else (client.name or 'Client') }}
+        </h1>
+        <p class="text-sm text-gray-600">Email: {{ client.email }}</p>
+        <p class="text-xs text-gray-500 mt-1">Client ID: {{ client.id }}</p>
+      </div>
+      <div class="flex flex-col items-end gap-2">
+        <span class="px-3 py-1 rounded-full text-xs font-semibold bg-gray-100 text-gray-700">
+          Created {{ client.created_at }}
+        </span>
+      </div>
     </div>
-
-    <!-- Project Panel -->
-    <div class="bg-white border p-4 rounded-xl shadow-sm">
-      <h2 class="text-sm font-bold mb-2">Project</h2>
-      {% if call.project_id %}
-        <a href="/admin/projects/{{ call.project_id }}" class="text-blue-600 hover:underline font-semibold">
-          View Project →
-        </a>
-        <p class="text-xs text-gray-400 mt-1">Project: {{ call.project_name or "—" }}</p>
-      {% else %}
-        <p class="text-xs text-gray-500">General Inquiry</p>
-      {% endif %}
-    </div>
-
-  </div>
-
-  <!-- Transcript -->
-  <section class="bg-white border p-4 rounded-xl shadow-sm">
-    <h2 class="text-sm font-bold mb-2">Transcript</h2>
-    {% if call.transcript %}
-    <div class="bg-gray-900 text-gray-100 text-xs font-mono p-3 rounded-lg whitespace-pre-wrap max-h-[300px] overflow-y-auto">
-      {{ call.transcript }}
+    {% if onboarding %}
+    <div class="text-sm text-gray-600 mt-3 space-y-1">
+      <p><strong>Owner:</strong> {{ onboarding.full_name }}</p>
+      <p><strong>Industry:</strong> {{ onboarding.industry }}</p>
+      {% if onboarding.phone %}<p><strong>Phone:</strong> {{ onboarding.phone }}</p>{% endif %}
+      {% if onboarding.target_audience %}<p><strong>Audience:</strong> {{ onboarding.target_audience }}</p>{% endif %}
     </div>
     {% else %}
-      <p class="text-xs text-gray-500">No transcript available yet.</p>
+    <p class="text-sm text-amber-700 mt-3">No onboarding submission yet.</p>
+    {% endif %}
+  </header>
+
+  <!-- Onboarding Snapshot -->
+  <section class="bg-white p-4 rounded-2xl border shadow-sm">
+    <h2 class="text-lg font-bold text-gray-900 mb-2">Onboarding Snapshot</h2>
+    {% if onboarding %}
+      <p class="text-sm text-gray-700 whitespace-pre-line">{{ onboarding.site_description }}</p>
+    {% else %}
+      <p class="text-sm text-gray-500">Awaiting onboarding form.</p>
     {% endif %}
   </section>
 
-  <!-- API Credentials (Masked Preview) -->
-  <section class="bg-white border p-4 rounded-xl shadow-sm">
-    <h2 class="text-sm font-bold mb-3">Related API Credentials</h2>
-    <div class="grid sm:grid-cols-1 md:grid-cols-2 gap-3 text-xs font-mono">
-
-      <div class="border p-3 rounded-lg bg-gray-50">
-        <div class="flex justify-between"><span>Twilio SID</span><span class="text-green-600">Saved</span></div>
-        <p>{{ call.twilio_sid[:6] + "••" if call.twilio_sid else "—" }}</p>
-      </div>
-
-      <div class="border p-3 rounded-lg bg-gray-50">
-        <div class="flex justify-between"><span>OpenAI Key</span><span class="text-blue-600">Masked</span></div>
-        <p>{{ call.openai_api_key[:8] + "••••••" if call.openai_api_key else "—" }}</p>
-      </div>
-
-      <div class="border p-3 rounded-lg bg-gray-50">
-        <div class="flex justify-between"><span>Domain</span><span class="text-amber-600">Pending</span></div>
-        <p>{{ call.domain_name or "—" }}</p>
-      </div>
-
-      <div class="border p-3 rounded-lg bg-gray-50">
-        <div class="flex justify-between"><span>Tier</span><span class="text-gray-400">—</span></div>
-        <p>{{ call.plan_tier or "Not set" }}</p>
-      </div>
-
+  <!-- Domain & Email -->
+  <section class="grid sm:grid-cols-2 gap-4">
+    <div class="bg-white p-4 rounded-2xl border shadow-sm">
+      <h3 class="text-sm font-bold text-gray-900 mb-2">Domain</h3>
+      {% if onboarding and onboarding.domain_name %}
+        <p class="text-sm text-gray-800">{{ onboarding.domain_name }}</p>
+      {% else %}
+        <p class="text-sm text-gray-500">Not provided</p>
+      {% endif %}
+      <p class="text-xs text-gray-500 mt-1">
+        Cloudflare: {{ 'Yes' if onboarding and onboarding.uses_cloudflare else 'No / Optional' }}
+        {% if onboarding and onboarding.cloudflare_email %}
+          • {{ onboarding.cloudflare_email }}
+        {% endif %}
+      </p>
+    </div>
+    <div class="bg-white p-4 rounded-2xl border shadow-sm">
+      <h3 class="text-sm font-bold text-gray-900 mb-2">Lead Forwarding</h3>
+      {% if onboarding and onboarding.lead_forward_email %}
+        <p class="text-sm text-gray-800">{{ onboarding.lead_forward_email }}</p>
+        <p class="text-xs text-gray-500 mt-1">We forward leads; inboxes are never accessed.</p>
+      {% else %}
+        <p class="text-sm text-gray-500">Not provided</p>
+      {% endif %}
     </div>
   </section>
 
-  <!-- Booking Meta -->
-  <section class="bg-white border p-4 rounded-xl shadow-sm grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 text-xs">
-    <div><span class="text-gray-400">Booked</span><p>{{ call.booked_at.strftime('%b %d, %Y %H:%M') if call.booked_at else "—" }}</p></div>
-    <div><span class="text-gray-400">Received</span><p>{{ call.received_at.strftime('%b %d, %Y %H:%M') if call.received_at else "—" }}</p></div>
-    <div><span class="text-gray-400">Status</span><p class="capitalize">{{ call.status }}</p></div>
-    <div><span class="text-gray-400">Project Linked</span><p>{{ call.project_id or "—" }}</p></div>
-  </section>
-
-  <!-- Admin Actions (future-ready) -->
-  <section class="bg-white border p-4 rounded-xl shadow-sm">
-    <h2 class="text-sm font-bold mb-3">Admin Actions</h2>
-    <div class="flex flex-wrap gap-2">
-      <button disabled class="px-3 py-2 bg-gray-200 text-gray-500 rounded-lg text-sm font-semibold">Cancel Booking (future)</button>
-      <button disabled class="px-3 py-2 bg-gray-200 text-gray-500 rounded-lg text-sm font-semibold">Export Transcript (future)</button>
-      <button disabled class="px-3 py-2 bg-gray-100 text-gray-500 rounded-lg text-sm font-semibold">Send to Client (future)</button>
+  <!-- Intent Badges -->
+  <section class="bg-white p-4 rounded-2xl border shadow-sm">
+    <h2 class="text-lg font-bold text-gray-900 mb-3">Integration Intents</h2>
+    <div class="flex flex-wrap gap-2 text-xs">
+      <span class="px-3 py-1 rounded-full {{ 'bg-green-100 text-green-800' if onboarding and onboarding.wants_payments else 'bg-gray-100 text-gray-700' }}">
+        Stripe: {{ 'Enabled' if onboarding and onboarding.wants_payments else 'Optional' }}
+      </span>
+      <span class="px-3 py-1 rounded-full {{ 'bg-blue-100 text-blue-800' if onboarding and onboarding.calling_direction and onboarding.calling_direction != 'none' else 'bg-gray-100 text-gray-700' }}">
+        Calling: {{ onboarding.calling_direction if onboarding else 'none' }}
+      </span>
+      <span class="px-3 py-1 rounded-full {{ 'bg-purple-100 text-purple-800' if onboarding and onboarding.wants_sms else 'bg-gray-100 text-gray-700' }}">
+        SMS: {{ 'Enabled' if onboarding and onboarding.wants_sms else 'Optional' }}
+      </span>
+      <span class="px-3 py-1 rounded-full {{ 'bg-amber-100 text-amber-800' if onboarding and onboarding.uses_cloudflare else 'bg-gray-100 text-gray-700' }}">
+        Cloudflare: {{ 'Enabled' if onboarding and onboarding.uses_cloudflare else 'Optional' }}
+      </span>
     </div>
   </section>
 
-  <!-- Back -->
-  <div class="pt-3">
-    <a href="/admin/calls" class="text-blue-600 text-sm font-semibold hover:underline">← Back to Calls</a>
-  </div>
+  <!-- Provisioning Status -->
+  <section class="bg-white p-4 rounded-2xl border shadow-sm">
+    <h2 class="text-lg font-bold text-gray-900 mb-3">Provisioning</h2>
+    <div class="divide-y divide-dashed text-sm text-gray-800">
+      <div class="py-2 flex justify-between">
+        <span>OpenAI Assistant</span>
+        <span>
+          {% if client.openai_assistant_id %}
+            {{ client.openai_assistant_id[:6] }}••••{{ client.openai_assistant_id[-4:] }}
+          {% else %}
+            <span class="text-gray-500">Pending</span>
+          {% endif %}
+        </span>
+      </div>
+      <div class="py-2 flex justify-between">
+        <span>Assistant Status</span>
+        <span class="{{ 'text-green-600 font-semibold' if client.assistant_status=='created' else 'text-gray-500 capitalize' }}">{{ client.assistant_status or 'pending' }}</span>
+      </div>
+      <div class="py-2 flex justify-between">
+        <span>Twilio Voice SID</span>
+        <span>
+          {% if client.twilio_voice_agent_sid %}
+            {{ client.twilio_voice_agent_sid[:6] }}••••{{ client.twilio_voice_agent_sid[-4:] }}
+          {% else %}
+            <span class="text-gray-500">Not provisioned</span>
+          {% endif %}
+        </span>
+      </div>
+      <div class="py-2 flex justify-between">
+        <span>Twilio Status</span>
+        <span class="{{ 'text-green-600 font-semibold' if client.twilio_status=='provisioned' else 'text-gray-500 capitalize' }}">{{ client.twilio_status or 'optional' }}</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Logo -->
+  <section class="bg-white p-4 rounded-2xl border shadow-sm">
+    <h2 class="text-lg font-bold text-gray-900 mb-3">Logo</h2>
+    {% if onboarding and onboarding.logo_url %}
+      <div class="text-sm text-gray-800 flex items-center justify-between">
+        <span>Uploaded logo</span>
+        <a href="{{ onboarding.logo_url }}" target="_blank" class="px-3 py-1 bg-blue-600 text-white text-xs font-bold rounded-full hover:opacity-90 transition">View / Download</a>
+      </div>
+    {% else %}
+      <p class="text-sm text-gray-500">No logo uploaded.</p>
+    {% endif %}
+  </section>
+
+  <!-- Credentials (admin only, masked) -->
+  <section class="bg-white p-4 rounded-2xl border shadow-sm">
+    <h2 class="text-lg font-bold text-gray-900 mb-3">Credentials (masked)</h2>
+    {% set cred = credentials %}
+    {% macro mask(val) -%}
+      {%- if not val -%}
+        —
+      {%- elif val|length <= 8 -%}
+        ****
+      {%- else -%}
+        {{ val[:4] }}****{{ val[-4:] }}
+      {%- endif -%}
+    {%- endmacro %}
+    <ul class="divide-y divide-dashed text-sm text-gray-800">
+      <li class="py-2 flex justify-between"><span>Stripe Publishable</span><span>{{ mask(cred.stripe_publishable_key if cred else None) }}</span></li>
+      <li class="py-2 flex justify-between"><span>Stripe Secret</span><span>{{ mask(cred.stripe_secret_key if cred else None) }}</span></li>
+      <li class="py-2 flex justify-between"><span>OpenAI API Key</span><span>{{ mask(cred.openai_api_key if cred else None) }}</span></li>
+      <li class="py-2 flex justify-between"><span>Twilio SID</span><span>{{ mask(cred.twilio_sid if cred else None) }}</span></li>
+      <li class="py-2 flex justify-between"><span>Twilio Token</span><span>{{ mask(cred.twilio_token if cred else None) }}</span></li>
+      <li class="py-2 flex justify-between"><span>Twilio From</span><span>{{ cred.twilio_from_number if cred and cred.twilio_from_number else '—' }}</span></li>
+      <li class="py-2 flex justify-between"><span>DNS API Key</span><span>{{ mask(cred.dns_api_key if cred else None) }}</span></li>
+    </ul>
+    <div class="mt-3 flex flex-wrap gap-2 text-xs">
+      <button id="reveal-creds" class="px-3 py-1 bg-gray-900 text-white rounded-full font-semibold hover:opacity-90 transition">Reveal full values</button>
+      <span id="reveal-status" class="text-gray-500"></span>
+    </div>
+    <div id="creds-full" class="mt-3 hidden text-sm text-gray-800 space-y-1">
+      <div class="flex justify-between"><span>Stripe Publishable</span><code id="full-spk" class="break-all text-xs"></code></div>
+      <div class="flex justify-between"><span>Stripe Secret</span><code id="full-ssk" class="break-all text-xs"></code></div>
+      <div class="flex justify-between"><span>OpenAI API Key</span><code id="full-oak" class="break-all text-xs"></code></div>
+      <div class="flex justify-between"><span>Twilio SID</span><code id="full-tsid" class="break-all text-xs"></code></div>
+      <div class="flex justify-between"><span>Twilio Token</span><code id="full-ttok" class="break-all text-xs"></code></div>
+      <div class="flex justify-between"><span>Twilio From</span><code id="full-tfrom" class="break-all text-xs"></code></div>
+      <div class="flex justify-between"><span>DNS API Key</span><code id="full-dns" class="break-all text-xs"></code></div>
+    </div>
+  </section>
 
 </div>
+
+<script>
+(function() {
+  const btn = document.getElementById('reveal-creds');
+  const statusEl = document.getElementById('reveal-status');
+  const fullWrap = document.getElementById('creds-full');
+  if (!btn) return;
+  btn.addEventListener('click', async () => {
+    statusEl.textContent = 'Loading...';
+    try {
+      const resp = await fetch('/admin/clients/{{ client.id }}/credentials/raw', { credentials: 'include' });
+      if (!resp.ok) throw new Error('Failed to load credentials');
+      const data = await resp.json();
+      const c = data.credentials || {};
+      const setText = (id, val) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = val || '—';
+      };
+      setText('full-spk', c.stripe_publishable_key);
+      setText('full-ssk', c.stripe_secret_key);
+      setText('full-oak', c.openai_api_key);
+      setText('full-tsid', c.twilio_sid);
+      setText('full-ttok', c.twilio_token);
+      setText('full-tfrom', c.twilio_from_number);
+      setText('full-dns', c.dns_api_key);
+      fullWrap.classList.remove('hidden');
+      statusEl.textContent = 'Loaded.';
+    } catch (err) {
+      statusEl.textContent = 'Unable to reveal credentials.';
+      console.error(err);
+    }
+  });
+})();
+</script>
 {% endblock %}

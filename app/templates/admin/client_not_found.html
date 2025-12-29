@@ -1,0 +1,15 @@
+{% extends "layout/base.html" %}
+{% block title %}Client Not Found{% endblock %}
+{% block header %}{% endblock %}
+{% block footer %}{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto p-6">
+  <div class="bg-white border p-6 rounded-2xl shadow-sm text-center space-y-3">
+    <h1 class="text-xl font-bold text-gray-900">Client not found</h1>
+    <p class="text-sm text-gray-500">The requested client could not be located.</p>
+    <a href="/admin/clients" class="text-blue-600 text-sm font-semibold hover:underline">← Back to clients</a>
+  </div>
+</div>
+{% endblock %}
+

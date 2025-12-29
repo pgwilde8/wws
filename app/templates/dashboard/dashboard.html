@@ -60,15 +60,17 @@
         </div>
       </div>
 
-      <!-- Integration Status -->
-      <section class="bg-white border p-5 rounded-2xl shadow-sm">
-        <h2 class="text-lg font-bold text-gray-900 mb-3">Integrations</h2>
-        <ul class="divide-y divide-dashed text-sm">
-          <li class="py-2 flex justify-between"><span>Stripe</span><span id="stripe-status">Checking…</span></li>
-          <li class="py-2 flex justify-between"><span>OpenAI</span><span id="openai-status">Checking…</span></li>
-          <li class="py-2 flex justify-between"><span>Twilio</span><span id="twilio-status">Optional</span></li>
-          <li class="py-2 flex justify-between"><span>Domain</span><span id="domain-status">Pending</span></li>
-        </ul>
+      <!-- Tutorial Video Placeholder -->
+      <section class="bg-white border p-5 rounded-2xl shadow-sm space-y-3">
+        <div class="flex items-start justify-between gap-3">
+          <div>
+            <h2 class="text-lg font-bold text-gray-900">How this page works</h2>
+            <p class="text-sm text-gray-600">We’ll add a short video here explaining each step (Stripe, OpenAI, Twilio, Domain, DNS, Email).</p>
+          </div>
+        </div>
+        <div class="aspect-w-16 aspect-h-9 bg-gray-100 border border-dashed border-gray-300 rounded-xl flex items-center justify-center text-gray-500 text-sm">
+          Tutorial video coming soon
+        </div>
       </section>
 
       <!-- Support Card -->
@@ -206,6 +208,52 @@
         </form>
       </section>
 
+      <!-- Automation Setup -->
+      <section class="bg-white border p-5 rounded-2xl shadow-sm space-y-4">
+        <div class="flex items-start justify-between gap-3">
+          <div>
+            <h2 class="text-lg font-bold text-gray-900">Automation Setup</h2>
+            <p class="text-sm text-gray-600">Create your AI assistant and voice caller using the credentials you saved.</p>
+          </div>
+        </div>
+        <div class="grid sm:grid-cols-1 md:grid-cols-2 gap-3">
+          <div class="border rounded-lg p-3">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-xs uppercase tracking-wide text-gray-400">OpenAI Assistant</p>
+                <p id="assistant-status" class="text-sm text-gray-700">Checking…</p>
+              </div>
+              <button id="btn-create-assistant" class="px-3 py-2 bg-gray-900 text-white text-xs font-bold rounded-full hover:opacity-90 transition">
+                Create Assistant
+              </button>
+            </div>
+          </div>
+          <div class="border rounded-lg p-3">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-xs uppercase tracking-wide text-gray-400">Voice Caller</p>
+                <p id="voice-status" class="text-sm text-gray-700">Checking…</p>
+              </div>
+              <button id="btn-create-voice" class="px-3 py-2 bg-purple-600 text-white text-xs font-bold rounded-full hover:opacity-90 transition">
+                Provision Caller
+              </button>
+            </div>
+          </div>
+        </div>
+        <p class="text-xs text-gray-500">You can keep using the dashboard even if one step is pending. We’ll update these statuses after each action.</p>
+      </section>
+
+      <!-- Integration Status (moved down) -->
+      <section class="bg-white border p-5 rounded-2xl shadow-sm">
+        <h2 class="text-lg font-bold text-gray-900 mb-3">Integrations</h2>
+        <ul class="divide-y divide-dashed text-sm">
+          <li class="py-2 flex justify-between"><span>Stripe</span><span id="stripe-status">Checking…</span></li>
+          <li class="py-2 flex justify-between"><span>OpenAI</span><span id="openai-status">Checking…</span></li>
+          <li class="py-2 flex justify-between"><span>Twilio</span><span id="twilio-status">Optional</span></li>
+          <li class="py-2 flex justify-between"><span>Domain</span><span id="domain-status">Pending</span></li>
+        </ul>
+      </section>
+
       <!-- Setup Call CTA -->
       <div class="text-center border-t pt-5">
         <p class="text-xs sm:text-sm text-gray-500 mb-3">Need help connecting accounts?</p>
@@ -301,6 +349,38 @@ async function loadCredentials() {
     }
   } catch (e) {
     console.warn('Credentials fetch failed', e);
+  }
+}
+
+async function loadProvisionStatus() {
+  try {
+    const data = await fetchJson('/api/provision/status');
+    const assistant = data.assistant || {};
+    const voice = data.twilio || {};
+    const assistantEl = document.getElementById('assistant-status');
+    const voiceEl = document.getElementById('voice-status');
+    if (assistantEl) {
+      if (assistant.id) {
+        assistantEl.textContent = `Provisioned (${assistant.id})`;
+        assistantEl.className = 'text-sm text-green-600 font-semibold';
+      } else {
+        assistantEl.textContent = 'Not provisioned';
+        assistantEl.className = 'text-sm text-gray-700';
+      }
+    }
+    if (voiceEl) {
+      if (voice.id) {
+        const num = voice.from_number ? ` ${voice.from_number}` : '';
+        voiceEl.textContent = `Provisioned (${voice.id})${num ? ' ' + num : ''}`;
+        voiceEl.className = 'text-sm text-green-600 font-semibold';
+      } else {
+        const num = voice.from_number ? ` (from ${voice.from_number})` : '';
+        voiceEl.textContent = `Not provisioned${num}`;
+        voiceEl.className = 'text-sm text-gray-700';
+      }
+    }
+  } catch (e) {
+    console.warn('Provision status fetch failed', e);
   }
 }
 
@@ -449,13 +529,51 @@ function wireCredentialForms() {
   }
 }
 
+function wireProvisionButtons() {
+  const btnAssistant = document.getElementById('btn-create-assistant');
+  if (btnAssistant) {
+    btnAssistant.addEventListener('click', async () => {
+      btnAssistant.disabled = true;
+      try {
+        await fetchJson('/api/provision/openai-assistant', { method: 'POST' });
+        showToast('Assistant provisioned');
+        await loadProvisionStatus();
+      } catch (err) {
+        console.error('Assistant provision failed', err);
+        showToast('Assistant provision failed');
+      } finally {
+        btnAssistant.disabled = false;
+      }
+    });
+  }
+
+  const btnVoice = document.getElementById('btn-create-voice');
+  if (btnVoice) {
+    btnVoice.addEventListener('click', async () => {
+      btnVoice.disabled = true;
+      try {
+        await fetchJson('/api/provision/twilio-caller', { method: 'POST' });
+        showToast('Voice caller recorded');
+        await loadProvisionStatus();
+      } catch (err) {
+        console.error('Voice provision failed', err);
+        showToast('Voice provision failed');
+      } finally {
+        btnVoice.disabled = false;
+      }
+    });
+  }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   loadLeadForwarding();
   loadDomain();
   loadCredentials();
+  loadProvisionStatus();
   wireLeadForwardForm();
   wireDomainForm();
   wireCredentialForms();
+  wireProvisionButtons();
 });
 </script>
 

@@ -77,7 +77,7 @@ async def projects_page(
     rows = await session.execute(
         text(
             """
-            SELECT id, client_id, name, status, plan_tier, live_domain, updated_at, created_at,
+            SELECT id, client_id, name, status, plan_tier, updated_at, created_at,
                    COUNT(*) OVER() AS total
             FROM projects
             WHERE name ILIKE :q

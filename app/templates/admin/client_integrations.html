@@ -1,0 +1,92 @@
+{% extends "layout/base.html" %}
+{% block title %}Admin – Client {{ client.id }}{% endblock %}
+{% block header %}{% endblock %}
+{% block footer %}{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto p-4 sm:p-6 space-y-6">
+
+  <!-- Header -->
+  <div class="bg-white p-5 rounded-2xl shadow-sm border flex flex-wrap justify-between items-center gap-3">
+    <div>
+      <h1 class="text-xl sm:text-2xl font-bold text-gray-900">Client {{ client.id }}</h1>
+      <p class="text-sm text-gray-600">{{ client.name or "—" }} · {{ client.email or "—" }}</p>
+      <p class="text-xs text-gray-400">Created: {{ client.created_at or "—" }}</p>
+    </div>
+    <a href="/admin/clients" class="text-blue-600 text-sm font-semibold hover:underline">← Back to clients</a>
+  </div>
+
+  <!-- Integrations summary -->
+  <section class="bg-white border p-5 rounded-2xl shadow-sm">
+    <h2 class="text-lg font-bold text-gray-900 mb-3">Integration Status</h2>
+    <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-3 text-sm">
+      <div class="border rounded-lg p-3 bg-gray-50">
+        <p class="text-xs uppercase text-gray-400">Stripe</p>
+        <p class="font-mono text-xs">{{ (creds.stripe_publishable_key[:8] + "••") if creds and creds.stripe_publishable_key else "—" }}</p>
+      </div>
+      <div class="border rounded-lg p-3 bg-gray-50">
+        <p class="text-xs uppercase text-gray-400">OpenAI</p>
+        <p class="font-mono text-xs">{{ (creds.openai_api_key[:8] + "••") if creds and creds.openai_api_key else "—" }}</p>
+      </div>
+      <div class="border rounded-lg p-3 bg-gray-50">
+        <p class="text-xs uppercase text-gray-400">Twilio SID</p>
+        <p class="font-mono text-xs">{{ (creds.twilio_sid[:8] + "••") if creds and creds.twilio_sid else "—" }}</p>
+        <p class="text-xs text-gray-500">From: {{ creds.twilio_from_number or "—" }}</p>
+      </div>
+      <div class="border rounded-lg p-3 bg-gray-50">
+        <p class="text-xs uppercase text-gray-400">DNS API</p>
+        <p class="font-mono text-xs">{{ (creds.dns_api_key[:8] + "••") if creds and creds.dns_api_key else "—" }}</p>
+      </div>
+      <div class="border rounded-lg p-3 bg-gray-50">
+        <p class="text-xs uppercase text-gray-400">Assistant</p>
+        <p class="text-xs text-gray-700">{{ client.assistant_status or "not provisioned" }}{% if client.openai_assistant_id %} ({{ client.openai_assistant_id }}){% endif %}</p>
+      </div>
+      <div class="border rounded-lg p-3 bg-gray-50">
+        <p class="text-xs uppercase text-gray-400">Voice Caller</p>
+        <p class="text-xs text-gray-700">{{ client.twilio_status or "not provisioned" }}{% if client.twilio_voice_agent_sid %} ({{ client.twilio_voice_agent_sid }}){% endif %}</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Domain / DNS -->
+  <section class="bg-white border p-5 rounded-2xl shadow-sm">
+    <h2 class="text-lg font-bold text-gray-900 mb-2">Domain & DNS</h2>
+    {% if domain %}
+      <p class="text-sm text-gray-700">Domain: {{ domain.domain or "—" }}</p>
+      <p class="text-xs text-gray-500">Status: {{ domain.status or "pending" }} · Cloudflare email: {{ domain.cloudflare_email or "—" }}</p>
+      <p class="text-xs text-gray-400">Updated: {{ domain.updated_at or "—" }}</p>
+    {% else %}
+      <p class="text-sm text-gray-500">No domain on record.</p>
+    {% endif %}
+  </section>
+
+  <!-- Lead forwarding -->
+  <section class="bg-white border p-5 rounded-2xl shadow-sm">
+    <h2 class="text-lg font-bold text-gray-900 mb-2">Lead Forwarding</h2>
+    {% if lead_forward %}
+      <p class="text-sm text-gray-700">Forward email: {{ lead_forward.email }}</p>
+      <p class="text-xs text-gray-400">Updated: {{ lead_forward.created_at or "—" }}</p>
+    {% else %}
+      <p class="text-sm text-gray-500">No forwarding email saved.</p>
+    {% endif %}
+  </section>
+
+  <!-- Orders -->
+  <section class="bg-white border p-5 rounded-2xl shadow-sm">
+    <h2 class="text-lg font-bold text-gray-900 mb-2">Latest Order</h2>
+    {% if order %}
+      <p class="text-sm text-gray-700">Plan: {{ order.plan or "—" }}</p>
+      <p class="text-xs text-gray-500">Status: {{ order.status or "—" }} · Ordered: {{ order.created_at or "—" }}</p>
+      <p class="text-xs text-gray-400">Order ID: {{ order.id }}</p>
+    {% else %}
+      <p class="text-sm text-gray-500">No orders found for this email.</p>
+    {% endif %}
+  </section>
+
+  <div class="pt-2">
+    <a href="/admin/clients" class="text-blue-600 text-sm font-semibold hover:underline">← Back to clients</a>
+  </div>
+
+</div>
+{% endblock %}
+

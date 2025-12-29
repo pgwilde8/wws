@@ -12,8 +12,8 @@ master-famous-liked-joyful
 uvicorn app.main:app --reload --host 0.0.0.0 --port 8888
 uvicorn app.main:app --reload --host 0.0.0.0 --port 8888 --log-level debug
 
-
 PGPASSWORD='Securepass9' psql -U webadmin -h localhost -d wwsdev_db
+
 SELECT id, email, hashed_password FROM users WHERE email='678@webwisesolutions.dev';
 \d orders
 \d users

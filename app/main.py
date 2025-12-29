@@ -30,7 +30,9 @@ from app.api.v1.domain import router as domain_router
 from app.api.v1.lead_forwarding import router as lead_forwarding_router
 from app.api.v1.admin_forwarding import router as admin_forwarding_router
 from app.api.v1.credentials import router as credentials_router
+from app.api.v1.provision import router as provision_router
 from app.api.v1.dashboard_support import router as dashboard_support_router
+from app.api.v1.dashboard_onboarding import router as dashboard_onboarding_router
 from app.api.v1.support import router as support_router
 from app.api.v1.admin_support_tickets import router as admin_support_tickets_router
 from app.api.v1.admin_login import router as admin_login_router
@@ -108,8 +110,17 @@ async def dashboard_home(request: Request, db: AsyncSession = Depends(get_sessio
     ).scalar_one_or_none()
     user_email = None
     user = getattr(request.state, "user", None)
+
+    # If logged in client has not completed onboarding, send them to the intake first.
     if user and getattr(user, "id", None):
         try:
+            exists = await db.execute(
+                text("SELECT 1 FROM client_onboarding WHERE client_id = :cid LIMIT 1"),
+                {"cid": user.id},
+            )
+            has_onboarding = exists.scalar_one_or_none() is not None
+            if not has_onboarding:
+                return RedirectResponse(url="/dashboard/onboarding", status_code=303)
             res = await db.execute(
                 text("SELECT email FROM users WHERE id = :uid LIMIT 1"),
                 {"uid": user.id},
@@ -117,6 +128,7 @@ async def dashboard_home(request: Request, db: AsyncSession = Depends(get_sessio
             user_email = res.scalar_one_or_none()
         except Exception:
             user_email = None
+
     return templates.TemplateResponse(
         "dashboard/dashboard.html",
         {"request": request, "latest_order": latest_order, "user_email": user_email},
@@ -266,7 +278,7 @@ async def login_post(
     )
     return resp
 
-app.include_router(admin_clients_router, prefix="/admin/clients", tags=["Admin Clients"])
+app.include_router(admin_clients_router, tags=["Admin Clients"])
 app.include_router(admin_projects_router, tags=["Admin Projects"])
 app.include_router(admin_webhooks_router, prefix="/admin/webhooks", tags=["Admin Webhooks"])
 app.include_router(admin_support_router, prefix="/admin/support", tags=["Admin Support"])
@@ -282,6 +294,7 @@ app.include_router(lead_forwarding_router, prefix="/api", tags=["Lead Forwarding
 app.include_router(credentials_router, prefix="/api", tags=["Credentials"])
 app.include_router(support_router, prefix="/api", tags=["Support"])
 app.include_router(dashboard_support_router, prefix="/dashboard", tags=["Dashboard"])
+app.include_router(dashboard_onboarding_router, prefix="/dashboard", tags=["Dashboard"])
 app.include_router(admin_support_tickets_router, tags=["Admin Support"])
 app.include_router(admin_login_router, tags=["Admin"])
 app.include_router(admin_calls_router, tags=["Admin Calls"])
@@ -290,8 +303,8 @@ if admin_pers_file_upload_router:
     app.include_router(admin_pers_file_upload_router, tags=["Admin File Upload"])
 if file_storage_upload_router:
     app.include_router(file_storage_upload_router, tags=["File Upload"])
+app.include_router(provision_router)
 app.middleware("http")(load_user_middleware)
-app.include_router(dashboard_support_router, prefix="/dashboard", tags=["Dashboard"])
 
 
 @app.post("/api/login/resend")

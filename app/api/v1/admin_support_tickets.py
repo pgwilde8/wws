@@ -31,7 +31,13 @@ async def support_list_for_client(
     tickets = [dict(r) for r in res.mappings().all()]
     return templates.TemplateResponse(
         "admin/support_inbox.html",
-        {"request": request, "tickets": tickets, "client_id": client_id},
+        {
+            "request": request,
+            "tickets": tickets,
+            "client_id": client_id,
+            "page": 1,
+            "total_pages": 1,
+        },
     )
 
 

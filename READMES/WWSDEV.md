@@ -2,12 +2,12 @@ PGPASSWORD='Securepass9' psql -U webadmin -h localhost -d wwsdev_db
 PGPASSWORD='Securepass9' psql -U webadmin -h localhost -d wwsdev_db -c "\dt"
 PGPASSWORD='Securepass9' psql -U webadmin -h localhost -d wwsdev_db -c "\d contacts"
 PGPASSWORD='Securepass9' psql -U webadmin -h localhost -d wwsdev_db -c "SELECT * FROM contacts;"
-PGPASSWORD='Securepass9' psql -U webadmin -h localhost -d wewsdev_db -c "\x" -c "SELECT id, name, email, phone, subject, created_at FROM contacts ORDER BY created_at DESC LIMIT 10;"
-PGPASSWORD='Securepass9' psql -U webadmin -h localhost -d wwsdev_db
+PGPASSWORD='Securepass9' psql -U webadmin -h localhost -d wewsdev_db -c "\x" -c "SELECT id, name, email, phone, subject, created_at FROM contachost -d wwsdev_db
 SELECT * FROM contacts;
 \d contacts  -- View table structure
 SELECT COUNT(*) FROM contacts;  -- Count total records
-PGPASSWORD='Securepass9' psql -U webadmin -h localhost -d wwsdev_db -c "SELECT COUNT(*) FROM contacts;"
+PGPASSWORD='Securepass9' psql -U webadmin -h localhost -d wwsdev_db -c "SELECT COUNT(*) FROM contacts;"ts ORDER BY created_at DESC LIMIT 10;"
+PGPASSWORD='Securepass9' psql -U webadmin -h local
 
 PGPASSWORD='Securepass9' psql -U webadmin -h localhost -d  wwsdev_db -c "\dt"
 
@@ -43,11 +43,15 @@ echo "CREATE TABLE IF NOT EXISTS lead_forward_emails (
 
   psql -U webadmin -h localhost -d wwsdev_db -c "SELECT id, client_id, email, created_at FROM lead_forward_emails ORDER BY created_at DESC LIMIT 10;"
 
-                List of relations
+  \d+ client_onboarding
+
+                 List of relations
  Schema |        Name         | Type  |  Owner   
 --------+---------------------+-------+----------
+ public | alembic_version     | table | webadmin
  public | chat_messages       | table | webadmin
  public | chat_sessions       | table | webadmin
+ public | client_onboarding   | table | webadmin
  public | clients             | table | webadmin
  public | coupon_redemptions  | table | webadmin
  public | coupon_tier_rules   | table | webadmin
@@ -73,4 +77,4 @@ echo "CREATE TABLE IF NOT EXISTS lead_forward_emails (
  public | testimonials        | table | webadmin
  public | users               | table | webadmin
  public | webhook_events      | table | webadmin
-(27 rows)
+(29 rows)
