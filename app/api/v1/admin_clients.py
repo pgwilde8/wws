@@ -5,6 +5,7 @@ from sqlalchemy import text, select, func
 from types import SimpleNamespace
 from app.db.session import get_session
 from fastapi.templating import Jinja2Templates
+from app.services.provisioning import provision_openai_assistant, provision_twilio_voice
 
 router = APIRouter()
 
@@ -236,3 +237,43 @@ async def client_credentials_raw(
     if not credentials:
         raise HTTPException(status_code=404, detail="No credentials for this client.")
     return {"credentials": dict(credentials)}
+
+
+@router.post("/admin/clients/{client_id}/provision/openai")
+async def admin_provision_openai(
+    client_id: int,
+    db: AsyncSession = Depends(get_session),
+):
+    await provision_openai_assistant(client_id, db)
+    return {"status": "ok"}
+
+
+@router.post("/admin/clients/{client_id}/provision/twilio")
+async def admin_provision_twilio(
+    client_id: int,
+    db: AsyncSession = Depends(get_session),
+):
+    await provision_twilio_voice(client_id, db)
+    return {"status": "ok"}
+
+
+@router.get("/admin/clients/{client_id}/provision/raw")
+async def admin_provision_raw(
+    client_id: int,
+    db: AsyncSession = Depends(get_session),
+):
+    row = await db.execute(
+        text(
+            """
+            SELECT openai_assistant_id, twilio_voice_agent_sid
+            FROM clients
+            WHERE id = :cid
+            LIMIT 1
+            """
+        ),
+        {"cid": client_id},
+    )
+    data = row.mappings().first()
+    if not data:
+        raise HTTPException(status_code=404, detail="Client not found.")
+    return {"provisioning": dict(data)}

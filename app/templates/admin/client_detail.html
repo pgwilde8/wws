@@ -123,6 +123,12 @@
         <span class="{{ 'text-green-600 font-semibold' if client.twilio_status=='provisioned' else 'text-gray-500 capitalize' }}">{{ client.twilio_status or 'optional' }}</span>
       </div>
     </div>
+    <div class="mt-3 flex gap-3">
+      <button id="prov-openai" class="px-4 py-2 bg-blue-600 text-white text-xs font-bold rounded-full hover:opacity-90 transition">Create OpenAI Assistant</button>
+      <button id="prov-twilio" class="px-4 py-2 bg-purple-600 text-white text-xs font-bold rounded-full hover:opacity-90 transition">Provision Twilio Voice</button>
+      <button id="reveal-prov" class="px-4 py-2 bg-gray-900 text-white text-xs font-bold rounded-full hover:opacity-90 transition">Reveal IDs</button>
+      <span id="prov-status" class="text-xs text-gray-600"></span>
+    </div>
   </section>
 
   <!-- Logo -->
@@ -206,6 +212,43 @@
     } catch (err) {
       statusEl.textContent = 'Unable to reveal credentials.';
       console.error(err);
+    }
+  });
+})();
+
+(function() {
+  const provStatus = document.getElementById('prov-status');
+  const call = async (url) => {
+    provStatus.textContent = 'Working...';
+    try {
+      const resp = await fetch(url, { method: 'POST', credentials: 'include' });
+      if (!resp.ok) throw new Error('Failed');
+      provStatus.textContent = 'Triggered. Refresh to see status.';
+    } catch (e) {
+      provStatus.textContent = 'Provisioning failed.';
+      console.error(e);
+    }
+  };
+  const btnO = document.getElementById('prov-openai');
+  const btnT = document.getElementById('prov-twilio');
+  if (btnO) btnO.addEventListener('click', () => call('/admin/clients/{{ client.id }}/provision/openai'));
+  if (btnT) btnT.addEventListener('click', () => call('/admin/clients/{{ client.id }}/provision/twilio'));
+  const btnR = document.getElementById('reveal-prov');
+  if (btnR) btnR.addEventListener('click', async () => {
+    provStatus.textContent = 'Loading IDs...';
+    try {
+      const resp = await fetch('/admin/clients/{{ client.id }}/provision/raw', { credentials: 'include' });
+      if (!resp.ok) throw new Error('Failed');
+      const data = await resp.json();
+      const p = data.provisioning || {};
+      alert(
+        `OpenAI Assistant ID: ${p.openai_assistant_id || '—'}\n` +
+        `Twilio Voice SID: ${p.twilio_voice_agent_sid || '—'}`
+      );
+      provStatus.textContent = 'IDs revealed.';
+    } catch (e) {
+      provStatus.textContent = 'Unable to reveal IDs.';
+      console.error(e);
     }
   });
 })();
