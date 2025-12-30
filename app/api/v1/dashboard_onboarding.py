@@ -6,6 +6,10 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db.session import get_session
 from app.schemas.onboarding import ClientOnboardIn
+from pydantic import BaseModel
+from fastapi import HTTPException
+from openai import OpenAI
+import os
 
 router = APIRouter()
 templates = Jinja2Templates(directory="app/templates")
@@ -20,6 +24,70 @@ async def onboarding_page(request: Request):
         "dashboard/onboarding.html",
         {"request": request},
     )
+
+
+class PromptGenRequest(BaseModel):
+    raw_text: str
+
+
+@router.post("/onboarding/generate-prompt")
+async def generate_prompt(
+    payload: PromptGenRequest,
+    request: Request,
+    db: AsyncSession = Depends(get_session),
+):
+    user = getattr(request.state, "user", None)
+    client_id = getattr(user, "id", None) if user else None
+    if not client_id:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authenticated")
+
+    # Get OpenAI key from credentials
+    cred_row = await db.execute(
+        text(
+            """
+            SELECT openai_api_key
+            FROM credentials
+            WHERE client_id = :cid
+            LIMIT 1
+            """
+        ),
+        {"cid": client_id},
+    )
+    cred = cred_row.mappings().first()
+    api_key = cred.get("openai_api_key") if cred else None
+    if not api_key:
+        # Fallback to server key so early users can generate a prompt before providing theirs
+        api_key = os.getenv("OPENAI_API_KEY")
+    if not api_key:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="No OpenAI key found. Add your key in Integrations or set OPENAI_API_KEY on the server.",
+        )
+
+    system_prompt = (
+        "You are a prompt builder. Convert the user's rough business notes into a polished, structured system prompt "
+        "for a website AI assistant. Include services, offers, policies, tone, booking/lead handling, FAQs, and automation goals. "
+        "Return only the final prompt text, concise and ready to paste."
+    )
+
+    try:
+        client = OpenAI(
+            api_key=api_key,
+            default_headers={"OpenAI-Beta": "assistants=v2"},
+        )
+        resp = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": payload.raw_text},
+            ],
+        )
+        content = resp.choices[0].message.content if resp.choices else ""
+        return {"prompt": content}
+    except HTTPException:
+        raise
+    except Exception as exc:  # noqa: BLE001
+        raise HTTPException(status_code=500, detail=f"Error generating prompt: {exc}")
 
 
 @router.post("/onboarding")

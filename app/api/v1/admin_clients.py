@@ -169,6 +169,7 @@ async def client_detail(
                 stripe_publishable_key,
                 has_logo,
                 brand_colors,
+                logo_url,
                 created_at
             FROM client_onboarding
             WHERE client_id = :cid

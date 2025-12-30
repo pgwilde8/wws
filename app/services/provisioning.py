@@ -3,6 +3,7 @@ Provisioning helpers for client agents (OpenAI assistant, Twilio voice).
 Reads credentials from the `credentials` table and updates the `clients` table.
 """
 from datetime import datetime
+import json
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
 

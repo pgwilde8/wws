@@ -1,0 +1,145 @@
+{% extends "layout/base.html" %}
+{% block title %}Admin Dashboard – WebWise Solutions{% endblock %}
+{% block header %}{% endblock %}
+{% block footer %}{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto p-4 sm:p-6 space-y-6">
+
+  <!-- HEADER -->
+  <header class="bg-white p-5 rounded-2xl shadow-sm border border-gray-200">
+    <h1 class="text-xl sm:text-2xl font-extrabold text-gray-900">Admin Dashboard</h1>
+    <p class="text-xs sm:text-sm text-gray-500 mt-1 uppercase tracking-wider">System Overview & Controls</p>
+  </header>
+
+  <!-- STATS CARDS -->
+  <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+
+    <div class="bg-white p-4 rounded-2xl border shadow-sm">
+      <div class="text-xs text-gray-400 uppercase">Total Clients</div>
+      <div class="text-2xl font-bold text-gray-900">{{ total_clients or 0 }}</div>
+    </div>
+
+    <div class="bg-white p-4 rounded-2xl border shadow-sm">
+      <div class="text-xs text-gray-400 uppercase">Total Projects</div>
+      <div class="text-2xl font-bold text-gray-900">{{ total_projects or 0 }}</div>
+    </div>
+
+    <div class="bg-white p-4 rounded-2xl border shadow-sm">
+      <div class="text-xs text-gray-400 uppercase">Orders</div>
+      <div class="text-2xl font-bold text-gray-900">{{ total_orders or 0 }}</div>
+    </div>
+
+    <div class="bg-white p-4 rounded-2xl border shadow-sm">
+      <div class="text-xs text-gray-400 uppercase">Active Subscriptions</div>
+      <div class="text-2xl font-bold text-gray-900">{{ active_subs or 0 }}</div>
+    </div>
+
+  </section>
+
+  <!-- QUICK ACTIONS -->
+  <section class="bg-white p-4 rounded-2xl border shadow-sm">
+    <h2 class="text-lg font-bold text-gray-900 mb-3">Quick Actions</h2>
+    <div class="flex flex-wrap gap-3">
+
+      <a href="/admin/clients" class="px-5 py-2 bg-blue-600 text-white text-sm font-bold rounded-full hover:opacity-90 transition">
+        View Clients
+      </a>
+
+      <a href="/admin/projects" class="px-5 py-2 bg-gray-900 text-white text-sm font-bold rounded-full hover:opacity-90 transition">
+        View Projects
+      </a>
+
+      <a href="/admin/webhooks" class="px-5 py-2 bg-amber-600 text-white text-sm font-bold rounded-full hover:opacity-90 transition">
+        Webhook Logs
+      </a>
+
+      <a href="/admin/support" class="px-5 py-2 bg-green-600 text-white text-sm font-bold rounded-full hover:opacity-90 transition">
+        Support Inbox
+      </a>
+
+    </div>
+  </section>
+
+  <!-- SYSTEM HEALTH + WEBHOOK MONITOR -->
+  <section class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+
+    <!-- Health -->
+    <div class="panel bg-white p-4 rounded-2xl border shadow-sm">
+      <h2 class="text-lg font-bold text-gray-900 mb-2">System Health</h2>
+      <ul class="text-sm space-y-1 text-gray-700">
+        <li>API: <strong class="text-green-600">Online</strong></li>
+        <li>Database: <strong class="text-green-600">Connected</strong></li>
+        <li>Stripe Webhooks: <strong class="text-blue-600">Receiving</strong></li>
+        <li>Uptime Monitor: <strong>Stable</strong></li>
+      </ul>
+    </div>
+
+    <!-- Recent Webhooks -->
+    <div class="panel bg-white p-4 rounded-2xl border shadow-sm">
+      <h2 class="text-lg font-bold text-gray-900 mb-2">Recent Webhook Events</h2>
+      {% if recent_events %}
+      <ul class="progress-list">
+        {% for e in recent_events %}
+        <li>
+          <span class="step-label">{{ e.event_type }}</span>
+          <span class="step-status {% if e.status=='success' %}step-done{% else %}step-working{% endif %}">
+            {{ e.status }}
+          </span>
+        </li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <p class="text-sm text-gray-500">No recent webhook events</p>
+      {% endif %}
+    </div>
+
+  </section>
+
+  <!-- Clients Preview -->
+  <section class="bg-white p-4 rounded-2xl shadow-sm border">
+    <h2 class="text-lg font-bold text-gray-900 mb-3">Clients (latest)</h2>
+    <div class="overflow-x-auto">
+      <table class="min-w-full text-sm">
+        <thead>
+          <tr class="text-left text-xs uppercase text-gray-500 border-b">
+            <th class="py-2 pr-4">Name</th>
+            <th class="py-2 pr-4">Email</th>
+            <th class="py-2 pr-4">Domain</th>
+            <th class="py-2 pr-4">Submitted</th>
+            <th class="py-2 pr-4">View</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for c in clients_preview %}
+          <tr class="border-b last:border-0">
+            <td class="py-2 pr-4">
+              <a href="/admin/clients/{{ c.id }}" class="text-blue-600 hover:underline">{{ c.display_name or '—' }}</a>
+            </td>
+            <td class="py-2 pr-4 text-gray-800">{{ c.email or '—' }}</td>
+            <td class="py-2 pr-4 text-gray-800">{{ c.domain_name or '—' }}</td>
+            <td class="py-2 pr-4 text-gray-800">
+              {% if c.submitted_at %}{{ c.submitted_at }}{% else %}<span class="text-gray-500 text-xs">—</span>{% endif %}
+            </td>
+            <td class="py-2 pr-4">
+              <a href="/admin/clients/{{ c.id }}" class="px-3 py-1 bg-blue-600 text-white text-xs font-bold rounded-full hover:opacity-90 transition">Open</a>
+            </td>
+          </tr>
+          {% endfor %}
+          {% if not clients_preview %}
+          <tr>
+            <td colspan="5" class="py-3 text-center text-gray-500 text-xs">No clients found.</td>
+          </tr>
+          {% endif %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- FOOTER NOTE -->
+  <footer class="text-center text-xs text-gray-400 pt-4 border-t">
+    Parsed logs, plan resolution, analytics, and client timelines will populate here as the system evolves.
+  </footer>
+
+</div>
+{% endblock %}

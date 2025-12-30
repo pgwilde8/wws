@@ -19,9 +19,16 @@ SELECT id, email, hashed_password FROM users WHERE email='678@webwisesolutions.d
 \d users
 fg %2
 
+
+python - <<'PY'
+from openai import OpenAI
+client = OpenAI(api_key="k-proj-lRr6e5VAKf8FYbHsz2MKwIjtmQSZ56KwA5C8TaQ6xlilSC2H1LCOCXhTl5LVOHO4GrmWj7Yoo1T3BlbkFJWric9Z8hRH-AM8bolj96Ih6crrr2vBYb2YyJjgBiYqLPWK52xYZB4ErfznZ1iBNljovBfuvoYA")
+print(client.models.list())
+PY
+
 /admin/login
 Email: admin@webwisesolutions.dev
-Password: YourStrongPwd
+Password: Securepass9
 
 1997: prod_TdQijJms4jaRRc, price_1Sg9rHRzRv6CTjxR69nkwXrx
 3997: prod_TdQkXuk1BBULCb, price_1Sg9t0RzRv6CTjxRDJZdEq5y
@@ -119,3 +126,8 @@ async def get_session() -> AsyncSession:
 app.include_router(public_pages_router)
 
 twillio: Account SID, Auth Token
+
+
+admin:
+https://webwisesolutions.dev/admin/dashboard
+https://webwisesolutions.dev/admin/clients/15
