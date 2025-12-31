@@ -125,16 +125,6 @@ async def submit_onboarding(
         {"cid": client_id, "email": user_email, "name": payload.business_name},
     )
 
-    existing = await db.execute(
-        text("SELECT 1 FROM client_onboarding WHERE client_id = :cid LIMIT 1"),
-        {"cid": client_id},
-    )
-    if existing.scalar_one_or_none():
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Onboarding already submitted for this client.",
-        )
-
     wants_calling = payload.calling_direction != "none"
     wants_sms = payload.wants_sms if wants_calling else False
     wants_payments = payload.wants_payments
@@ -211,71 +201,101 @@ async def submit_onboarding(
             },
         )
 
-    await db.execute(
+    params = {
+        "client_id": client_id,
+        "full_name": payload.full_name,
+        "business_name": payload.business_name,
+        "industry": payload.industry,
+        "site_description": payload.site_description,
+        "target_audience": payload.target_audience,
+        "phone": payload.phone,
+        "domain_name": payload.domain_name,
+        "lead_forward_email": str(payload.lead_forward_email),
+        "calling_direction": payload.calling_direction,
+        "wants_sms": wants_sms,
+        "wants_payments": wants_payments,
+        "uses_cloudflare": uses_cloudflare,
+        "cloudflare_email": cloudflare_email,
+        "has_logo": payload.has_logo,
+        "brand_colors": payload.brand_colors,
+        "logo_url": payload.logo_url,
+    }
+
+    update_result = await db.execute(
         text(
             """
-            INSERT INTO client_onboarding (
-                client_id,
-                full_name,
-                business_name,
-                industry,
-                site_description,
-                target_audience,
-                phone,
-                domain_name,
-                lead_forward_email,
-                calling_direction,
-                wants_sms,
-                wants_payments,
-                uses_cloudflare,
-                cloudflare_email,
-                has_logo,
-                brand_colors,
-                logo_url,
-                created_at
-            )
-            VALUES (
-                :client_id,
-                :full_name,
-                :business_name,
-                :industry,
-                :site_description,
-                :target_audience,
-                :phone,
-                :domain_name,
-                :lead_forward_email,
-                :calling_direction,
-                :wants_sms,
-                :wants_payments,
-                :uses_cloudflare,
-                :cloudflare_email,
-                :has_logo,
-                :brand_colors,
-                :logo_url,
-                NOW()
-            )
+            UPDATE client_onboarding SET
+                full_name = :full_name,
+                business_name = :business_name,
+                industry = :industry,
+                site_description = :site_description,
+                target_audience = :target_audience,
+                phone = :phone,
+                domain_name = :domain_name,
+                lead_forward_email = :lead_forward_email,
+                calling_direction = :calling_direction,
+                wants_sms = :wants_sms,
+                wants_payments = :wants_payments,
+                uses_cloudflare = :uses_cloudflare,
+                cloudflare_email = :cloudflare_email,
+                has_logo = :has_logo,
+                brand_colors = :brand_colors,
+                logo_url = :logo_url,
+                created_at = COALESCE(created_at, NOW())
+            WHERE client_id = :client_id
             """
         ),
-        {
-            "client_id": client_id,
-            "full_name": payload.full_name,
-            "business_name": payload.business_name,
-            "industry": payload.industry,
-            "site_description": payload.site_description,
-            "target_audience": payload.target_audience,
-            "phone": payload.phone,
-            "domain_name": payload.domain_name,
-            "lead_forward_email": str(payload.lead_forward_email),
-            "calling_direction": payload.calling_direction,
-            "wants_sms": wants_sms,
-            "wants_payments": wants_payments,
-            "uses_cloudflare": uses_cloudflare,
-            "cloudflare_email": cloudflare_email,
-            "has_logo": payload.has_logo,
-            "brand_colors": payload.brand_colors,
-            "logo_url": payload.logo_url,
-        },
+        params,
     )
+
+    if update_result.rowcount == 0:
+        await db.execute(
+            text(
+                """
+                INSERT INTO client_onboarding (
+                    client_id,
+                    full_name,
+                    business_name,
+                    industry,
+                    site_description,
+                    target_audience,
+                    phone,
+                    domain_name,
+                    lead_forward_email,
+                    calling_direction,
+                    wants_sms,
+                    wants_payments,
+                    uses_cloudflare,
+                    cloudflare_email,
+                    has_logo,
+                    brand_colors,
+                    logo_url,
+                    created_at
+                )
+                VALUES (
+                    :client_id,
+                    :full_name,
+                    :business_name,
+                    :industry,
+                    :site_description,
+                    :target_audience,
+                    :phone,
+                    :domain_name,
+                    :lead_forward_email,
+                    :calling_direction,
+                    :wants_sms,
+                    :wants_payments,
+                    :uses_cloudflare,
+                    :cloudflare_email,
+                    :has_logo,
+                    :brand_colors,
+                    :logo_url,
+                    NOW()
+                )
+                """
+            ),
+            params,
+        )
 
     # Activity log (optional; skip if table is missing)
     try:

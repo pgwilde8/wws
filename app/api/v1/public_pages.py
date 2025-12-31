@@ -1,8 +1,13 @@
 # app/api/v1/public_pages.py
 from datetime import datetime
+from types import SimpleNamespace
 from fastapi import APIRouter, Request
 from fastapi.templating import Jinja2Templates
 from app.core.config import settings
+from app.services.email import (
+    send_call_booking_confirmation,
+    send_call_booking_email,
+)
 
 
 router = APIRouter(tags=["Public Pages"])
@@ -65,6 +70,34 @@ async def choose_your_build(request: Request):
 async def book_call(request: Request):
     return templates.TemplateResponse("public/book-call.html", {"request": request})
 
+@router.post("/book-call/submit")
+async def book_call_submit(request: Request):
+    form = await request.form()
+    cb = SimpleNamespace(
+        name=form.get("name"),
+        email=form.get("email"),
+        phone=form.get("phone"),
+        preferred_date=form.get("preferred_date"),
+        preferred_time=form.get("preferred_time"),
+        timezone=form.get("timezone") or "EST",
+        message=form.get("message") or "",
+        created_at=datetime.utcnow(),
+    )
+
+    try:
+        await send_call_booking_confirmation(cb)  # to the submitter (BCC devs if configured)
+        await send_call_booking_email(cb)         # to internal team
+    except Exception as e:
+        print(f"Call booking email error: {e}")
+
+    ctx = {
+        "request": request,
+        "success": True,
+        "message": "Thanks! We got your request and will confirm your call shortly.",
+    }
+    ctx.update({k: v for k, v in form.items()})
+    return templates.TemplateResponse("public/book-call.html", ctx)
+
 @router.get("/automate-or-die")
 async def automate_or_die(request: Request):
     return templates.TemplateResponse("public/automate-or-die.html", {"request": request})    
@@ -72,6 +105,10 @@ async def automate_or_die(request: Request):
 @router.get("/start-build-process")
 async def star_build_process(request: Request):
     return templates.TemplateResponse("public/start-build-process.html", {"request": request})
+
+@router.get("/start-your-project")
+async def start_your_project(request: Request):
+    return templates.TemplateResponse("public/start-your-project.html", {"request": request})    
     
 @router.get("/pricing")
 async def pricing(request: Request):

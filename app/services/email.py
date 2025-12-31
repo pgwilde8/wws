@@ -177,6 +177,8 @@ async def send_call_booking_confirmation(call_booking: CallBooking) -> bool:
         msg = MIMEMultipart()
         msg["From"] = settings.SMTP_FROM_EMAIL
         msg["To"] = call_booking.email
+        if getattr(settings, "CALL_BOOKED_EMAIL", None):
+            msg["Bcc"] = settings.CALL_BOOKED_EMAIL
         msg["Subject"] = "Your Call with WebWise Solutions is Scheduled!"
         
         # Create email body with nice formatting
@@ -197,13 +199,12 @@ Your call details:
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 What's Next:
-1. We'll send you a calendar invite shortly
-2. You'll receive a confirmation call or email 24 hours before
-3. Prepare any questions about your project
+1. We'll will call you at the scheduled time.
+2. Prepare any questions about your project
 
 Looking forward to speaking with you!
 
-If you need to reschedule, just reply to this email or call us at [your phone number].
+If you need to reschedule, just reply to this email or leave a voice mail at: 848-225-7510.
 
 Best regards,
 The WebWise Solutions Team

@@ -54,7 +54,7 @@
     </style>
   {% block extra_head %}{% endblock %}
 </head>
-<body style="background-image: url('/static/img/logo4.png'); background-size: cover; background-position: center; background-repeat: no-repeat; background-attachment: fixed; background-opacity: 0.05;">
+<body style="background-image: url('/static/img/logo4.png'); background-size: cover; background-position: center; background-repeat: no-repeat; background-attachment: fixed;">
     {% block header %}
     <nav class="bg-white shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -74,6 +74,7 @@
                     <a href="/pricing" class="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">Pricing</a>
                     <a href="/automate-or-die" class="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">Learn More</a>
                     <a href="/start-build-process" class="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">Build Process Guide</a>
+                    <a href="/faq" class="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">FAQ</a>
                     <a href="/contact" class="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">Contact</a>
     </div>
 
@@ -99,6 +100,7 @@
                     <a href="/pricing" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50">Pricing</a>
                     <a href="/automate-or-die" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50">Learn More</a>
                     <a href="/start-build-process" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50">Build Process Guide</a>
+                    <a href="/faq" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50">FAQ</a>
                     <a href="/contact" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50">Contact</a>
                 </div>
             </div>
@@ -443,9 +445,35 @@
             }
 
             function renderBotText(str) {
-                const escaped = escapeHtml(str);
-                const withLinks = escaped.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" class="text-blue-600 underline">$1</a>');
-                return withLinks.replace(/\n/g, '<br>');
+                // Start with escaped text to prevent injection
+                let rendered = escapeHtml(str);
+
+                // Strip escaped anchor/strong tags to avoid broken nesting
+                rendered = rendered.replace(/&lt;\/?a[^&]*&gt;/gi, '');
+                rendered = rendered.replace(/&lt;\/?strong&gt;/gi, '');
+
+                // Markdown links [text](url)
+                rendered = rendered.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
+                // Paths in parentheses e.g., "(/client-quiz)"
+                rendered = rendered.replace(/\((\/[^\s)]+)\)/g, '<a href="$1">$1</a>');
+                // Bare URLs or paths
+                rendered = rendered.replace(/((https?:\/\/|\/)[^\s<>"']+)/g, '<a href="$1">$1</a>');
+
+                // Force any quiz mention to the absolute URL, no bold, no duplication
+                const quizUrl = "https://webwisesolutions.dev/client-quiz";
+                const quizAnchor = `<a href="${quizUrl}">Take quick quiz</a>`;
+                // Replace any anchor already pointing to client-quiz with clean anchor
+                rendered = rendered.replace(/<a[^>]*href="[^"]*client-quiz[^"]*"[^>]*>.*?<\/a>/gi, quizAnchor);
+                // Replace raw quiz URL strings (absolute or relative) with clean anchor
+                rendered = rendered.replace(/(https?:\/\/webwisesolutions\.dev\/client-quiz|\/client-quiz)\b/gi, quizAnchor);
+                // If still no quiz anchor, inject one on mention
+                if (!rendered.includes(`href="${quizUrl}"`)) {
+                    rendered = rendered.replace(/client-quiz/gi, quizAnchor);
+                }
+                // Final cleanup: collapse any nested anchors that might remain
+                rendered = rendered.replace(/<a[^>]*>\s*(?:<a[^>]*>)?([^<]+?)(?:<\/a>\s*)?<\/a>/gi, '<a href="' + quizUrl + '">$1</a>');
+
+                return rendered.replace(/\n/g, '<br>');
             }
 
             function appendMessage(sender, text) {

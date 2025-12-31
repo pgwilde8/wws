@@ -1,0 +1,117 @@
+{% extends "layout/base.html" %}
+
+{% block title %}Services - WebWise Solutions{% endblock %}
+
+{% block content %}
+
+<!-- HERO -->
+<section style="text-align:center; padding:4rem 1rem; background: linear-gradient(135deg, rgba(0,0,0,0.8), rgba(15,23,42,0.9)), url('/static/img/logo4.png') center/cover no-repeat; color:white;">
+    <h1 style="font-size:2.6rem; font-weight:800; margin-bottom:0.75rem;">Done‑For‑You Automated Business Builds</h1>
+    <p style="max-width:760px; margin:0 auto 1.5rem; font-size:1.15rem; line-height:1.6;">
+        Strategy, design, build, and automation—delivered as a complete system. We launch your website, funnels, AI, CRM, payments, email/SMS, and support layers so you can operate fast without hiring a team.
+    </p>
+    <div style="display:flex; gap:0.75rem; justify-content:center; flex-wrap:wrap;">
+        <a href="/book-call" class="cta-button" style="background:#27ae60; padding:0.9rem 2rem; font-size:1.1rem;">Book a Call</a>
+        <a href="/pricing" class="cta-button" style="padding:0.9rem 2rem; font-size:1.1rem;">See Packages</a>
+    </div>
+</section>
+
+<!-- PACKAGES -->
+<section style="padding:3rem 1rem; max-width:1100px; margin:0 auto;">
+    <div style="text-align:center; margin-bottom:2rem;">
+        <h2 style="font-size:2rem; font-weight:700; margin-bottom:0.5rem;">Pick the Build That Fits</h2>
+        <p style="color:#555; max-width:760px; margin:0 auto; line-height:1.6;">
+            Three levels to match your scope and speed. All include strategy, setup, and launch support.
+        </p>
+    </div>
+    <div style="display:flex; flex-wrap:wrap; gap:1.5rem; justify-content:center;">
+        <div style="width:320px; background:white; border:1px solid #e5e7eb; border-radius:12px; padding:1.5rem; box-shadow:0 8px 24px rgba(0,0,0,0.04);">
+            <h3 style="font-size:1.3rem; font-weight:700; margin-bottom:0.5rem;">Starter</h3>
+            <p style="color:#6b7280; margin-bottom:0.75rem;">Launch-ready site + core automations.</p>
+            <ul style="list-style:none; padding:0; margin:0; line-height:1.6; color:#374151;">
+                <li>✓ Custom site + brand styling</li>
+                <li>✓ Lead capture + booking funnel</li>
+                <li>✓ AI chat widget installed</li>
+                <li>✓ Email/SMS basics + CRM setup</li>
+            </ul>
+        </div>
+        <div style="width:320px; background:white; border:2px solid #667eea; border-radius:12px; padding:1.5rem; box-shadow:0 12px 32px rgba(102, 126, 234, 0.12);">
+            <h3 style="font-size:1.3rem; font-weight:800; margin-bottom:0.5rem;">Growth</h3>
+            <p style="color:#6b7280; margin-bottom:0.75rem;">Deeper automations and payments.</p>
+            <ul style="list-style:none; padding:0; margin:0; line-height:1.6; color:#374151;">
+                <li>✓ Everything in Starter</li>
+                <li>✓ Sales funnels + upsells</li>
+                <li>✓ Payments (Stripe) + stripen-connect + subscriptions</li>
+                <li>✓ AI call/SMS workflows with Twilio</li>
+                <li>✓ Analytics + reporting dashboard</li>
+            </ul>
+        </div>
+        <div style="width:320px; background:white; border:1px solid #e5e7eb; border-radius:12px; padding:1.5rem; box-shadow:0 8px 24px rgba(0,0,0,0.04);">
+            <h3 style="font-size:1.3rem; font-weight:700; margin-bottom:0.5rem;">Scale</h3>
+            <p style="color:#6b7280; margin-bottom:0.75rem;">Complex logic, integrations, and ops.</p>
+            <ul style="list-style:none; padding:0; margin:0; line-height:1.6; color:#374151;">
+                <li>✓ Everything in Growth</li>
+                <li>✓ Custom workflows + APIs</li>
+                <li>✓ Multi-location or multi-role access</li>
+                <li>✓ Advanced AI agents (voice + chat)</li>
+                <li>✓ White-glove launch + handoff</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<!-- SERVICES GRID -->
+<section style="padding:3rem 1rem; background:#f8fafc;">
+    <div style="max-width:1100px; margin:0 auto;">
+        <h2 style="text-align:center; font-size:2rem; font-weight:700; margin-bottom:1.5rem;">What We Deliver</h2>
+        <div style="display:flex; flex-wrap:wrap; gap:1.25rem; justify-content:center;">
+            <div style="width:240px; background:white; border:1px solid #e5e7eb; border-radius:10px; padding:1rem;">
+                <h4 style="margin:0 0 0.5rem; font-weight:700;">Brand & Site</h4>
+                <p style="color:#4b5563; line-height:1.5;">Custom design, pages, SEO, and launch-ready build.</p>
+            </div>
+            <div style="width:240px; background:white; border:1px solid #e5e7eb; border-radius:10px; padding:1rem;">
+                <h4 style="margin:0 0 0.5rem; font-weight:700;">Funnels & Offers</h4>
+                <p style="color:#4b5563; line-height:1.5;">Lead capture, sales funnels, upsells, and CTAs that convert.</p>
+            </div>
+            <div style="width:240px; background:white; border:1px solid #e5e7eb; border-radius:10px; padding:1rem;">
+                <h4 style="margin:0 0 0.5rem; font-weight:700;">AI Chat & Voice</h4>
+                <p style="color:#4b5563; line-height:1.5;">Assistants for web chat and voice (Twilio) to book, qualify, and reply 24/7.</p>
+            </div>
+            <div style="width:240px; background:white; border:1px solid #e5e7eb; border-radius:10px; padding:1rem;">
+                <h4 style="margin:0 0 0.5rem; font-weight:700;">Email & SMS</h4>
+                <p style="color:#4b5563; line-height:1.5;">Sequences, reminders, missed-call texts, and nurture automation.</p>
+            </div>
+            <div style="width:240px; background:white; border:1px solid #e5e7eb; border-radius:10px; padding:1rem;">
+                <h4 style="margin:0 0 0.5rem; font-weight:700;">CRM & Ops</h4>
+                <p style="color:#4b5563; line-height:1.5;">Pipelines, tasks, permissions, and dashboards to run the business.</p>
+            </div>
+            <div style="width:240px; background:white; border:1px solid #e5e7eb; border-radius:10px; padding:1rem;">
+                <h4 style="margin:0 0 0.5rem; font-weight:700;">Payments & Subscriptions</h4>
+                <p style="color:#4b5563; line-height:1.5;">Stripe setup for products, services, memberships, or recurring revenue.</p>
+            </div>
+            <div style="width:240px; background:white; border:1px solid #e5e7eb; border-radius:10px; padding:1rem;">
+                <h4 style="margin:0 0 0.5rem; font-weight:700;">Analytics & Reporting</h4>
+                <p style="color:#4b5563; line-height:1.5;">KPIs, conversions, and performance dashboards to steer growth.</p>
+            </div>
+            <div style="width:240px; background:white; border:1px solid #e5e7eb; border-radius:10px; padding:1rem;">
+                <h4 style="margin:0 0 0.5rem; font-weight:700;">Support & Iteration</h4>
+                <p style="color:#4b5563; line-height:1.5;">Launch support, updates, and optimization as you scale.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA -->
+<section style="padding:3rem 1rem; text-align:center;">
+    <h2 style="font-size:2rem; font-weight:700; margin-bottom:0.75rem;">Ready to Start?</h2>
+    <p style="max-width:720px; margin:0 auto 1.5rem; color:#4b5563; line-height:1.6;">
+        Tell us what you’re building and we’ll recommend the right package and automation plan.
+    </p>
+    <div style="display:flex; gap:0.75rem; justify-content:center; flex-wrap:wrap;">
+        <a href="/book-call" class="cta-button" style="background:#27ae60; padding:0.9rem 2rem; font-size:1.1rem;">Book a Call</a>
+        <a href="/pricing" class="cta-button" style="padding:0.9rem 2rem; font-size:1.1rem;">See Pricing</a>
+    </div>
+</section>
+
+{% endblock %}
+

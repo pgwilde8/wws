@@ -44,6 +44,9 @@ scale' prod_TdQm4ocyVXU2A5, price_1Sg9uTRzRv6CTjxR0It8rVkC
 Add lead capture endpoint and ticket creation only if you plan to use them.
 Add a route to render the chat widget/template if the UI expects on
 
+git add .
+git commit -m "happy-happy"
+git push
 
 
 
@@ -131,3 +134,5 @@ twillio: Account SID, Auth Token
 admin:
 https://webwisesolutions.dev/admin/dashboard
 https://webwisesolutions.dev/admin/clients/15
+
+https://webwisesolutions.dev/dashboard/onboarding

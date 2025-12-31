@@ -105,15 +105,19 @@ def home_page(request: Request):
 
 @app.get("/dashboard")
 async def dashboard_home(request: Request, db: AsyncSession = Depends(get_session)):
+    # Latest order (optional)
     latest_order = (
         await db.execute(select(Order).order_by(Order.created_at.desc()).limit(1))
     ).scalar_one_or_none()
-    user_email = None
-    user = getattr(request.state, "user", None)
 
-    # If logged in client has not completed onboarding, send them to the intake first.
+    user = getattr(request.state, "user", None)
+    user_email = None
+    onboarding_row = None
+    client_status = None
+
     if user and getattr(user, "id", None):
         try:
+            # Require onboarding before showing dashboard
             exists = await db.execute(
                 text("SELECT 1 FROM client_onboarding WHERE client_id = :cid LIMIT 1"),
                 {"cid": user.id},
@@ -121,17 +125,58 @@ async def dashboard_home(request: Request, db: AsyncSession = Depends(get_sessio
             has_onboarding = exists.scalar_one_or_none() is not None
             if not has_onboarding:
                 return RedirectResponse(url="/dashboard/onboarding", status_code=303)
+
+            # Basic user email
             res = await db.execute(
                 text("SELECT email FROM users WHERE id = :uid LIMIT 1"),
                 {"uid": user.id},
             )
             user_email = res.scalar_one_or_none()
+
+            # Onboarding summary
+            res = await db.execute(
+                text(
+                    """
+                    SELECT business_name, domain_name, lead_forward_email,
+                           industry, created_at
+                    FROM client_onboarding
+                    WHERE client_id = :cid
+                    ORDER BY created_at DESC
+                    LIMIT 1
+                    """
+                ),
+                {"cid": user.id},
+            )
+            onboarding_row = res.mappings().first()
+
+            # Provisioning/status summary
+            res = await db.execute(
+                text(
+                    """
+                    SELECT assistant_status, assistant_status_detail, openai_assistant_id,
+                           twilio_status, twilio_status_detail, twilio_voice_agent_sid
+                    FROM clients
+                    WHERE id = :cid
+                    LIMIT 1
+                    """
+                ),
+                {"cid": user.id},
+            )
+            client_status = res.mappings().first()
         except Exception:
             user_email = None
+            onboarding_row = None
+            client_status = None
 
     return templates.TemplateResponse(
         "dashboard/dashboard.html",
-        {"request": request, "latest_order": latest_order, "user_email": user_email},
+        {
+            "request": request,
+            "latest_order": latest_order,
+            "user_email": user_email,
+            "onboarding": onboarding_row,
+            "client_status": client_status,
+        },
     )
 
 

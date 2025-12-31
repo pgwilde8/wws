@@ -1,0 +1,234 @@
+{% extends "layout/base.html" %}
+
+{% block title %}FAQ - WebWise Solutions{% endblock %}
+
+{% block content %}
+<!-- HERO -->
+<section style="text-align:center; padding:3.5rem 1rem; background: linear-gradient(135deg, #111827, #1f2937); color:white;">
+  <h1 style="font-size:2.4rem; font-weight:800; margin-bottom:0.75rem;">Frequently Asked Questions</h1>
+  <p style="max-width:760px; margin:0 auto; font-size:1.05rem; line-height:1.7; opacity:0.9;">
+    Straight answers about builds, third-party costs, support, data, and how to get started.
+  </p>
+</section>
+
+<!-- FAQ GRID -->
+<section style="max-width:1100px; margin:0 auto; padding:3rem 1rem 4rem;">
+    <div style="display:grid; gap:1.5rem; grid-template-columns:repeat(auto-fit, minmax(320px, 1fr));">
+    <!-- Third-party services -->
+    <div style="background:white; border:1px solid #e5e7eb; border-radius:12px; padding:1.5rem; box-shadow:0 6px 18px rgba(0,0,0,0.04);">
+      <h3 style="margin:0 0 0.75rem; font-size:1.2rem; font-weight:700; color:#111827;">Third-party services (OpenAI, Twilio, Stripe, Cloudflare)</h3>
+      <ul style="list-style:none; padding:0; margin:0; color:#4b5563; line-height:1.6; font-size:0.97rem;">
+        <li style="margin-bottom:0.75rem;"><strong>What services do you integrate?</strong><br>Commonly OpenAI (AI features), Twilio (voice/SMS), Stripe (payments), Cloudflare (DNS/security).</li>
+        <li style="margin-bottom:0.75rem;"><strong>What rates should we expect from OpenAI?</strong><br>Usage-based by model and tokens. Light chat often lands in the tens of dollars monthly; heavier automation costs more. Exact rates depend on the model and volume.</li>
+        <li style="margin-bottom:0.75rem;"><strong>What rates should we expect from Twilio?</strong><br>Per-number monthly fee plus per-minute voice and per-SMS charges. US numbers are low monthly cost; usage scales with call/SMS volume.</li>
+        <li style="margin-bottom:0.75rem;"><strong>Do you add a markup to third-party fees?</strong><br>No. You pay providers directly; we configure and integrate.</li>
+        <li><strong>Can we cap or monitor usage?</strong><br>Yes. We can help set sensible defaults and usage alerts.</li>
+      </ul>
+        <div style="margin-top:1rem; display:flex; gap:0.5rem; flex-wrap:wrap;">
+          <button id="ratesBtn" style="padding:0.65rem 1rem; font-size:0.95rem; font-weight:600; background:#2563eb; color:white; border:none; border-radius:8px; cursor:pointer;">
+            See Twilio Rate Examples
+          </button>
+          <button id="openaiBtn" style="padding:0.65rem 1rem; font-size:0.95rem; font-weight:600; background:#0f172a; color:white; border:none; border-radius:8px; cursor:pointer;">
+            See OpenAI Rate Examples
+          </button>
+        </div>
+    </div>
+
+    <!-- Build process & scope -->
+    <div style="background:white; border:1px solid #e5e7eb; border-radius:12px; padding:1.5rem; box-shadow:0 6px 18px rgba(0,0,0,0.04);">
+      <h3 style="margin:0 0 0.75rem; font-size:1.2rem; font-weight:700; color:#111827;">Build process & scope</h3>
+      <ul style="list-style:none; padding:0; margin:0; color:#4b5563; line-height:1.6; font-size:0.97rem;">
+        <li style="margin-bottom:0.75rem;"><strong>What’s included?</strong><br>Your chosen package: site, funnels, AI chat/voice wiring, CRM/email/SMS workflows as scoped.</li>
+        <li style="margin-bottom:0.75rem;"><strong>What’s not included?</strong><br>Ongoing design/content changes, copywriting, or marketing ops unless added as an ongoing plan.</li>
+        <li style="margin-bottom:0.75rem;"><strong>How long does a build take?</strong><br>Starter ~2–3 weeks; Growth ~3–5 weeks; custom/Scale depends on complexity.</li>
+        <li><strong>Do I own what you build?</strong><br>Yes. You own the code, data, and configuration delivered.</li>
+      </ul>
+    </div>
+
+    <!-- Support & changes -->
+    <div style="background:white; border:1px solid #e5e7eb; border-radius:12px; padding:1.5rem; box-shadow:0 6px 18px rgba(0,0,0,0.04);">
+      <h3 style="margin:0 0 0.75rem; font-size:1.2rem; font-weight:700; color:#111827;">Support & changes</h3>
+      <ul style="list-style:none; padding:0; margin:0; color:#4b5563; line-height:1.6; font-size:0.97rem;">
+        <li style="margin-bottom:0.75rem;"><strong>What support is included?</strong><br>Keeping the system running: bug fixes, maintaining automations/integrations, ensuring it operates as designed.</li>
+        <li style="margin-bottom:0.75rem;"><strong>What’s not included in base support?</strong><br>Frequent design tweaks, ongoing copy/content production, marketing ops, or repetitive asset swaps.</li>
+        <li><strong>Do you offer a design/content add-on?</strong><br>Yes, we can scope a monthly plan for creative updates and asset changes—book a call to discuss.</li>
+      </ul>
+    </div>
+
+    <!-- Data, security, ownership -->
+    <div style="background:white; border:1px solid #e5e7eb; border-radius:12px; padding:1.5rem; box-shadow:0 6px 18px rgba(0,0,0,0.04);">
+      <h3 style="margin:0 0 0.75rem; font-size:1.2rem; font-weight:700; color:#111827;">Data, security, ownership</h3>
+      <ul style="list-style:none; padding:0; margin:0; color:#4b5563; line-height:1.6; font-size:0.97rem;">
+        <li style="margin-bottom:0.75rem;"><strong>Who controls accounts and credentials?</strong><br>You do. We set up and hand off; billing stays in your accounts.</li>
+        <li style="margin-bottom:0.75rem;"><strong>Is my data private?</strong><br>We follow provider guidelines and best practices; your data stays in your accounts/services.</li>
+        <li><strong>Can we get usage/export access?</strong><br>Yes. You retain access to dashboards and data in your connected services.</li>
+      </ul>
+    </div>
+
+    <!-- Getting started -->
+    <div style="background:white; border:1px solid #e5e7eb; border-radius:12px; padding:1.5rem; box-shadow:0 6px 18px rgba(0,0,0,0.04);">
+      <h3 style="margin:0 0 0.75rem; font-size:1.2rem; font-weight:700; color:#111827;">Getting started</h3>
+      <ul style="list-style:none; padding:0; margin:0; color:#4b5563; line-height:1.6; font-size:0.97rem;">
+        <li style="margin-bottom:0.75rem;"><strong>What do you need from me?</strong><br>Business basics (name, industry, audience), brand preferences, copy/offer details, domain/DNS access, and your API keys (Stripe, Twilio, OpenAI, etc.).</li>
+        <li style="margin-bottom:0.75rem;"><strong>How do I choose the right package?</strong><br>Take our 6-question quiz or book a call; we’ll recommend Starter, Growth, or a custom scope based on complexity and volume.</li>
+        <li><strong>Can we explore custom work?</strong><br>Yes—book a call for a custom scope when you need deeper engineering, data/AI, or complex workflows.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- Rates Modal -->
+<div id="ratesModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:9999; align-items:center; justify-content:center; padding:1rem;">
+  <div style="background:white; border-radius:12px; max-width:720px; width:100%; padding:1.5rem; position:relative; box-shadow:0 20px 50px rgba(0,0,0,0.25);">
+    <button id="ratesClose" aria-label="Close" style="position:absolute; top:10px; right:10px; background:transparent; border:none; font-size:1.5rem; line-height:1; cursor:pointer;">×</button>
+    <h3 style="margin:0 0 0.75rem; font-size:1.3rem; font-weight:800; color:#111827;">Twilio example rates (U.S. baseline)</h3>
+    <p style="color:#4b5563; margin:0 0 0.75rem; line-height:1.6; font-size:0.96rem;">These are illustrative only; actual pricing varies by country, number type, carrier fees, and volume. Always confirm current rates in your Twilio account.</p>
+    <ul style="list-style:none; padding:0; margin:0 0 1rem; color:#374151; line-height:1.6; font-size:0.95rem;">
+      <li><strong>SMS:</strong> ~\$0.0079 per message (inbound/outbound).</li>
+      <li><strong>MMS:</strong> ~\$0.010 inbound / \$0.020 outbound per message.</li>
+      <li><strong>Voice:</strong> ~\$0.0085/min inbound; ~\$0.014/min outbound (toll-free inbound can be higher).</li>
+      <li><strong>Number rental:</strong> ~\$1–\$2/mo per U.S. number.</li>
+    </ul>
+    <p style="color:#4b5563; margin:0 0 0.75rem; line-height:1.6; font-size:0.95rem;"><strong>Example:</strong> 10,000 outbound SMS ≈ 10,000 × \$0.0079 = \$79 (plus any carrier pass-through fees).</p>
+    <p style="color:#4b5563; margin:0; line-height:1.6; font-size:0.95rem;">International rates differ by country; check Twilio’s pricing tables or API for precise numbers.</p>
+  </div>
+</div>
+
+<!-- OpenAI Rates Modal -->
+<div id="openaiModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:9999; align-items:center; justify-content:center; padding:1rem;">
+  <div style="background:white; border-radius:12px; max-width:780px; width:100%; padding:1.5rem; position:relative; box-shadow:0 20px 50px rgba(0,0,0,0.25);">
+    <button id="openaiClose" aria-label="Close" style="position:absolute; top:10px; right:10px; background:transparent; border:none; font-size:1.5rem; line-height:1; cursor:pointer;">×</button>
+    <h3 style="margin:0 0 0.75rem; font-size:1.3rem; font-weight:800; color:#111827;">OpenAI example rates (token-based, illustrative)</h3>
+    <p style="color:#4b5563; margin:0 0 0.75rem; line-height:1.6; font-size:0.96rem;">OpenAI bills per input/output tokens. Costs below are rough examples; always confirm current pricing in your account.</p>
+    <div style="overflow-x:auto; margin-bottom:1rem;">
+      <table style="width:100%; border-collapse:collapse; font-size:0.95rem; color:#1f2937;">
+        <thead>
+          <tr style="background:#f8fafc;">
+            <th style="text-align:left; padding:0.5rem; border-bottom:1px solid #e5e7eb;">Model</th>
+            <th style="text-align:left; padding:0.5rem; border-bottom:1px solid #e5e7eb;">Input (per 1M tokens)</th>
+            <th style="text-align:left; padding:0.5rem; border-bottom:1px solid #e5e7eb;">Output (per 1M tokens)</th>
+            <th style="text-align:left; padding:0.5rem; border-bottom:1px solid #e5e7eb;">Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="padding:0.5rem; border-bottom:1px solid #e5e7eb;">GPT-5.2</td>
+            <td style="padding:0.5rem; border-bottom:1px solid #e5e7eb;">~$1.75</td>
+            <td style="padding:0.5rem; border-bottom:1px solid #e5e7eb;">~$14.00</td>
+            <td style="padding:0.5rem; border-bottom:1px solid #e5e7eb;">High-end agentic tasks</td>
+          </tr>
+          <tr>
+            <td style="padding:0.5rem; border-bottom:1px solid #e5e7eb;">GPT-4.1</td>
+            <td style="padding:0.5rem; border-bottom:1px solid #e5e7eb;">~$2.00</td>
+            <td style="padding:0.5rem; border-bottom:1px solid #e5e7eb;">~$8.00</td>
+            <td style="padding:0.5rem; border-bottom:1px solid #e5e7eb;">Strong chat quality</td>
+          </tr>
+          <tr>
+            <td style="padding:0.5rem; border-bottom:1px solid #e5e7eb;">GPT-4o / similar</td>
+            <td style="padding:0.5rem; border-bottom:1px solid #e5e7eb;">~$5.00</td>
+            <td style="padding:0.5rem; border-bottom:1px solid #e5e7eb;">~$10.00</td>
+            <td style="padding:0.5rem; border-bottom:1px solid #e5e7eb;">Multimodal/advanced</td>
+          </tr>
+          <tr>
+            <td style="padding:0.5rem;">Cheaper “mini” models</td>
+            <td style="padding:0.5rem;">~$0.15–$0.60</td>
+            <td style="padding:0.5rem;">Typically 4–16× higher than input</td>
+            <td style="padding:0.5rem;">Best for high-volume/simple flows</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="color:#4b5563; margin:0 0 0.5rem; line-height:1.6; font-size:0.95rem;"><strong>Example (medium chatbot):</strong> 30k messages/month × ~600 tokens each = 18M tokens total.</p>
+    <ul style="list-style:none; padding:0; margin:0 0 0.5rem; color:#374151; line-height:1.6; font-size:0.95rem;">
+      <li><strong>GPT-4.1:</strong> ~($2.00 + $8.00) × 18 = ~$180/mo (illustrative)</li>
+      <li><strong>GPT-5.2:</strong> ~($1.75 + $14.00) × 18 = ~$283.50/mo (illustrative)</li>
+      <li><strong>Cheaper mini model:</strong> Roughly ~$13–$20/mo (illustrative)</li>
+    </ul>
+    <p style="color:#4b5563; margin:0; line-height:1.6; font-size:0.95rem;">Actual costs depend on model choice, token lengths, and optimization (summaries, shorter prompts). Always verify current pricing in your OpenAI account.</p>
+  </div>
+</div>
+
+<script>
+  (function() {
+    const btn = document.getElementById('ratesBtn');
+    const modal = document.getElementById('ratesModal');
+    const closeBtn = document.getElementById('ratesClose');
+    const openaiBtn = document.getElementById('openaiBtn');
+    const openaiModal = document.getElementById('openaiModal');
+    const openaiClose = document.getElementById('openaiClose');
+    if (!btn || !modal || !closeBtn || !openaiBtn || !openaiModal || !openaiClose) return;
+
+    function openModal() {
+      modal.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+    }
+    function closeModal() {
+      modal.style.display = 'none';
+      document.body.style.overflow = '';
+    }
+    function openOpenAiModal() {
+      openaiModal.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+    }
+    function closeOpenAiModal() {
+      openaiModal.style.display = 'none';
+      document.body.style.overflow = '';
+    }
+
+    btn.addEventListener('click', openModal);
+    closeBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) closeModal();
+    });
+    openaiBtn.addEventListener('click', openOpenAiModal);
+    openaiClose.addEventListener('click', closeOpenAiModal);
+    openaiModal.addEventListener('click', (e) => {
+      if (e.target === openaiModal) closeOpenAiModal();
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeModal();
+        closeOpenAiModal();
+      }
+    });
+  })();
+</script>
+{% endblock %}
+Here’s a draft Q&A set you can use on the site. Adjust numbers to your current pricing/experience as needed.
+Using third-party services (OpenAI, Twilio, Stripe, Cloudflare)
+What third-party services do you integrate?
+We commonly use OpenAI for AI features, Twilio for voice/SMS, Stripe for payments, and Cloudflare for DNS/security.
+What rates should we expect from OpenAI?
+Model pricing varies by model and usage (input/output tokens). Budget a small monthly amount for light chat (tens of dollars), more for heavy automation or high-traffic sites. Exact rates are published by OpenAI and depend on model choice and volume.
+What rates should we expect from Twilio?
+Twilio charges per phone number (monthly) plus per-minute voice and per-SMS fees, varying by country/number type. Typical US numbers are low monthly cost, with small per-minute/SMS fees. Heavy call/SMS volume will increase spend.
+Do you add a markup to third-party fees?
+No. You pay providers directly; we handle setup and integration.
+Can we cap or monitor usage?
+Yes. We can help you set usage alerts and sensible defaults (e.g., model choice, rate limiting, number of calls/messages).
+Build process and scope
+What’s included in the build?
+The selected package deliverables (site, funnels, AI chat/voice wiring, CRM/email/SMS workflows as scoped).
+What’s not included?
+Ongoing design/content changes beyond the initial scope, copywriting, and marketing management unless we agree on an add-on.
+How long does a typical build take?
+Starter: ~2–3 weeks; Growth: ~3–5 weeks; custom/Scale timelines vary by complexity.
+Do I own what you build?
+Yes. You own the code, data, and configuration we deliver.
+Support and changes
+What support is included?
+Keeping the system running: bug fixes, maintaining automations/integrations, and ensuring it operates as designed.
+What support is not included?
+Frequent design tweaks, ongoing copy/content production, marketing ops, or repetitive asset swaps. Those are separate add-ons.
+Do you offer a design/content add-on?
+Yes, we can scope a monthly plan for design/content updates—book a call to discuss.
+Data, security, and access
+Who controls the accounts and credentials?
+You do. We set up and hand off; third-party bills go to you.
+Is my data private?
+We follow provider guidelines and best practices; your data stays in your accounts and configured services.
+Getting started
+What do you need from me?
+Business basics (name, industry, audience), brand preferences, copy/offer details, domain/DNS access, and your API keys (Stripe, Twilio, OpenAI, etc.).
+How do I choose the right package?
+Use our 6-question quiz or book a call; we’ll recommend Starter, Growth, or a custom scope based on complexity and volume.

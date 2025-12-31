@@ -1,0 +1,215 @@
+{% extends "layout/base.html" %}
+
+{% block title %}Discuss Your Idea – WebWise Solutions{% endblock %}
+
+{% block content %}
+
+<!-- HERO -->
+<section style="padding:4rem 1rem 3rem; background:linear-gradient(135deg,#667eea,#764ba2); color:white; text-align:center;">
+    <div style="max-width:900px; margin:0 auto;">
+        <h1 style="font-size:2.7rem; font-weight:800; margin-bottom:1rem;">
+            Want to Talk Through an Idea?
+        </h1>
+        <p style="font-size:1.25rem; max-width:680px; margin:0 auto; line-height:1.7;">
+            You don’t need a perfect plan.  
+            If you have a concept, problem, or rough vision — let’s discuss it.
+        </p>
+    </div>
+</section>
+
+<!-- FORM SECTION -->
+<section style="padding:4rem 1rem; background:#f8f9fa;">
+    <div style="max-width:720px; margin:0 auto;">
+
+        <div style="background:white; border-radius:14px; padding:2.75rem; box-shadow:0 10px 30px rgba(0,0,0,0.08);">
+
+            <h2 style="text-align:center; font-size:2rem; font-weight:700; margin-bottom:0.75rem; color:#1f2937;">
+                Tell Us What You’re Thinking
+            </h2>
+
+            <p style="text-align:center; color:#6b7280; margin-bottom:2.25rem;">
+                We review every submission personally and usually respond within 24 hours.
+            </p>
+
+            <form id="ideaForm">
+
+                <!-- NAME -->
+                <div style="margin-bottom:1.5rem;">
+                    <label style="font-weight:600; display:block; margin-bottom:0.4rem;">Name *</label>
+                    <input type="text" name="name" required
+                        style="width:100%; padding:0.75rem; border:1px solid #d1d5db; border-radius:6px;">
+                </div>
+
+                <!-- EMAIL -->
+                <div style="margin-bottom:1.5rem;">
+                    <label style="font-weight:600; display:block; margin-bottom:0.4rem;">Email *</label>
+                    <input type="email" name="email" required
+                        style="width:100%; padding:0.75rem; border:1px solid #d1d5db; border-radius:6px;">
+                </div>
+
+                <!-- PROJECT TYPE -->
+                <div style="margin-bottom:1.5rem;">
+                    <label style="font-weight:600; display:block; margin-bottom:0.4rem;">What kind of project is this?</label>
+                    <select name="project_type"
+                        style="width:100%; padding:0.75rem; border:1px solid #d1d5db; border-radius:6px;">
+                        <option value="">Select one</option>
+                        <option>SaaS / Web App</option>
+                        <option>AI / Automation</option>
+                        <option>Marketplace / Platform</option>
+                        <option>Internal Business System</option>
+                        <option>Not sure yet</option>
+                    </select>
+                </div>
+
+                <!-- IDEA -->
+                <div style="margin-bottom:1.75rem;">
+                    <label style="font-weight:600; display:block; margin-bottom:0.4rem;">Your idea *</label>
+                    <textarea name="idea_description" rows="6" required
+                        placeholder="What are you trying to build or solve?"
+                        style="width:100%; padding:0.75rem; border:1px solid #d1d5db; border-radius:6px;"></textarea>
+                </div>
+
+                <!-- SUBMIT -->
+                <button type="submit"
+                    style="width:100%; background:#667eea; color:white; font-size:1.1rem; font-weight:700;
+                           padding:0.9rem; border:none; border-radius:6px; cursor:pointer;">
+                    Submit & Start the Conversation →
+                </button>
+
+                <div id="formMessage" style="display:none; margin-top:1.5rem; padding:1rem; border-radius:6px;"></div>
+
+            </form>
+
+            <p style="text-align:center; margin-top:1.75rem; font-size:0.9rem; color:#6b7280;">
+                Prefer to talk first?
+                <a href="/book-call" style="color:#667eea; font-weight:600;">Book a free call</a>
+            </p>
+
+        </div>
+    </div>
+</section>
+
+<!-- PROOF SECTION -->
+<section style="padding:3.5rem 1rem; background:white;">
+    <div style="max-width:960px; margin:0 auto;">
+
+        <h2 style="text-align:center; font-size:2rem; font-weight:700; margin-bottom:1rem;">
+            Proof We Can Build Real Systems
+        </h2>
+
+        <p style="text-align:center; max-width:640px; margin:0 auto 2.5rem; color:#6b7280;">
+            Most ideas start rough. What matters is knowing the team can execute.
+        </p>
+
+        <!-- SINGLE PROJECT CARD -->
+        <div style="max-width:520px; margin:0 auto; background:white; border-radius:12px;
+                    border:1px solid #e5e7eb; padding:1.75rem;
+                    box-shadow:0 6px 18px rgba(0,0,0,0.06);">
+
+            <h3 style="font-size:1.4rem; font-weight:700; margin-bottom:0.25rem;">
+                🏆 EZCLUB.APP
+            </h3>
+
+            <p style="font-size:0.9rem; font-weight:600; color:#6b7280; margin-bottom:0.75rem;">
+                White-Label Community Platform
+            </p>
+
+            <p style="font-size:1rem; color:#374151; line-height:1.6; margin-bottom:1rem;">
+                Built to help creators launch branded communities with memberships,
+                bookings, payments, and AI — without needing a technical team.
+            </p>
+
+            <div style="display:flex; flex-wrap:wrap; gap:0.5rem;">
+                <span style="background:#eef2ff; color:#4338ca; padding:0.35rem 0.75rem;
+                             border-radius:999px; font-size:0.8rem; font-weight:600;">
+                    SaaS Platform
+                </span>
+                <span style="background:#eef2ff; color:#4338ca; padding:0.35rem 0.75rem;
+                             border-radius:999px; font-size:0.8rem; font-weight:600;">
+                    Payments
+                </span>
+                <span style="background:#eef2ff; color:#4338ca; padding:0.35rem 0.75rem;
+                             border-radius:999px; font-size:0.8rem; font-weight:600;">
+                    Bookings
+                </span>
+                <span style="background:#eef2ff; color:#4338ca; padding:0.35rem 0.75rem;
+                             border-radius:999px; font-size:0.8rem; font-weight:600;">
+                    AI Automation
+                </span>
+            </div>
+
+        </div>
+
+        <p style="text-align:center; margin-top:2.25rem; color:#6b7280;">
+            Your idea doesn’t need to look like this — most of our work starts from a conversation.
+        </p>
+
+    </div>
+</section>
+
+<!-- WHAT HAPPENS NEXT -->
+<section style="padding:3.5rem 1rem; background:#f8f9fa;">
+    <div style="max-width:1000px; margin:0 auto;">
+
+        <h2 style="text-align:center; font-size:2rem; font-weight:700; margin-bottom:2.5rem;">
+            What Happens Next
+        </h2>
+
+        <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:2rem;">
+
+            {% for step, text in [
+                ("Review","We read your idea and consider possible approaches."),
+                ("Discuss","If it’s a fit, we schedule a short call."),
+                ("Plan","You receive a clear proposal and roadmap."),
+                ("Build","We design and build the system collaboratively.")
+            ] %}
+            <div style="text-align:center;">
+                <div style="width:56px; height:56px; background:#667eea; color:white;
+                            border-radius:50%; display:flex; align-items:center;
+                            justify-content:center; font-weight:700; font-size:1.3rem;
+                            margin:0 auto 1rem;">
+                    {{ loop.index }}
+                </div>
+                <h3 style="font-weight:700; margin-bottom:0.5rem;">{{ step }}</h3>
+                <p style="color:#6b7280;">{{ text }}</p>
+            </div>
+            {% endfor %}
+
+        </div>
+    </div>
+</section>
+
+<script>
+const ideaForm = document.getElementById('ideaForm');
+if (ideaForm) {
+    ideaForm.addEventListener('submit', async e => {
+        e.preventDefault();
+        const msg = document.getElementById('formMessage');
+        msg.style.display = 'none';
+
+        try {
+            const res = await fetch('/contact/submit-idea', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(Object.fromEntries(new FormData(ideaForm)))
+            });
+
+            if (!res.ok) throw new Error();
+
+            msg.style.display = 'block';
+            msg.style.background = '#d1fae5';
+            msg.style.color = '#065f46';
+            msg.textContent = 'Thanks — we’ll be in touch shortly.';
+            ideaForm.reset();
+
+        } catch {
+            msg.style.display = 'block';
+            msg.style.background = '#fee2e2';
+            msg.style.color = '#7f1d1d';
+            msg.textContent = 'Something went wrong. Please try again or book a call.';
+        }
+    });
+}
+</script>
+
+{% endblock %}

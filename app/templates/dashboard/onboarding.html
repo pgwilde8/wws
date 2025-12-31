@@ -15,11 +15,22 @@
 
     {% include "partials/onboarding_email_privacy.html" %}
   </header>
-
+  <!-- Tutorial Videos (overview only; section-specific buttons below) -->
+  <section class="bg-white border p-5 rounded-2xl shadow-sm space-y-3">
+    <div class="flex items-center justify-between gap-3">
+      <div>
+        <h2 class="text-lg font-bold text-gray-900">How this page works</h2>
+        <p class="text-sm text-gray-600">Watch a quick overview, then see section-specific tutorials below.</p>
+      </div>
+      <button type="button" class="px-3 py-2 text-xs font-semibold bg-gray-900 text-white rounded-full hover:opacity-90" data-video="/static/videos/vtest1.mp4"">
+        Watch overview
+      </button>
+    </div>
+  </section>
   <!-- Form -->
   <section class="bg-white p-5 rounded-2xl shadow-sm border border-gray-200">
     <form id="onboarding-form" class="space-y-6" method="post" action="/client/onboarding">
-
+       
       <!-- 1) Identity -->
       <div>
         <h2 class="text-lg font-bold text-gray-900">1) Business Profile</h2>
@@ -51,10 +62,13 @@
         <div class="mt-6 space-y-4">
           <div class="flex items-center justify-between">
             <h3 class="text-sm font-bold text-gray-900">Prompt Generator (optional)</h3>
-            <span class="text-xs text-gray-500">Uses your OpenAI key</span>
+            <span class="text-xs text-gray-500">Build a great system prompt for your ai agent on your site</span>
+            <button type="button" class="px-3 py-1 text-xs font-semibold bg-gray-900 text-white rounded-full hover:opacity-90" data-video="https://www.youtube.com/embed/dQw4w9WgXcQ">
+              Watch how it works
+            </button>
           </div>
           <p class="text-xs text-gray-600">
-            This writes the instructions for your AI agent. Answer the guided questions and/or paste rough notes, then click “Generate System Prompt.” We’ll turn it into a polished system prompt and drop it into “Site description” so your agent knows your services, tone, policies, and how to handle leads.
+            The Site description box below becomes your website AI agent’s system prompt. Use the guided questions and/or paste rough notes, then click “Generate System Prompt.” We’ll place the generated prompt into Site description so the agent knows your services, tone, policies, and how to handle leads.
           </p>
 
           <!-- Guided builder -->
@@ -91,7 +105,11 @@
               </div>
               <div>
                 <label class="block text-xs font-semibold text-gray-600 mb-1">Locations / audience</label>
-                <input id="guided-locations" class="w-full border rounded-lg p-2 bg-white" placeholder="NJ, nationwide, SMBs...">
+                <input id="guided-locations" class="w-full border rounded-lg p-2 bg-white" placeholder="Service Area">
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-gray-600 mb-1">Who needs your service?</label>
+                <input id="guided-who" class="w-full border rounded-lg p-2 bg-white" placeholder="Homeowners, SMB owners, busy parents...">
               </div>
             </div>
           </div>
@@ -108,14 +126,10 @@
         </div>
 
         <div class="mt-6 space-y-2">
-          <div class="text-xs text-blue-800 bg-blue-50 border border-blue-200 rounded-lg p-3">
-            <p class="font-semibold">Tip: Paste your AI brief here</p>
-            <p>If you use ChatGPT/Docs to draft everything the agent should know about your business (services, offers, policies, FAQs), copy that summary and paste it below. This becomes the assistant’s system prompt.</p>
-          </div>
           <label class="block text-xs font-semibold text-gray-600 mb-1">Site description *</label>
           <textarea name="site_description" required rows="4"
             class="w-full border rounded-lg p-2 text-sm bg-gray-50"
-            placeholder="What does your business do? What should the site and automation accomplish? Paste your AI brief here."></textarea>
+            placeholder="Very important! Answer questions or add notes above as detailed as possible, This will be the rule book for your websites AI-AGENT"></textarea>
         </div>
 
         <div class="mt-4">
@@ -205,10 +219,15 @@
         <div id="openai-wrap" class="mt-4">
           <div class="flex items-center justify-between gap-3">
             <label class="block text-xs font-semibold text-gray-600 mb-1">OpenAI API key *</label>
-            <a href="https://platform.openai.com/signup" target="_blank"
-               class="px-3 py-2 bg-gray-900 text-white text-xs font-bold rounded-full hover:opacity-90 transition">
-              Create OpenAI Account
-            </a>
+            <div class="flex gap-2">
+              <a href="https://platform.openai.com/signup" target="_blank"
+                 class="px-3 py-2 bg-gray-900 text-white text-xs font-bold rounded-full hover:opacity-90 transition">
+                Create OpenAI Account
+              </a>
+              <button type="button" class="px-3 py-2 bg-gray-700 text-white text-xs font-bold rounded-full hover:opacity-90 transition" data-video="https://www.youtube.com/embed/dQw4w9WgXcQ">
+                Watch tutorial
+              </button>
+            </div>
           </div>
           <input type="password" name="openai_api_key"
                  class="w-full border rounded-lg p-2 text-sm bg-gray-50"
@@ -230,6 +249,9 @@
              class="px-3 py-2 bg-purple-600 text-white text-xs font-bold rounded-full hover:opacity-90 transition">
             Create a Twilio Account
           </a>
+          <button type="button" class="px-3 py-2 bg-gray-700 text-white text-xs font-bold rounded-full hover:opacity-90 transition" data-video="https://www.youtube.com/embed/dQw4w9WgXcQ">
+            Watch tutorial
+          </button>
         </div>
 
         <div class="mt-4">
@@ -248,10 +270,15 @@
               <p class="text-sm font-semibold text-gray-900">Twilio credentials</p>
               <p class="text-xs text-gray-500">Only required if you enable calling.</p>
             </div>
-            <a href="https://www.twilio.com/try-twilio" target="_blank"
-               class="px-3 py-2 bg-purple-600 text-white text-xs font-bold rounded-full hover:opacity-90 transition">
-              Create Twilio Account
-            </a>
+            <div class="flex gap-2">
+              <a href="https://www.twilio.com/try-twilio" target="_blank"
+                 class="px-3 py-2 bg-purple-600 text-white text-xs font-bold rounded-full hover:opacity-90 transition">
+                Create Twilio Account
+              </a>
+              <button type="button" class="px-3 py-2 bg-gray-700 text-white text-xs font-bold rounded-full hover:opacity-90 transition" data-video="https://www.youtube.com/embed/dQw4w9WgXcQ">
+                Watch tutorial
+              </button>
+            </div>
           </div>
 
           <div>
@@ -283,10 +310,17 @@
 
       <!-- 5) Domain & DNS -->
       <div>
-        <h2 class="text-lg font-bold text-gray-900">5) Domain & DNS</h2>
-        <p class="text-sm text-gray-600">
-          Submit your domain so we can configure DNS automatically.
-        </p>
+        <div class="flex items-start justify-between gap-3">
+          <div>
+            <h2 class="text-lg font-bold text-gray-900">5) Domain & DNS</h2>
+            <p class="text-sm text-gray-600">
+              Submit your domain so we can configure DNS automatically.
+            </p>
+          </div>
+          <button type="button" class="px-3 py-2 bg-gray-700 text-white text-xs font-bold rounded-full hover:opacity-90 transition" data-video="https://www.youtube.com/embed/dQw4w9WgXcQ">
+            Watch tutorial
+          </button>
+        </div>
 
         <div class="grid sm:grid-cols-2 gap-4 mt-4">
           <div>
@@ -673,5 +707,56 @@
     });
   }
 })();
+</script>
+<script>
+  // Simple modal for tutorial videos
+  document.addEventListener('DOMContentLoaded', function() {
+    const modal = document.createElement('div');
+    modal.id = 'tutorialModal';
+    modal.style.position = 'fixed';
+    modal.style.inset = '0';
+    modal.style.background = 'rgba(0,0,0,0.65)';
+    modal.style.display = 'none';
+    modal.style.alignItems = 'center';
+    modal.style.justifyContent = 'center';
+    modal.style.zIndex = '9999';
+
+    modal.innerHTML = `
+      <div style="position: relative; width: min(900px, 92vw); aspect-ratio: 16 / 9; background: #000; border-radius: 12px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.35);">
+        <iframe id="tutorialFrame" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="width: 100%; height: 100%;"></iframe>
+        <button id="tutorialClose" style="position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.6); color: white; border: none; border-radius: 50%; width: 36px; height: 36px; font-size: 18px; cursor: pointer;">×</button>
+      </div>
+    `;
+    document.body.appendChild(modal);
+
+    const frame = document.getElementById('tutorialFrame');
+    const closeBtn = document.getElementById('tutorialClose');
+
+    function openModal(src) {
+      frame.src = src;
+      modal.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+    }
+    function closeModal() {
+      frame.src = '';
+      modal.style.display = 'none';
+      document.body.style.overflow = '';
+    }
+
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) closeModal();
+    });
+    closeBtn.addEventListener('click', closeModal);
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeModal();
+    });
+
+    document.querySelectorAll('[data-video]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const src = btn.getAttribute('data-video');
+        if (src) openModal(src);
+      });
+    });
+  });
 </script>
 {% endblock %}

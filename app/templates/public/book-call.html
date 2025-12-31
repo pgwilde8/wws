@@ -295,6 +295,16 @@
             <a href="/contact">Contact Us</a> |
             <a href="/intro2">Learn More</a>
         </div>
+
+        <div class="info-box" style="margin-top:3rem;">
+            <h3>Not sure which build you need?</h3>
+            <p style="margin:0.5rem 0 1rem; color:#4b5563; line-height:1.6;">
+                Take our quick 6-question quiz to see which package fits your goals. It’s fast and gives you a tailored recommendation.
+            </p>
+            <a href="https://webwisesolutions.dev/client-quiz" class="cta-button" style="background:#2563eb; padding:0.75rem 1.4rem; font-size:1rem;">
+                Take the Quiz →
+            </a>
+        </div>
     </div>
 </section>
 
@@ -427,20 +437,6 @@
         }
     });
 
-    // Auto-open modal if there's a success or error message
-    {% if success or error %}
-    document.addEventListener('DOMContentLoaded', function() {
-        openModal();
-        // Scroll to top of modal content to show the message
-        setTimeout(function() {
-            const modalContent = document.querySelector('.modal-content');
-            if (modalContent) {
-                modalContent.scrollTop = 0;
-            }
-        }, 100);
-    });
-    {% endif %}
-
     // Handle form submission with better UX
     const form = document.querySelector('.contact-form');
     const submitBtn = document.getElementById('submitBtn');
@@ -453,6 +449,17 @@
         });
     }
 </script>
+{% if success or error %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        openModal();
+        setTimeout(function() {
+            const modalContent = document.querySelector('.modal-content');
+            if (modalContent) {
+                modalContent.scrollTop = 0;
+            }
+        }, 100);
+    });
+</script>
+{% endif %}
 {% endblock %}
-
-    

@@ -3,7 +3,9 @@ import os
 import uuid
 import json
 import asyncio
+import re
 from datetime import datetime
+from types import SimpleNamespace
 from typing import Optional
 from dotenv import load_dotenv
 
@@ -15,6 +17,10 @@ from sqlalchemy import text
 from pydantic import BaseModel
 
 from app.db.session import get_session
+from app.services.email import (
+    send_call_booking_confirmation,
+    send_call_booking_email,
+)
 
 router = APIRouter(prefix="/chat", tags=["Chat"])
 templates = Jinja2Templates(directory="app/templates")
@@ -50,11 +56,11 @@ def get_or_create_assistant(client):
         return ASSISTANT_ID
 
     instructions = """
-You are the AI assistant for WebWise Solutions, a done-for-you automation company that builds fully automated, AI-powered businesses from scratch. Be conversational and helpful. Guide visitors on packages (Starter $1,997; Growth $3,997; Scale $5,997), process (choose package -> onboarding -> setup -> build -> launch -> support), tech stack (FastAPI, Stripe, OpenAI, CRM, automations), and always offer to book a call if serious. If unsure which package, suggest the quick quiz at /client-quiz. Use relative paths (like /client-quiz, /pricing, /book-call). Avoid hard-selling; focus on clarity and value.
+You are the AI assistant for WebWise Solutions, a done-for-you automation company that builds fully automated, AI-powered businesses from scratch. Be conversational and helpful. Guide visitors on packages (Starter $1,997; Growth $3,997; Scale $5,997), process (choose package -> onboarding -> setup -> build -> launch -> support), tech stack (FastAPI, Stripe, OpenAI, CRM, automations), and always offer to book a call if serious. Avoid hard-selling; focus on clarity and value.
 
-QUIZ ANSWERS:
-- When asked about the quiz, always give a short, confident link in markdown: "👉 [Take quick quiz](/client-quiz)"
-- Never say you can’t show the quiz; just give the link above.
+QUIZ ANSWERS (TEMP RULE):
+- Do NOT emit links or HTML for the quiz.
+- If asked about the quiz, respond with: "You can find the 6-question quiz link in the site footer—look for 'Take quick quiz'." Keep it plain text.
 """
     try:
         assistant = client.beta.assistants.create(
@@ -151,6 +157,35 @@ async def send_message(
         {"sid": existing["id"], "c": payload.message}
     )
     await session.commit()
+
+    # 2b) If the user provided name/email/time inline, send booking emails (non-blocking)
+    async def try_send_booking_emails(user_text: str):
+        try:
+            email_match = re.search(r'[\w\.-]+@[\w\.-]+\.\w+', user_text)
+            time_match = re.search(r'\b(\d{1,2}:\d{2}\s*(?:am|pm)?\s*(?:est|edt|pst|pdt|cst|cdt|mst|mdt)?)\b', user_text, re.IGNORECASE)
+            if not email_match or not time_match:
+                return
+            email_val = email_match.group(0)
+            time_val = time_match.group(1).strip()
+            # Name: take text before email if present
+            name_part = user_text.split(email_val)[0].strip(" ,:-\n\t")
+            name_val = name_part if name_part else "Unknown"
+            cb = SimpleNamespace(
+                name=name_val,
+                email=email_val,
+                phone=None,
+                preferred_date=None,
+                preferred_time=time_val,
+                timezone=None,
+                message=None,
+                created_at=datetime.utcnow(),
+            )
+            await send_call_booking_email(cb)
+            await send_call_booking_confirmation(cb)
+        except Exception as e:
+            print(f"[chat booking email] error: {e}")
+
+    await try_send_booking_emails(payload.message)
 
     # 3) Add message to OpenAI thread
     client.beta.threads.messages.create(
