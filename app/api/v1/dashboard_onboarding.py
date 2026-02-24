@@ -1,5 +1,9 @@
 import json
-from fastapi import APIRouter, Request, Depends, HTTPException, status
+import boto3
+import os
+import uuid
+from fastapi import APIRouter, Request, Depends, HTTPException, status, File, UploadFile, Form
+from fastapi.responses import JSONResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -7,18 +11,48 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.db.session import get_session
 from app.schemas.onboarding import ClientOnboardIn
 from pydantic import BaseModel
-from fastapi import HTTPException
 from openai import OpenAI
-import os
 
 router = APIRouter()
 templates = Jinja2Templates(directory="app/templates")
+
+
+@router.get("/welcome-instructions")
+async def welcome_instructions_page(request: Request):
+    """
+    Welcome page that explains the onboarding process and what users need before starting.
+    """
+    return templates.TemplateResponse(
+        "dashboard/welcome-instructions.html",
+        {"request": request},
+    )
+
+# DigitalOcean Spaces (S3 compatible) client for file uploads
+s3 = boto3.client(
+    "s3",
+    region_name=os.getenv("DO_SPACE_REGION"),
+    endpoint_url="https://sfo3.digitaloceanspaces.com",
+    aws_access_key_id=os.getenv("DO_SPACE_KEY"),
+    aws_secret_access_key=os.getenv("DO_SPACE_SECRET"),
+)
+
+
+def _safe_prefix(raw: str | None) -> str:
+    """Sanitize path prefix to prevent directory traversal."""
+    if not raw:
+        return ""
+    # Remove any leading slashes and dots
+    cleaned = raw.lstrip("/.").replace("..", "").replace("\\", "/")
+    # Only allow alphanumeric, hyphens, underscores, and forward slashes
+    cleaned = "".join(c if c.isalnum() or c in ("-", "_", "/") else "_" for c in cleaned)
+    return f"{cleaned}/" if cleaned else ""
 
 
 @router.get("/onboarding")
 async def onboarding_page(request: Request):
     """
     Serve the client onboarding intake form.
+    Users can access this form from the welcome-instructions page.
     """
     return templates.TemplateResponse(
         "dashboard/onboarding.html",
@@ -325,3 +359,40 @@ async def submit_onboarding(
     await db.commit()
 
     return {"status": "onboarding_saved", "client_id": client_id}
+
+
+@router.post("/upload-file")
+async def client_upload_file(
+    request: Request,
+    file: UploadFile = File(...),
+    path: str | None = Form(None),
+    db: AsyncSession = Depends(get_session),
+):
+    """
+    Client-accessible file upload endpoint for logo uploads during onboarding.
+    Requires authenticated client session.
+    """
+    # Check client authentication
+    user = getattr(request.state, "user", None)
+    client_id = getattr(user, "id", None) if user else None
+    if not client_id:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authenticated")
+
+    # Sanitize path prefix
+    prefix = _safe_prefix(path)
+    ext = file.filename.split(".")[-1] if "." in file.filename else ""
+    suffix = f".{ext}" if ext else ""
+    fname = f"{prefix}{uuid.uuid4()}{suffix}"
+
+    try:
+        file_content = await file.read()
+        s3.put_object(
+            Bucket=os.getenv("DO_SPACE_BUCKET"),
+            Key=fname,
+            Body=file_content,
+            ACL="private",
+        )
+        url_path = f"/api/v1/file/{fname}"
+        return JSONResponse({"status": "ok", "file": fname, "url_path": url_path})
+    except Exception as e:
+        return JSONResponse({"status": "error", "detail": str(e)}, status_code=500)

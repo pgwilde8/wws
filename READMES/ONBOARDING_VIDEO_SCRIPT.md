@@ -1,0 +1,142 @@
+# Onboarding Overview Video Script
+
+## Script
+
+Hi, and thanks for jumping in! I want to do a quick overview on everything you need to do so we can start your build.
+
+**[TIMELINE SETTING]**
+
+We try to get every project done within 21 days, but the clock doesn't start until we have the following: OpenAI, Twilio, Domain and DNS, and an email to forward website leads.
+
+We actually have short onboarding videos for each of these sections - this is just an overview to get you oriented.
+
+**[SECTION 1: BUSINESS PROFILE & PROMPT GENERATOR]**
+
+Now, you'll see the Prompt Generator section. I want to explain this to you: You can either answer these guided questions, or you can paste rough notes into the text area below. Then click "Generate System Prompt" - and the finished product will auto-fill into the Site Description box.
+
+Now, this Site Description box will be the system prompt for your AI agent who runs your chat box on your website. So it's really important to get this right - this is essentially the rule book for how your AI agent will interact with visitors.
+
+**[SECTION 2: BRAND PREFERENCES]**
+
+Section 2 is Brand Preferences - this is optional. If you're not sure about colors or logos, we'll choose clean defaults. You can always update this later.
+
+**[SECTION 3: AI ASSISTANT - OPENAI]**
+
+Section 3 is your AI Assistant, which uses OpenAI. Here I'll point out the tutorial button where we show users exactly how to get their OpenAI API key. This is one of those four critical items we need before we can start the 21-day clock, so make sure to watch that tutorial if you need help.
+
+**[SECTION 4: CALLING - TWILIO]**
+
+Section 4 is Calling, which uses Twilio. Again, you'll see a tutorial button here that shows you how to get your Twilio credentials. Twilio is optional - only enable this if you want inbound or outbound calling and SMS. But if you do want it, it's another one of those four critical items.
+
+**[SECTION 5: DOMAIN & DNS]**
+
+Section 5 is Domain and DNS. You'll submit your domain name here so we can configure DNS automatically. There's a tutorial for this as well. This is required, and it's one of the four critical items.
+
+**[SECTION 6: STRIPE PAYMENTS]**
+
+Section 6 is Stripe - this is optional, only enable it if you need payments or paid bookings on your site.
+
+**[SECTION 7: EMAIL FORWARDING]**
+
+Section 7 is Email Forwarding. This is where you tell us the email address where you want to receive leads captured from your website and AI assistant. This is required, and it's the fourth critical item we need.
+
+**[FINAL STEPS]**
+
+Finally, at the bottom, you'll see a checkbox that says "I confirm the information above is correct. I understand this intake form is submitted once." Check that box, then click the Submit Onboarding button.
+
+**[SUCCESS & NEXT STEPS]**
+
+If everything saves successfully, you'll get a confirmation message and a logout button will appear. You should logout now.
+
+The next time you log in, you'll go to a new page - that's your dashboard page - where you can change your password and track your project status.
+
+**[CLOSING]**
+
+That's the overview! Remember, we have detailed tutorials for each section if you need them. Take your time, fill everything out accurately, and once you submit, we'll get started on your build.
+
+Thanks, and let's get your automated business up and running!
+
+---
+
+## Example Business for Video Demo
+
+**Business Name:** "Summit HVAC Services"
+
+### Section 1: Business Profile
+
+**Full Name:** Michael Rodriguez  
+**Business/Brand Name:** Summit HVAC Services  
+**Industry:** HVAC / Heating & Cooling  
+**Phone (optional):** +1 (555) 234-5678
+
+**Prompt Generator - Guided Builder:**
+- **Services:** Air conditioning installation, heating system repair, duct cleaning, emergency HVAC service, seasonal maintenance, indoor air quality solutions
+- **Offers:** Free estimates, $99 seasonal tune-up special, 10% off for seniors, same-day emergency service
+- **Tone:** Professional, trustworthy, friendly, helpful, reliable
+- **Policies:** 1-year warranty on all work, licensed and insured, upfront pricing with no surprises, free estimates, available 24/7 for emergencies
+- **FAQs:** How quickly can you get here? Do you offer financing? Are you licensed? What areas do you serve? Do you offer maintenance plans?
+- **Booking/lead flow:** Collect name, phone, email, address, preferred contact time. Schedule service call or request free estimate. Follow up within 2 hours.
+- **Differentiators:** 30+ years experience, family-owned business, 24/7 emergency service, same-day appointments available, fully licensed and insured, local technicians
+- **Locations/audience:** Serving Denver metro area and surrounding suburbs (Arvada, Westminster, Lakewood, Aurora, Littleton)
+- **Who needs your service?** Homeowners, property managers, small business owners, landlords with rental properties
+
+**Site Description (after generating):** *[This would be auto-generated by the AI prompt generator based on the above inputs]*
+
+**Target Audience:** Homeowners and property managers in the Denver metro area who need reliable HVAC services
+
+### Section 2: Brand Preferences
+
+**Has logo?** Yes  
+**Has colors?** Yes  
+**Colors:** Navy blue (#1e3a5f), Orange (#ff6b35), White, Gray accents  
+**Site tone:** Modern / Clean  
+**Logo:** *[Would upload logo file]*
+
+### Section 3: AI Assistant
+
+**Enable AI chat?** Yes  
+**OpenAI API key:** sk-proj-xxxxx... *[fake key for demo]*
+
+### Section 4: Calling (Twilio)
+
+**Calling direction:** Inbound + Outbound  
+**Account SID:** ACxxxxxxxxxxxxxxxxxxxxxxxxxxxxx  
+**Auth Token:** *[hidden]*  
+**From number:** +17325551234  
+**Enable SMS reminders?** Yes ✓
+
+### Section 5: Domain & DNS
+
+**Domain name:** summithvac.com  
+**Uses Cloudflare?** Yes  
+**Cloudflare email:** michael@summithvac.com
+
+### Section 6: Payments (Stripe)
+
+**Want Stripe payments?** Yes  
+**Publishable key:** pk_live_51xxxxx...  
+**Secret key:** sk_live_51xxxxx... *[hidden]*
+
+### Section 7: Email Forwarding
+
+**Lead forwarding email:** michael@summithvac.com
+
+### Submit
+
+**Checkbox:** ✓ I confirm the information above is correct. I understand this intake form is submitted once.
+
+---
+
+## Key Points Summary:
+
+1. **Timeline:** 21 days, but clock starts when you have: OpenAI, Twilio, Domain/DNS, Email forwarding
+2. **Prompt Generator:** Answer questions or paste notes → Click Generate → Auto-fills Site Description (your AI agent's system prompt)
+3. **Section 2:** Brand Preferences (optional)
+4. **Section 3:** OpenAI (required, has tutorial)
+5. **Section 4:** Twilio (optional if you want calling, has tutorial)
+6. **Section 5:** Domain & DNS (required, has tutorial)
+7. **Section 6:** Stripe (optional, only if you need payments)
+8. **Section 7:** Email Forwarding (required)
+9. **Submit:** Checkbox + Submit button
+10. **After Submit:** Logout, next login goes to dashboard where they can change password
+

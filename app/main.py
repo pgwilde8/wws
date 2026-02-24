@@ -7,6 +7,7 @@ from importlib.machinery import SourceFileLoader
 from typing import Optional
 import os
 import stripe
+import logging
 from fastapi import FastAPI, Request, HTTPException, Depends, Form
 from fastapi.responses import RedirectResponse      # add this import
 from fastapi.staticfiles import StaticFiles
@@ -14,6 +15,7 @@ from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, text
+from app.models.testimonial import Testimonial
 from app.core.config import settings
 from app.api.v1.admin_clients import router as admin_clients_router
 from app.api.v1.admin_projects import router as admin_projects_router
@@ -33,10 +35,13 @@ from app.api.v1.credentials import router as credentials_router
 from app.api.v1.provision import router as provision_router
 from app.api.v1.dashboard_support import router as dashboard_support_router
 from app.api.v1.dashboard_onboarding import router as dashboard_onboarding_router
+from app.api.v1.dashboard_password import router as dashboard_password_router
 from app.api.v1.support import router as support_router
 from app.api.v1.admin_support_tickets import router as admin_support_tickets_router
 from app.api.v1.admin_login import router as admin_login_router
 from app.api.v1.admin_calls import router as admin_calls_router
+from app.api.v1.testimonials_router import router as testimonials_router
+from app.api.v1.admin_marketer import router as admin_marketer_router
 from app.services.email import send_welcome_email
 from app.db.session import SessionLocal
 from app.models.order import Order
@@ -55,6 +60,8 @@ static_dir = Path(__file__).resolve().parent.parent / "static"
 app.mount("/static", StaticFiles(directory=static_dir), name="static")
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
+
+logger = logging.getLogger(__name__)
 
 # Allow fallback to legacy env var names if the new ones are not set
 PRICE_MAP = {
@@ -78,20 +85,6 @@ if _admin_upload_spec and _admin_upload_spec.loader:
 else:
     admin_pers_file_upload_router = None
 
-# Load file storage upload API (hyphenated filename)
-file_storage_upload_path = (
-    Path(__file__).resolve().parent / "api" / "v1" / "file-storage-upload.py"
-)
-_file_upload_spec = importlib.util.spec_from_loader(
-    "file_storage_upload",
-    SourceFileLoader("file_storage_upload", str(file_storage_upload_path)),
-)
-if _file_upload_spec and _file_upload_spec.loader:
-    _file_upload_module = importlib.util.module_from_spec(_file_upload_spec)
-    _file_upload_spec.loader.exec_module(_file_upload_module)  # type: ignore
-    file_storage_upload_router = getattr(_file_upload_module, "router", None)
-else:
-    file_storage_upload_router = None
 
 
 class CheckoutRequest(BaseModel):
@@ -99,9 +92,33 @@ class CheckoutRequest(BaseModel):
     tos_checked: Optional[bool] = False
 
 
+def _get_checkout_domain(request: Request) -> str:
+    if settings.DOMAIN_URL:
+        return settings.DOMAIN_URL.rstrip("/")
+    forwarded_proto = request.headers.get("x-forwarded-proto")
+    forwarded_host = request.headers.get("x-forwarded-host")
+    proto = forwarded_proto or request.url.scheme
+    host = forwarded_host or request.headers.get("host") or request.url.netloc
+    if proto == "http" and host and "localhost" not in host and "127.0.0.1" not in host:
+        proto = "https"
+    return f"{proto}://{host}".rstrip("/")
+
+
 @app.get("/")
-def home_page(request: Request):
-    return templates.TemplateResponse("public/home.html", {"request": request})
+async def home_page(request: Request, db: AsyncSession = Depends(get_session)):
+    # Fetch approved testimonials for the homepage hero/footer section
+    testimonials_query = (
+        select(Testimonial)
+        .where(Testimonial.is_approved.is_(True))
+        .order_by(Testimonial.created_at.desc())
+        .limit(6)
+    )
+    testimonials_result = await db.execute(testimonials_query)
+    testimonials = testimonials_result.scalars().all()
+
+    return templates.TemplateResponse(
+        "public/home.html", {"request": request, "testimonials": testimonials}
+    )
 
 @app.get("/dashboard")
 async def dashboard_home(request: Request, db: AsyncSession = Depends(get_session)):
@@ -111,20 +128,28 @@ async def dashboard_home(request: Request, db: AsyncSession = Depends(get_sessio
     ).scalar_one_or_none()
 
     user = getattr(request.state, "user", None)
-    user_email = None
-    onboarding_row = None
-    client_status = None
-
+    
+    # Check if user is authenticated and has completed onboarding
     if user and getattr(user, "id", None):
+        # Require onboarding before showing dashboard - redirect to welcome page first
         try:
-            # Require onboarding before showing dashboard
             exists = await db.execute(
                 text("SELECT 1 FROM client_onboarding WHERE client_id = :cid LIMIT 1"),
                 {"cid": user.id},
             )
             has_onboarding = exists.scalar_one_or_none() is not None
             if not has_onboarding:
-                return RedirectResponse(url="/dashboard/onboarding", status_code=303)
+                return RedirectResponse(url="/dashboard/welcome-instructions", status_code=303)
+        except Exception:
+            # If there's any error checking, redirect to welcome page to be safe
+            return RedirectResponse(url="/dashboard/welcome-instructions", status_code=303)
+    
+    user_email = None
+    onboarding_row = None
+    client_status = None
+
+    if user and getattr(user, "id", None):
+        try:
 
             # Basic user email
             res = await db.execute(
@@ -270,6 +295,11 @@ async def _self_heal_user(email: str) -> bool:
 def health():
     return {"status": "ok"}
 
+@app.get("/dashboard/login")
+async def dashboard_login(request: Request):
+    """Client dashboard login page."""
+    return templates.TemplateResponse("dashboard/client-login.html", {"request": request})
+
 @app.get("/login")
 async def login(request: Request):
     return templates.TemplateResponse("public/login.html", {"request": request})
@@ -305,14 +335,26 @@ async def login_post(
 
     incoming_hash = hashlib.sha256(password.encode()).hexdigest()
     if row["hashed_password"] != incoming_hash:
-        healed = await _self_heal_user(email)
-        if healed:
-            return RedirectResponse("/login?error=reset", status_code=303)
+        # Password is incorrect - don't reset it, just return invalid
         return RedirectResponse("/login?error=invalid", status_code=303)
 
-    # Set signed session cookie and redirect to dashboard
+    # Set signed session cookie and redirect to welcome-instructions for new users
     token = signer.sign(str(row["id"])).decode()
-    resp = RedirectResponse("/dashboard", status_code=303)
+    
+    # Check if user has completed onboarding
+    try:
+        async with SessionLocal() as db:
+            exists = await db.execute(
+                text("SELECT 1 FROM client_onboarding WHERE client_id = :cid LIMIT 1"),
+                {"cid": row["id"]},
+            )
+            has_onboarding = exists.scalar_one_or_none() is not None
+            redirect_url = "/dashboard" if has_onboarding else "/dashboard/welcome-instructions"
+    except Exception:
+        # On error, default to welcome-instructions to be safe
+        redirect_url = "/dashboard/welcome-instructions"
+    
+    resp = RedirectResponse(redirect_url, status_code=303)
     resp.set_cookie(
         "session",
         token,
@@ -321,6 +363,13 @@ async def login_post(
         samesite="lax",
         max_age=60 * 60 * 24 * 30,
     )
+    return resp
+
+@app.get("/logout")
+async def logout():
+    """Clear session cookie and redirect to login."""
+    resp = RedirectResponse("/login", status_code=303)
+    resp.delete_cookie("session", httponly=True, secure=True, samesite="lax")
     return resp
 
 app.include_router(admin_clients_router, tags=["Admin Clients"])
@@ -340,14 +389,15 @@ app.include_router(credentials_router, prefix="/api", tags=["Credentials"])
 app.include_router(support_router, prefix="/api", tags=["Support"])
 app.include_router(dashboard_support_router, prefix="/dashboard", tags=["Dashboard"])
 app.include_router(dashboard_onboarding_router, prefix="/dashboard", tags=["Dashboard"])
+app.include_router(dashboard_password_router, prefix="/dashboard", tags=["Dashboard"])
 app.include_router(admin_support_tickets_router, tags=["Admin Support"])
 app.include_router(admin_login_router, tags=["Admin"])
 app.include_router(admin_calls_router, tags=["Admin Calls"])
 app.include_router(admin_forwarding_router, tags=["Admin Forwarding"])
+app.include_router(testimonials_router, prefix="/admin/testimonials", tags=["Admin Testimonials"])
+app.include_router(admin_marketer_router, tags=["Admin Marketer"])
 if admin_pers_file_upload_router:
-    app.include_router(admin_pers_file_upload_router, tags=["Admin File Upload"])
-if file_storage_upload_router:
-    app.include_router(file_storage_upload_router, tags=["File Upload"])
+    app.include_router(admin_pers_file_upload_router, tags=["Admin Personal"])
 app.include_router(provision_router)
 app.middleware("http")(load_user_middleware)
 
@@ -375,20 +425,25 @@ async def create_checkout_session(payload: CheckoutRequest, request: Request):
     if not settings.STRIPE_SECRET_KEY:
         raise HTTPException(status_code=500, detail="Stripe is not configured.")
 
-    domain = settings.DOMAIN_URL or str(request.base_url).rstrip("/")
+    domain = _get_checkout_domain(request)
     try:
         session = stripe.checkout.Session.create(
             mode="payment",
+            payment_method_types=["card"],
             line_items=[{"price": price_id, "quantity": 1}],
             success_url=f"{domain}/success?session_id={{CHECKOUT_SESSION_ID}}",
             cancel_url=f"{domain}/pricing",
             metadata={
+                "project": "webwisesolutions",
+                "app_name": "WebWise Solutions",
                 "plan": plan,
                 "tos_checked": str(tos_checked).lower(),
                 "source": "web_checkout",
             },
             payment_intent_data={
                 "metadata": {
+                    "project": "webwisesolutions",
+                    "app_name": "WebWise Solutions",
                     "plan": plan,
                     "tos_checked": str(tos_checked).lower(),
                     "source": "web_checkout",
@@ -396,8 +451,24 @@ async def create_checkout_session(payload: CheckoutRequest, request: Request):
             },
         )
         return {"id": session.id}
+    except stripe.error.StripeError as exc:
+        logger.exception("Stripe checkout session creation failed", extra={"plan": plan})
+        detail = "Unable to create checkout session."
+        error_code = getattr(exc, "code", None)
+        error_type = exc.__class__.__name__
+        if settings.DEBUG:
+            message = exc.user_message or str(exc)
+            code_suffix = f" ({error_type}/{error_code})" if error_code else f" ({error_type})"
+            detail = f"Stripe error{code_suffix}: {message}"
+        elif error_code:
+            detail = f"Stripe error ({error_code})."
+        raise HTTPException(status_code=500, detail=detail) from exc
     except Exception as exc:  # noqa: BLE001
-        raise HTTPException(status_code=500, detail="Unable to create checkout session.") from exc
+        logger.exception("Checkout session creation failed", extra={"plan": plan})
+        detail = "Unable to create checkout session."
+        if settings.DEBUG:
+            detail = f"Server error: {str(exc)}"
+        raise HTTPException(status_code=500, detail=detail) from exc
 
 
 @app.post("/stripe/webhook")
@@ -420,9 +491,22 @@ async def stripe_webhook(request: Request):
 
     if event["type"] == "checkout.session.completed":
         session = event["data"]["object"]
+        metadata = session.get("metadata") or {}
+        plan = metadata.get("plan")
+        project = metadata.get("project")
+        app_name = metadata.get("app_name")
+        if project and project != "webwisesolutions":
+            print("Stripe webhook ignored: foreign_project")
+            return {"received": True, "ignored": True}
+        if app_name and app_name != "WebWise Solutions":
+            print("Stripe webhook ignored: foreign_app")
+            return {"received": True, "ignored": True}
+        if plan in {"free", "pro"}:
+            print("Stripe webhook ignored: clickmeter_plan")
+            return {"received": True, "ignored": True}
         email = (session.get("customer_details") or {}).get("email") or session.get("customer_email")
         customer_name = (session.get("customer_details") or {}).get("name")
-        plan = (session.get("metadata") or {}).get("plan")
+        plan = metadata.get("plan")
         dashboard_link = f"{(settings.DOMAIN_URL or str(request.base_url).rstrip('/'))}/login"
         session_id = session.get("id")
         payment_intent_id = session.get("payment_intent")

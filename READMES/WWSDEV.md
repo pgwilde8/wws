@@ -1,3 +1,8 @@
+
+
+
+PGPASSWORD='Securepass9' psql -U webadmin -h localhost -d wwsdev_db
+
 PGPASSWORD='Securepass9' psql -U webadmin -h localhost -d wwsdev_db
 PGPASSWORD='Securepass9' psql -U webadmin -h localhost -d wwsdev_db -c "\dt"
 PGPASSWORD='Securepass9' psql -U webadmin -h localhost -d wwsdev_db -c "\d contacts"
@@ -78,3 +83,39 @@ echo "CREATE TABLE IF NOT EXISTS lead_forward_emails (
  public | users               | table | webadmin
  public | webhook_events      | table | webadmin
 (29 rows)
+
+(venv) root@wws-multi-vm:/srv/projects/wws# psql -U webadmin -h localhost -d wwsdev_db -c "SELECT id, client_id, email, created_at FROM lead_forward_emails ORDER BY created_at DESC LIMIT 10;"
+Password for user webadmin: 
+ id | client_id |          email           |          created_at           
+----+-----------+--------------------------+-------------------------------
+  6 |         8 | yyu@webwisesolutions.dev | 2025-12-28 22:53:30.362214+00
+  1 |         1 | allstarincome@gmail.com  | 2025-12-27 14:37:29.987666+00
+(2 rows)
+
+# Update Jeff Macburnie's testimonial
+PGPASSWORD='Securepass9' psql -U webadmin -h localhost -d wwsdev_db -c "UPDATE testimonials SET website_url = 'https://mountwilsonranch.com' WHERE id = 1;"
+
+# Update Dan Stragapede's testimonial
+PGPASSWORD='Securepass9' psql -U webadmin -h localhost -d wwsdev_db -c "UPDATE testimonials SET website_url = 'https://mobiletintguy.com' WHERE id = 2;"
+
+support ticket:
+PGPASSWORD='Securepass9' psql -U webadmin -h localhost -d wwsdev_db -c "SELECT id, client_id, project_id, subject, status, priority, created_at FROM support_tickets ORDER BY created_at DESC LIMIT 10;"
+
+*: PGPASSWORD='Securepass9' psql -U webadmin -h localhost -d wwsdev_db
+
+PGPASSWORD='Securepass9' psql -U webadmin -h localhost -d wwsdev_db -c "SELECT id, client_name, client_location FROM testimonials;"
+
+PGPASSWORD='Securepass9' psql -U webadmin -h localhost -d wwsdev_db -c "SELECT * FROM TABLE_NAME;"
+
+# See testimonials table
+PGPASSWORD='Securepass9' psql -U webadmin -h localhost -d wwsdev_db -c "SELECT * FROM testimonials;"
+
+# See users table
+PGPASSWORD='Securepass9' psql -U webadmin -h localhost -d wwsdev_db -c "SELECT * FROM users;"
+
+# See contacts table
+PGPASSWORD='Securepass9' psql -U webadmin -h localhost -d wwsdev_db -c "SELECT * FROM contacts;"
+
+# See orders table
+PGPASSWORD='Securepass9' psql -U webadmin -h localhost -d wwsdev_db -c "SELECT * FROM orders;"
+

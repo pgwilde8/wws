@@ -1,0 +1,34 @@
+{% extends "layout/base.html" %}
+{% block title %}Personal Dashboard{% endblock %}
+{% block header %}{% endblock %}
+{% block footer %}{% endblock %}
+{% block content %}
+<div class="min-h-screen bg-gray-50 py-12 px-4 flex justify-center">
+  <div class="w-full max-w-2xl bg-white border border-gray-200 rounded-2xl shadow-sm p-8 space-y-6">
+    
+    <!-- Header -->
+    <div class="text-center">
+      <h1 class="text-3xl font-extrabold text-gray-900">Personal Page</h1>
+    </div>
+
+    <!-- Links Section -->
+    <div class="space-y-4">
+      <a 
+        href="/admin/file-upload" 
+        class="block w-full px-6 py-4 bg-blue-600 text-white text-lg font-semibold rounded-lg hover:opacity-90 transition text-center"
+      >
+        File Storage
+      </a>
+
+      <a 
+        href="/admin/personal/music" 
+        class="block w-full px-6 py-4 bg-gray-900 text-white text-lg font-semibold rounded-lg hover:opacity-90 transition text-center"
+      >
+        Music
+      </a>
+    </div>
+
+  </div>
+</div>
+{% endblock %}
+

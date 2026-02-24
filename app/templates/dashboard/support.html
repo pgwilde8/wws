@@ -19,10 +19,6 @@
   <div class="bg-blue-50 border-l-4 border-blue-600 p-3 rounded-xl text-sm text-blue-800 font-semibold">
     Active Support Plan: <strong class="capitalize">{{ client.plan_tier.replace('_',' ') }}</strong>
   </div>
-  {% else %}
-  <div class="bg-amber-50 border-l-4 border-amber-600 p-3 rounded-xl text-sm text-amber-800 font-semibold">
-    No active support plan detected.
-  </div>
   {% endif %}
 
   <!-- Support Actions -->
@@ -32,16 +28,16 @@
     <div class="bg-white p-4 rounded-2xl border shadow-sm">
       <h2 class="text-lg font-bold text-gray-900 mb-1">Book a Support Call</h2>
       <p class="text-xs text-gray-500 mb-3">Voice or video troubleshooting</p>
-      <a href="/dashboard/support/call" 
+      <a href="/book-call" 
          class="inline-block px-5 py-2 bg-green-600 text-white text-sm font-bold rounded-full hover:opacity-90 transition">
          Book Call →
       </a>
     </div>
 
-    <!-- Support Inbox (History) -->
+    <!-- Support Inbox -->
     <div class="bg-white p-4 rounded-2xl border shadow-sm">
       <h2 class="text-lg font-bold text-gray-900 mb-1">Support Inbox</h2>
-      <p class="text-xs text-gray-500 mb-3">Previous tickets & threads</p>
+      <p class="text-xs text-gray-500 mb-3">View your tickets</p>
       <a href="/dashboard/support/inbox" 
          class="inline-block px-5 py-2 bg-blue-100 text-blue-700 text-sm font-bold rounded-full hover:bg-blue-200 transition">
          View Inbox →

@@ -1,0 +1,158 @@
+{% extends "layout/base.html" %}
+{% block title %}Private File Upload{% endblock %}
+{% block header %}{% endblock %}
+{% block footer %}{% endblock %}
+{% block content %}
+<div class="min-h-screen bg-gray-50 py-12 px-4 flex justify-center">
+  <div class="w-full max-w-2xl bg-white border border-gray-200 rounded-2xl shadow-sm p-8 space-y-6">
+    <div class="flex items-start justify-between">
+      <div>
+        <h1 class="text-2xl font-extrabold text-gray-900">Private File Storage</h1>
+        <p class="text-sm text-gray-500 mt-1">Upload files to DigitalOcean Spaces (private ACL).</p>
+      </div>
+      <div class="text-xs px-3 py-1 bg-emerald-50 text-emerald-700 rounded-full border border-emerald-100">
+        Admin only
+      </div>
+    </div>
+
+    <div class="space-y-3 text-sm text-gray-600 bg-gray-50 border border-gray-200 rounded-lg p-4">
+      <p>Files are uploaded privately. You'll get a file path to reference later.</p>
+      <ul class="list-disc list-inside space-y-1">
+        <li>Supports multiple files and folders.</li>
+        <li>ACL: private (not publicly readable); use the provided link for access.</li>
+        <li>After upload, copy the returned path/URL for your records.</li>
+      </ul>
+    </div>
+
+    <div class="space-y-4">
+      <label class="block text-sm font-semibold text-gray-700">Choose files or folder</label>
+      
+      <div class="space-y-3">
+        <div>
+          <label class="block text-xs text-gray-600 mb-1">Select individual files:</label>
+          <input id="fileInput" type="file" class="w-full text-sm text-gray-700" multiple />
+        </div>
+        
+        <div>
+          <label class="block text-xs text-gray-600 mb-1">Or select a folder:</label>
+          <input id="folderInput" type="file" class="w-full text-sm text-gray-700" multiple webkitdirectory />
+        </div>
+      </div>
+      
+      <p class="text-xs text-gray-500">You can select multiple files, or choose a folder to upload all files inside it (paths preserved).</p>
+      <button
+        id="uploadBtn"
+        class="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-semibold rounded-full hover:opacity-90 transition disabled:opacity-50"
+      >
+        Upload selected
+      </button>
+      <p id="status" class="text-sm text-gray-500"></p>
+      <div id="result" class="text-sm text-emerald-600 font-semibold"></div>
+      <ul id="resultsList" class="text-sm space-y-2"></ul>
+    </div>
+  </div>
+</div>
+
+<script>
+const uploadBtn = document.getElementById('uploadBtn');
+const fileInput = document.getElementById('fileInput');
+const folderInput = document.getElementById('folderInput');
+const statusEl = document.getElementById('status');
+const resultEl = document.getElementById('result');
+const resultsList = document.getElementById('resultsList');
+let selectedFiles = [];
+
+function updateSelectedFiles() {
+  const files = Array.from(fileInput.files || []);
+  const folderFiles = Array.from(folderInput.files || []);
+  selectedFiles = [...files, ...folderFiles];
+  statusEl.textContent = selectedFiles.length
+    ? `Ready to upload ${selectedFiles.length} file(s).`
+    : 'No files selected.';
+}
+
+fileInput.addEventListener('change', updateSelectedFiles);
+folderInput.addEventListener('change', updateSelectedFiles);
+
+function dirPrefix(file) {
+  const rel = file.webkitRelativePath || '';
+  if (!rel.includes('/')) return '';
+  const parts = rel.split('/');
+  parts.pop(); // remove filename
+  return parts.join('/');
+}
+
+function addResult(status, msg, link) {
+  const li = document.createElement('li');
+  li.className = status === 'ok' ? 'text-emerald-700' : 'text-red-600';
+  const text = document.createElement('div');
+  text.textContent = msg;
+  li.appendChild(text);
+  if (link) {
+    const a = document.createElement('a');
+    a.href = link;
+    a.target = '_blank';
+    a.textContent = link;
+    a.className = 'underline text-blue-600 break-all';
+    li.appendChild(a);
+  }
+  resultsList.appendChild(li);
+}
+
+uploadBtn.addEventListener('click', async () => {
+  if (!selectedFiles.length) {
+    statusEl.textContent = 'Please choose at least one file first.';
+    return;
+  }
+  uploadBtn.disabled = true;
+  statusEl.textContent = `Uploading ${selectedFiles.length} file(s)...`;
+  resultEl.textContent = '';
+  resultsList.innerHTML = '';
+
+  let successCount = 0;
+
+  for (const file of selectedFiles) {
+    const fd = new FormData();
+    fd.append('file', file);
+    const prefix = dirPrefix(file);
+    if (prefix) fd.append('path', prefix);
+
+    try {
+      const res = await fetch('/upload-file', {
+        method: 'POST',
+        body: fd,
+      });
+      
+      // Check if response is OK and content type is JSON
+      if (!res.ok) {
+        const text = await res.text();
+        addResult('error', `Failed: ${file.name} — Server error (${res.status}): ${text.substring(0, 100)}`);
+        return;
+      }
+      
+      const contentType = res.headers.get('content-type');
+      if (!contentType || !contentType.includes('application/json')) {
+        const text = await res.text();
+        addResult('error', `Failed: ${file.name} — Unexpected response format: ${text.substring(0, 100)}`);
+        return;
+      }
+      
+      const data = await res.json();
+      if (data.status === 'ok') {
+        successCount += 1;
+        const link = `${window.location.origin}/api/v1/file/${data.file}`;
+        addResult('ok', `Uploaded: ${file.name}`, link);
+      } else {
+        addResult('error', `Failed: ${file.name} — ${data.detail || 'Unknown error'}`);
+      }
+    } catch (err) {
+      addResult('error', `Failed: ${file.name} — ${err?.message || String(err)}`);
+    }
+  }
+
+  statusEl.textContent = `Done. ${successCount}/${selectedFiles.length} uploaded successfully.`;
+  uploadBtn.disabled = false;
+});
+</script>
+{% endblock %}
+

@@ -355,8 +355,46 @@
 
     <a href="/automate-or-die" class="cta-button" 
        style="padding:1rem 2.5rem; font-size:1.2rem; font-weight:700;">
-        Read the Sales Letter →
+        Read the Wake-Up Call →
     </a>
 </section>
+
+<!-- TESTIMONIALS SECTION (ANCHOR NEAR FOOTER) -->
+{% if testimonials %}
+<section style="padding:3rem 1rem; background:#f8f9fa; border-top:1px solid #e5e7eb;">
+    <div style="max-width:1200px; margin:0 auto;">
+        <h2 style="text-align:center; font-size:2rem; font-weight:700; margin-bottom:2rem; color:#2c3e50;">
+            What Our Clients Say
+        </h2>
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:2rem; max-width:1100px; margin:0 auto;">
+            {% for testimonial in testimonials %}
+            <div style="background:white; border:1px solid #e5e7eb; border-radius:12px; padding:2rem; box-shadow:0 4px 6px rgba(0,0,0,0.1);">
+                <div style="margin-bottom:1rem; color:#fbbf24; font-size:1.25rem;">
+                    {% if testimonial.rating %}
+                    {% for i in range(testimonial.rating) %}★{% endfor %}
+                    {% endif %}
+                </div>
+                <p style="font-size:1.1rem; line-height:1.7; color:#374151; margin-bottom:1.5rem; font-style:italic;">"{{ testimonial.testimonial_text }}"</p>
+                <div style="border-top:1px solid #e5e7eb; padding-top:1rem;">
+                    <p style="font-weight:700; color:#1f2937; margin-bottom:0.25rem;">{{ testimonial.client_name }}</p>
+                    {% if testimonial.client_location %}
+                    <p style="color:#6b7280; font-size:0.9rem; margin-bottom:0.25rem;">{{ testimonial.client_location }}</p>
+                    {% endif %}
+                    {% if testimonial.event_type %}
+                    <p style="color:#6b7280; font-size:0.9rem;">
+                        <span style="display:inline-block; padding:0.25rem 0.5rem; background:#dbeafe; color:#1e40af; border-radius:9999px; font-size:0.85rem;">{{ testimonial.event_type }}</span>
+                    </p>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div style="text-align:center; margin-top:2rem; display:flex; gap:1rem; justify-content:center; flex-wrap:wrap;">
+            <a href="/testimonials" style="color:#2563eb; text-decoration:none; font-weight:600; font-size:1rem;">View All Testimonials →</a>
+            <a href="/testimonials/submit" style="color:#1f2937; text-decoration:none; font-weight:600; font-size:1rem; background:#e5e7eb; padding:0.6rem 1rem; border-radius:9999px;">Share Your Experience</a>
+        </div>
+    </div>
+</section>
+{% endif %}
 
 {% endblock %}

@@ -81,12 +81,12 @@
 <body>
     <div class="email-container">
         <div class="header">
-            <h1>Welcome to WebWise Solutions!</h1>
+            <h1>Welcome to {{ project_name or 'Our Team' }}!</h1>
         </div>
         <div class="content">
             <p>Hi {{ customer_name or 'there' }},</p>
             
-            <p>Thank you for choosing WebWise Solutions! We're excited to start building your automated business.</p>
+            <p>Thank you for choosing {{ project_name or 'our team' }}! We're excited to start building your automated business.</p>
             
             {% if temp_password %}
             <div style="background: #fef3e2; border: 2px solid #f17105; border-radius: 8px; padding: 20px; margin: 20px 0;">
@@ -117,22 +117,24 @@
             </div>
             <p style="text-align: center; color: #666; font-size: 0.9rem; margin-top: 15px;">
                 {% if temp_password %}
-                You can also log in at <a href="https://webwisesolutions.dev/login" style="color: #3498db;">webwisesolutions.dev/login</a> using your email and password above.
+                {% if login_url %}
+                You can also log in at <a href="{{ login_url }}" style="color: #3498db;">{{ login_url | replace('https://', '') | replace('http://', '') }}</a> using your email and password above.
+                {% endif %}
                 {% else %}
                 This link will automatically log you in and is valid for 30 days.
                 {% endif %}
             </p>
             {% endif %}
             
-            <p>If you have any questions in the meantime, feel free to reply to this email or visit our <a href="https://webwisesolutions.dev/contact" style="color: #3498db;">contact page</a>.</p>
+            <p>If you have any questions in the meantime, feel free to reply to this email{% if contact_url %} or visit our <a href="{{ contact_url }}" style="color: #3498db;">contact page</a>{% endif %}.</p>
             
             <p>We're here to help you succeed!</p>
             
             <p>Best regards,<br>
-            <strong>The WebWise Solutions Team</strong></p>
+            <strong>The {{ project_name or 'our' }} Team</strong></p>
         </div>
         <div class="footer">
-            <p>© 2025 WebWise Solutions LLC | <a href="https://webwisesolutions.dev">webwisesolutions.dev</a></p>
+            <p>© 2025 {{ project_name or 'Our Team' }}{% if domain_url %} | <a href="{{ domain_url }}">{{ domain_url | replace('https://', '') | replace('http://', '') }}</a>{% endif %}</p>
         </div>
     </div>
 </body>

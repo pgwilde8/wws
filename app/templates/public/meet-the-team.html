@@ -55,50 +55,57 @@
         background: #27ae60;
     }
     .team-page {
-        max-width: 1080px;
+        max-width: 1100px;
         margin: 0 auto;
         padding: 2.5rem 1.25rem 3rem;
     }
-    .team-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 1.5rem;
-    }
-    .team-card {
+    .team-member {
+        display: flex;
+        gap: 2rem;
+        align-items: flex-start;
         background: var(--card);
         border-radius: 14px;
-        padding: 1.5rem;
+        padding: 2rem;
+        margin-bottom: 2.5rem;
         box-shadow: 0 14px 40px rgba(15, 23, 42, 0.08);
         border: 1px solid #e2e8f0;
     }
-    .team-card img {
-        width: 100%;
+    .team-member:nth-child(even) {
+        flex-direction: row-reverse;
+    }
+    .team-member img {
+        width: 280px;
         height: 320px;
         object-fit: cover;
         object-position: center;
         border-radius: 12px;
-        margin-bottom: 1rem;
+        flex-shrink: 0;
         background: #e2e8f0;
     }
-    .team-card h3 {
-        margin: 0 0 0.35rem 0;
-        font-size: 1.2rem;
+    .team-info {
+        flex: 1;
+    }
+    .team-info h3 {
+        margin: 0 0 0.5rem 0;
+        font-size: 1.8rem;
         color: var(--ink);
+        font-weight: 700;
     }
     .team-role {
         color: var(--accent);
         font-weight: 600;
-        margin-bottom: 0.35rem;
+        font-size: 1.1rem;
+        margin-bottom: 0.5rem;
     }
     .team-location {
         color: var(--muted);
-        font-size: 0.95rem;
-        margin-bottom: 0.75rem;
+        font-size: 1rem;
+        margin-bottom: 1.25rem;
     }
     .team-bio {
         color: #334155;
-        line-height: 1.6;
-        font-size: 0.98rem;
+        line-height: 1.7;
+        font-size: 1.05rem;
     }
     .team-closing {
         margin-top: 2.75rem;
@@ -108,6 +115,15 @@
         color: var(--ink);
         line-height: 1.5;
     }
+    @media (max-width: 768px) {
+        .team-member {
+            flex-direction: column !important;
+        }
+        .team-member img {
+            width: 100%;
+            height: 280px;
+        }
+    }
 </style>
 {% endblock %}
 
@@ -116,7 +132,7 @@
 <div class="team-hero">
     <h2>WebWise Solutions</h2>
     <h1>Meet The Team</h1>
-    <p>Your two person army building your digital empire!</p>
+    <p>Your three person army building your digital empire!</p>
 
     <a href="/the-shift" class="cta-button">Discover The Truth</a>
     <a href="/book-call" class="cta-button green">Book a Call</a>
@@ -124,30 +140,48 @@
 
 <div class="team-page">
     <h1 style="margin-top: 0; text-align: center; font-size: 2rem; margin-bottom: 2rem;">Meet The Team</h1>
-    <div class="team-grid">
-        <div class="team-card">
-            <img src="/static/img/20161227_153549.jpg" alt="Photo of Paul G Wilde">
+    
+    <div class="team-member">
+        <img src="/static/img/20161227_153549.jpg" alt="Photo of Paul G Wilde">
+        <div class="team-info">
             <h3>Paul G Wilde</h3>
             <div class="team-role">Founder &amp; Business Specialist</div>
             <div class="team-location">New Jersey, USA</div>
             <p class="team-bio">
-                Entrepreneur and builder of digital systems,
-with 15+ years creating self-owned automated business assets.
-I started coding in 2008 with raw HTML and grew into cloud, VMs, and Python.
-US Navy veteran (1987–1991, VA-196) — disciplined, mission-focused, and detail-driven.
-Based in New Jersey with my wife of 19 years, I build automation infrastructure that founders can own, extend, and control.
+                Entrepreneur and builder of digital systems. With 15+ years building automated business systems, I help founders turn chaos into clarity — by engineering tools that work when they don't.
+                
+                I started coding in 2008 with raw HTML, then scaled into full-stack development, cloud infrastructure, VMs, and Python automation.
+                
+                US Navy veteran (VA-196, 1987–1991). Mission-first. Detail-obsessed. Calm under fire.
+                
+                Today, I build automation infrastructure that founders own — not rent — designed to scale without hand-holding or duct tape.
             </p>
         </div>
-        <div class="team-card">
-            <img src="/static/img/team-camillio.jpg" alt="Photo of Camillio Philips">
-            <h3>Camillio Philips</h3>
-            <div class="team-role">Senior Systems Architect &amp; Python Wizard</div>
+    </div>
+    
+    <div class="team-member">
+        <img src="/static/img/cm1.jpg" alt="Photo of Czianell Magbago">
+        <div class="team-info">
+            <h3>Czianell Magbago</h3>
+            <div class="team-role">Senior Backend Engineer &amp; Systems Architect</div>
+            <div class="team-location">New Jersey, USA</div>
+            <p class="team-bio">
+                Czianell Magbago is a computer science graduate with a strong academic foundation and a proven record of excellence. She earned her degree with magna cum laude honors at Ocean County College and cum laude honors at Rowan University, where she focused on building a rigorous understanding of core computer science principles.
+
+Based in New Jersey, Czianell brings a disciplined, analytical mindset shaped by her academic achievements and a commitment to continuous learning. She is driven by precision, problem-solving, and a thoughtful approach to technology.
+
+            </p>
+        </div>
+    </div>
+        <div class="team-member">
+        <img src="/static/img/cam1.jpg" alt="Photo of Camillio Villaviza ">
+        <div class="team-info">
+            <h3>Camillio Villaviza Jr</h3>
+            <div class="team-role">Senior Full-Stack Developer &amp; Frontend Specialist</div>
             <div class="team-location">Philippines</div>
             <p class="team-bio">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer
-                vitae justo sapien. Nulla facilisi. Maecenas tincidunt justo quis
-                tortor dictum, in mattis lorem molestie. Cras a sapien a turpis
-                accumsan consequat ac ac erat.
+                Hi, I’m Camilo Villaviza Jr., a web developer focused on building responsive, user-friendly, and scalable web applications. I specialize in translating complex requirements into clean, maintainable solutions using Laravel, Vue.js, Bootstrap, and modern web technologies. I’m driven by craftsmanship, performance, and continuous improvement, and I enjoy staying current with emerging tools and best practices.
+
             </p>
         </div>
     </div>

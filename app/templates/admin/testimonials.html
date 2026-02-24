@@ -1,0 +1,141 @@
+{% extends "layout/base.html" %}
+{% block title %}Testimonials – Admin{% endblock %}
+{% block header %}{% endblock %}
+{% block footer %}{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto p-4 sm:p-6 space-y-6">
+
+  <!-- HEADER -->
+  <header class="bg-white p-5 rounded-2xl shadow-sm border border-gray-200">
+    <div class="flex items-center justify-between">
+      <div>
+        <h1 class="text-xl sm:text-2xl font-extrabold text-gray-900">Testimonials Management</h1>
+        <p class="text-xs sm:text-sm text-gray-500 mt-1 uppercase tracking-wider">Review and Approve Client Testimonials</p>
+      </div>
+      <a href="/admin/dashboard" class="px-4 py-2 bg-gray-600 text-white text-sm font-bold rounded-full hover:opacity-90 transition">
+        Back to Dashboard
+      </a>
+    </div>
+  </header>
+
+  <!-- STATS -->
+  <section class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+    <div class="bg-white p-4 rounded-2xl border shadow-sm">
+      <div class="text-xs text-gray-400 uppercase">Pending Approval</div>
+      <div class="text-2xl font-bold text-amber-600">{{ pending_count or 0 }}</div>
+    </div>
+    <div class="bg-white p-4 rounded-2xl border shadow-sm">
+      <div class="text-xs text-gray-400 uppercase">Approved</div>
+      <div class="text-2xl font-bold text-green-600">{{ approved_count or 0 }}</div>
+    </div>
+    <div class="bg-white p-4 rounded-2xl border shadow-sm">
+      <div class="text-xs text-gray-400 uppercase">Total</div>
+      <div class="text-2xl font-bold text-gray-900">{{ total_count or 0 }}</div>
+    </div>
+  </section>
+
+  <!-- PENDING TESTIMONIALS -->
+  {% if pending_testimonials %}
+  <section class="bg-white p-5 rounded-2xl shadow-sm border border-amber-200">
+    <h2 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+      <span class="w-3 h-3 bg-amber-500 rounded-full"></span>
+      Pending Approval ({{ pending_testimonials|length }})
+    </h2>
+    <div class="space-y-4">
+      {% for testimonial in pending_testimonials %}
+      <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+        <div class="flex items-start justify-between gap-4 mb-3">
+          <div class="flex-1">
+            <div class="flex items-center gap-3 mb-2">
+              <h3 class="font-bold text-gray-900">{{ testimonial.client_name }}</h3>
+              {% if testimonial.rating %}
+              <div class="text-amber-500">
+                {% for i in range(testimonial.rating) %}★{% endfor %}
+              </div>
+              {% endif %}
+            </div>
+            {% if testimonial.client_location %}
+            <p class="text-sm text-gray-600 mb-1">{{ testimonial.client_location }}</p>
+            {% endif %}
+            {% if testimonial.event_type %}
+            <p class="text-xs text-gray-500 mb-2">
+              <span class="px-2 py-1 bg-blue-100 text-blue-700 rounded-full">{{ testimonial.event_type }}</span>
+            </p>
+            {% endif %}
+          </div>
+          <div class="text-xs text-gray-500">
+            {{ testimonial.created_at.strftime('%Y-%m-%d %H:%M') if testimonial.created_at else '—' }}
+          </div>
+        </div>
+        <p class="text-gray-700 italic mb-4 leading-relaxed">"{{ testimonial.testimonial_text }}"</p>
+        <div class="flex gap-2">
+          <form method="POST" action="/admin/testimonials/{{ testimonial.id }}/approve" class="inline">
+            <button type="submit" class="px-4 py-2 bg-green-600 text-white text-sm font-bold rounded-full hover:opacity-90 transition">
+              ✓ Approve
+            </button>
+          </form>
+          <form method="POST" action="/admin/testimonials/{{ testimonial.id }}/delete" class="inline" onsubmit="return confirm('Are you sure you want to delete this testimonial?');">
+            <button type="submit" class="px-4 py-2 bg-red-600 text-white text-sm font-bold rounded-full hover:opacity-90 transition">
+              ✗ Delete
+            </button>
+          </form>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+
+  <!-- APPROVED TESTIMONIALS -->
+  <section class="bg-white p-5 rounded-2xl shadow-sm border">
+    <h2 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+      <span class="w-3 h-3 bg-green-500 rounded-full"></span>
+      Approved Testimonials ({{ approved_testimonials|length }})
+    </h2>
+    {% if approved_testimonials %}
+    <div class="space-y-3">
+      {% for testimonial in approved_testimonials %}
+      <div class="border border-gray-200 rounded-lg p-4">
+        <div class="flex items-start justify-between gap-4">
+          <div class="flex-1">
+            <div class="flex items-center gap-3 mb-1">
+              <h3 class="font-semibold text-gray-900">{{ testimonial.client_name }}</h3>
+              {% if testimonial.rating %}
+              <div class="text-amber-500 text-sm">
+                {% for i in range(testimonial.rating) %}★{% endfor %}
+              </div>
+              {% endif %}
+            </div>
+            {% if testimonial.client_location %}
+            <p class="text-xs text-gray-600 mb-1">{{ testimonial.client_location }}</p>
+            {% endif %}
+            {% if testimonial.event_type %}
+            <p class="text-xs text-gray-500 mb-2">
+              <span class="px-2 py-1 bg-blue-100 text-blue-700 rounded-full">{{ testimonial.event_type }}</span>
+            </p>
+            {% endif %}
+            <p class="text-sm text-gray-700 italic">"{{ testimonial.testimonial_text[:150] }}{% if testimonial.testimonial_text|length > 150 %}...{% endif %}"</p>
+          </div>
+          <div class="flex flex-col items-end gap-2">
+            <span class="text-xs text-gray-500">
+              {{ testimonial.created_at.strftime('%Y-%m-%d') if testimonial.created_at else '—' }}
+            </span>
+            <form method="POST" action="/admin/testimonials/{{ testimonial.id }}/delete" class="inline" onsubmit="return confirm('Are you sure you want to delete this testimonial?');">
+              <button type="submit" class="px-3 py-1 bg-red-600 text-white text-xs font-bold rounded-full hover:opacity-90 transition">
+                Delete
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <p class="text-sm text-gray-500">No approved testimonials yet.</p>
+    {% endif %}
+  </section>
+
+</div>
+{% endblock %}
+

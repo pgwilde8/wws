@@ -1,0 +1,693 @@
+{% extends "layout/base.html" %}
+{% block title %}Teleprompter{% endblock %}
+
+{% block extra_head %}
+<style>
+  .teleprompter-wrapper {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 200px);
+    min-height: 600px;
+    background: #000;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  }
+  
+  .teleprompter-controls {
+    background: #111827;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .controls-row {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .control-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-weight: 500;
+    color: white;
+  }
+  
+  .control-btn:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+  }
+  
+  .btn-play {
+    background: #2563eb;
+  }
+  
+  .btn-play:hover {
+    background: #1e40af;
+  }
+  
+  .btn-reset, .btn-fullscreen, .btn-edit {
+    background: #374151;
+  }
+  
+  .btn-reset:hover, .btn-fullscreen:hover, .btn-edit:hover {
+    background: #4b5563;
+  }
+  
+  .btn-mirror {
+    background: #374151;
+  }
+  
+  .btn-mirror.active {
+    background: #16a34a;
+  }
+  
+  .btn-mirror.active:hover {
+    background: #15803d;
+  }
+  
+  .btn-done {
+    background: #9333ea;
+  }
+  
+  .btn-done:hover {
+    background: #7e22ce;
+  }
+  
+  .control-slider {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: white;
+    font-size: 0.875rem;
+  }
+  
+  .control-slider input[type="range"] {
+    width: 128px;
+    height: 6px;
+    border-radius: 3px;
+    background: #374151;
+    outline: none;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  
+  .control-slider input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #2563eb;
+    cursor: pointer;
+  }
+  
+  .control-slider input[type="range"]::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #2563eb;
+    cursor: pointer;
+    border: none;
+  }
+  
+  .teleprompter-display {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    background: #000;
+    scroll-behavior: auto;
+  }
+  
+  .teleprompter-textarea {
+    width: 100%;
+    height: 100%;
+    padding: 2rem;
+    background: #000;
+    color: white;
+    resize: none;
+    outline: none;
+    border: none;
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+  }
+  
+  #editor-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  
+  .editor-toolbar {
+    background: #1f2937;
+    padding: 0.5rem;
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    border-bottom: 1px solid #374151;
+    flex-shrink: 0;
+  }
+  
+  .editor-btn {
+    background: #374151;
+    color: white;
+    border: none;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    font-size: 0.875rem;
+    transition: background 0.2s;
+  }
+  
+  .editor-btn:hover {
+    background: #4b5563;
+  }
+  
+  .editor-btn.active {
+    background: #2563eb;
+  }
+  
+  .editor-content {
+    width: 100%;
+    height: calc(100% - 50px);
+    padding: 2rem;
+    background: #000;
+    color: white;
+    outline: none;
+    border: none;
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    overflow-y: auto;
+  }
+  
+  .editor-content:focus {
+    outline: none;
+  }
+  
+  .editor-content ul,
+  .editor-content ol {
+    margin: 1rem 0;
+    padding-left: 2rem;
+  }
+  
+  .editor-content li {
+    margin: 0.5rem 0;
+  }
+  
+  .editor-content strong {
+    font-weight: bold;
+  }
+  
+  .editor-content em {
+    font-style: italic;
+  }
+  
+  .editor-content u {
+    text-decoration: underline;
+  }
+  
+  .teleprompter-content {
+    padding: 2rem;
+    color: white;
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    min-height: 100%;
+  }
+  
+  .teleprompter-content ul,
+  .teleprompter-content ol {
+    margin: 1rem 0;
+    padding-left: 2rem;
+  }
+  
+  .teleprompter-content li {
+    margin: 0.5rem 0;
+  }
+  
+  .teleprompter-content strong {
+    font-weight: bold;
+  }
+  
+  .teleprompter-content em {
+    font-style: italic;
+  }
+  
+  .teleprompter-content u {
+    text-decoration: underline;
+  }
+  
+  .teleprompter-content p {
+    margin: 0.5rem 0;
+  }
+  
+  .teleprompter-content.mirrored,
+  .teleprompter-textarea.mirrored {
+    transform: scaleX(-1);
+  }
+  
+  .teleprompter-spacer {
+    height: 80vh;
+  }
+  
+  .icon {
+    width: 20px;
+    height: 20px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  
+  @media (max-width: 768px) {
+    .teleprompter-wrapper {
+      height: calc(100vh - 150px);
+      min-height: 500px;
+    }
+    
+    .controls-row {
+      flex-direction: column;
+    }
+    
+    .control-btn {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="teleprompter-container" style="max-width: 1400px; margin: 2rem auto; padding: 0 1rem;">
+  <div class="teleprompter-header" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 2rem; border-radius: 12px; margin-bottom: 2rem; text-align: center;">
+    <h1 style="font-size: 2rem; font-weight: 800; margin-bottom: 0.5rem;">📺 Teleprompter</h1>
+    <p style="opacity: 0.9; font-size: 1rem;">Video interview teleprompter with adjustable speed and text size</p>
+  </div>
+
+  <div class="teleprompter-wrapper" id="teleprompter-wrapper">
+    <!-- Controls -->
+    <div class="teleprompter-controls" id="teleprompter-controls">
+      <div class="controls-row">
+        <button class="control-btn btn-play" id="play-pause-btn">
+          <svg class="icon" viewBox="0 0 24 24">
+            <polygon id="play-icon" points="5 3 19 12 5 21 5 3"></polygon>
+            <rect id="pause-icon" x="6" y="4" width="4" height="16" style="display: none;"></rect>
+            <rect id="pause-icon-2" x="14" y="4" width="4" height="16" style="display: none;"></rect>
+          </svg>
+          <span id="play-pause-text">Play</span>
+        </button>
+        
+        <button class="control-btn btn-reset" id="reset-btn">
+          <svg class="icon" viewBox="0 0 24 24">
+            <polyline points="23 4 23 10 17 10"></polyline>
+            <polyline points="1 20 1 14 7 14"></polyline>
+            <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+          </svg>
+          Reset
+        </button>
+        
+        <button class="control-btn btn-mirror" id="mirror-btn">
+          <svg class="icon" viewBox="0 0 24 24">
+            <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+            <line x1="1" y1="10" x2="23" y2="10"></line>
+          </svg>
+          Mirror
+        </button>
+        
+        <button class="control-btn btn-fullscreen" id="fullscreen-btn">
+          <svg class="icon" viewBox="0 0 24 24">
+            <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
+          </svg>
+          Fullscreen
+        </button>
+        
+        <button class="control-btn btn-edit" id="edit-btn" style="display: none;">
+          <svg class="icon" viewBox="0 0 24 24">
+            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+          </svg>
+          Edit Script
+        </button>
+        
+        <button class="control-btn btn-done" id="done-btn">
+          <svg class="icon" viewBox="0 0 24 24">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+          Done Editing
+        </button>
+      </div>
+      
+      <div class="controls-row">
+        <div class="control-slider">
+          <svg class="icon" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 16 14"></polyline>
+          </svg>
+          <span>Speed:</span>
+          <input type="range" id="speed-slider" min="0.05" max="2" step="0.05" value="0.3">
+          <span id="speed-value">0.3x</span>
+        </div>
+        
+        <div class="control-slider">
+          <svg class="icon" viewBox="0 0 24 24">
+            <polyline points="4 7 4 4 20 4 20 7"></polyline>
+            <line x1="9" y1="20" x2="15" y2="20"></line>
+            <line x1="12" y1="4" x2="12" y2="20"></line>
+          </svg>
+          <span>Size:</span>
+          <input type="range" id="size-slider" min="20" max="72" step="4" value="32">
+          <span id="size-value">32px</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Teleprompter Display -->
+    <div class="teleprompter-display" id="teleprompter-display">
+      <!-- Editor Mode -->
+      <div id="editor-container">
+        <div class="editor-toolbar" id="editor-toolbar">
+          <button class="editor-btn" id="btn-bold" title="Bold">
+            <strong>B</strong>
+          </button>
+          <button class="editor-btn" id="btn-italic" title="Italic">
+            <em>I</em>
+          </button>
+          <button class="editor-btn" id="btn-underline" title="Underline">
+            <u>U</u>
+          </button>
+          <button class="editor-btn" id="btn-bullet" title="Bullet List">
+            •
+          </button>
+          <button class="editor-btn" id="btn-number" title="Numbered List">
+            1.
+          </button>
+          <button class="editor-btn" id="btn-clear" title="Clear Formatting">
+            Clear
+          </button>
+        </div>
+        <div
+          id="teleprompter-textarea"
+          class="editor-content"
+          contenteditable="true"
+          data-placeholder="Paste your script here...&#10;&#10;The text will scroll automatically when you press play.&#10;&#10;You can adjust the speed and text size using the controls above."
+        >Paste your script here...<br><br>The text will scroll automatically when you press play.<br><br>You can adjust the speed and text size using the controls above.</div>
+      </div>
+      
+      <!-- View Mode -->
+      <div id="teleprompter-content" class="teleprompter-content" style="display: none;"></div>
+      <div class="teleprompter-spacer"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  // State
+  let script = 'Paste your script here...<br><br>The text will scroll automatically when you press play.<br><br>You can adjust the speed and text size using the controls above.';
+  let isPlaying = false;
+  let speed = 0.3;
+  let fontSize = 32;
+  let isMirrored = false;
+  let isFullscreen = false;
+  let isEditing = true;
+  
+  // Refs
+  let animationFrameId = null;
+  let scrollInterval = null;
+  let lastScrollTime = null;
+  const scrollRef = document.getElementById('teleprompter-display');
+  const containerRef = document.getElementById('teleprompter-wrapper');
+  const textareaRef = document.getElementById('teleprompter-textarea');
+  const contentRef = document.getElementById('teleprompter-content');
+  const editorContainer = document.getElementById('editor-container');
+  const playPauseBtn = document.getElementById('play-pause-btn');
+  const resetBtn = document.getElementById('reset-btn');
+  const mirrorBtn = document.getElementById('mirror-btn');
+  const fullscreenBtn = document.getElementById('fullscreen-btn');
+  const editBtn = document.getElementById('edit-btn');
+  const doneBtn = document.getElementById('done-btn');
+  const speedSlider = document.getElementById('speed-slider');
+  const sizeSlider = document.getElementById('size-slider');
+  const speedValue = document.getElementById('speed-value');
+  const sizeValue = document.getElementById('size-value');
+  const playPauseText = document.getElementById('play-pause-text');
+  const playIcon = document.getElementById('play-icon');
+  const pauseIcon = document.getElementById('pause-icon');
+  const pauseIcon2 = document.getElementById('pause-icon-2');
+
+  // Scroll function - using interval-based scrolling for reliable control
+  function startScrolling() {
+    if (!scrollRef || isEditing || !isPlaying) {
+      return;
+    }
+    
+    // Clear any existing interval
+    if (scrollInterval) {
+      clearInterval(scrollInterval);
+    }
+    
+    // Convert speed to pixels per second, then to pixels per interval
+    // Speed of 0.3 = 0.3 * 30 = 9 pixels per second
+    // At 60fps (16.67ms intervals), that's 9/60 = 0.15 pixels per frame
+    // We'll use 50ms intervals for smoother control: 9 * 0.05 = 0.45 pixels per interval
+    const basePixelsPerSecond = 30;
+    const pixelsPerSecond = speed * basePixelsPerSecond;
+    const intervalMs = 50; // Update every 50ms for smooth scrolling
+    const pixelsPerInterval = (pixelsPerSecond * intervalMs) / 1000;
+    
+    scrollInterval = setInterval(() => {
+      if (!scrollRef || !isPlaying || isEditing) {
+        stopScrolling();
+        return;
+      }
+      
+      const oldScrollTop = scrollRef.scrollTop;
+      scrollRef.scrollTop += pixelsPerInterval;
+      
+      // Check if we're at the bottom
+      const maxScroll = scrollRef.scrollHeight - scrollRef.clientHeight;
+      if (scrollRef.scrollTop >= maxScroll - 1 || scrollRef.scrollTop === oldScrollTop) {
+        setIsPlaying(false);
+        stopScrolling();
+      }
+    }, intervalMs);
+  }
+  
+  function stopScrolling() {
+    if (scrollInterval) {
+      clearInterval(scrollInterval);
+      scrollInterval = null;
+    }
+    if (animationFrameId) {
+      cancelAnimationFrame(animationFrameId);
+      animationFrameId = null;
+    }
+  }
+
+  function setIsPlaying(value) {
+    isPlaying = value;
+    
+    if (isPlaying) {
+      playPauseText.textContent = 'Pause';
+      playIcon.style.display = 'none';
+      pauseIcon.style.display = 'block';
+      pauseIcon2.style.display = 'block';
+      
+      // Only start scrolling if not in edit mode and content is visible
+      if (!isEditing && contentRef.style.display === 'block') {
+        startScrolling();
+      }
+    } else {
+      playPauseText.textContent = 'Play';
+      playIcon.style.display = 'block';
+      pauseIcon.style.display = 'none';
+      pauseIcon2.style.display = 'none';
+      stopScrolling();
+    }
+  }
+
+  function handlePlayPause() {
+    if (isEditing) {
+      setIsEditing(false);
+      // Wait a moment for the content to render before starting scroll
+      setTimeout(() => {
+        if (scrollRef && contentRef.style.display === 'block') {
+          setIsPlaying(true);
+        }
+      }, 200);
+    } else {
+      setIsPlaying(!isPlaying);
+    }
+  }
+
+  function handleReset() {
+    setIsPlaying(false);
+    stopScrolling();
+    if (scrollRef) {
+      scrollRef.scrollTop = 0;
+    }
+  }
+
+  function toggleMirror() {
+    isMirrored = !isMirrored;
+    mirrorBtn.classList.toggle('active', isMirrored);
+    
+    if (isMirrored) {
+      textareaRef.classList.add('mirrored');
+      contentRef.classList.add('mirrored');
+    } else {
+      textareaRef.classList.remove('mirrored');
+      contentRef.classList.remove('mirrored');
+    }
+  }
+
+  function toggleFullscreen() {
+    if (!document.fullscreenElement) {
+      containerRef?.requestFullscreen();
+      isFullscreen = true;
+    } else {
+      document.exitFullscreen();
+      isFullscreen = false;
+    }
+  }
+
+  function setIsEditing(value) {
+    isEditing = value;
+    
+    // Stop playing when switching modes
+    if (isPlaying) {
+      setIsPlaying(false);
+    }
+    
+    if (isEditing) {
+      editorContainer.style.display = 'flex';
+      contentRef.style.display = 'none';
+      editBtn.style.display = 'none';
+      doneBtn.style.display = 'flex';
+      // Get HTML content from editor
+      script = textareaRef.innerHTML;
+    } else {
+      // Save HTML content from editor
+      script = textareaRef.innerHTML;
+      // Render HTML in content view
+      contentRef.innerHTML = script;
+      editorContainer.style.display = 'none';
+      contentRef.style.display = 'block';
+      editBtn.style.display = 'flex';
+      doneBtn.style.display = 'none';
+      
+      // Apply mirror transform if needed
+      if (isMirrored) {
+        contentRef.classList.add('mirrored');
+      } else {
+        contentRef.classList.remove('mirrored');
+      }
+      
+      // Reset scroll position when switching to view mode
+      if (scrollRef) {
+        scrollRef.scrollTop = 0;
+      }
+    }
+  }
+
+  function updateSpeed(value) {
+    speed = parseFloat(value);
+    // Display with 2 decimal places for slower speeds
+    speedValue.textContent = speed.toFixed(2) + 'x';
+    
+    // Restart scrolling with new speed if currently playing
+    if (isPlaying && !isEditing) {
+      stopScrolling();
+      startScrolling();
+    }
+  }
+
+  function updateFontSize(value) {
+    fontSize = parseInt(value);
+    sizeValue.textContent = fontSize + 'px';
+    textareaRef.style.fontSize = fontSize + 'px';
+    contentRef.style.fontSize = fontSize + 'px';
+    // Also update editor content font size
+    const editorContent = document.querySelector('.editor-content');
+    if (editorContent) {
+      editorContent.style.fontSize = fontSize + 'px';
+    }
+  }
+  
+  // Formatting functions
+  function formatText(command, value = null) {
+    document.execCommand(command, false, value);
+    textareaRef.focus();
+  }
+  
+  function clearFormatting() {
+    document.execCommand('removeFormat', false, null);
+    textareaRef.focus();
+  }
+
+  // Event listeners
+  playPauseBtn.addEventListener('click', handlePlayPause);
+  resetBtn.addEventListener('click', handleReset);
+  mirrorBtn.addEventListener('click', toggleMirror);
+  fullscreenBtn.addEventListener('click', toggleFullscreen);
+  editBtn.addEventListener('click', () => {
+    setIsPlaying(false);
+    setIsEditing(true);
+  });
+  doneBtn.addEventListener('click', () => setIsEditing(false));
+  
+  speedSlider.addEventListener('input', (e) => updateSpeed(e.target.value));
+  sizeSlider.addEventListener('input', (e) => updateFontSize(e.target.value));
+  
+  textareaRef.addEventListener('input', (e) => {
+    script = e.target.innerHTML;
+  });
+  
+  // Placeholder handling for contenteditable
+  function handlePlaceholder() {
+    if (textareaRef.innerHTML.trim() === '' || textareaRef.innerHTML === '<br>') {
+      textareaRef.innerHTML = '';
+    }
+  }
+  
+  textareaRef.addEventListener('focus', () => {
+    if (textareaRef.innerHTML === textareaRef.dataset.placeholder || textareaRef.innerHTML.trim() === '') {
+      textareaRef.innerHTML = '';
+    }
+  });
+  
+  textareaRef.addEventListener('blur', () => {
+    if (textareaRef.innerHTML.trim() === '' || textareaRef.innerHTML === '<br>') {
+      textareaRef.innerHTML = textareaRef.dataset.placeholder || '';
+    }
+  });
+  
+  // Formatting button event listeners
+  document.getElementById('btn-bold').addEventListener('click', () => formatText('bold'));
+  document.getElementById('btn-italic').addEventListener('click', () => formatText('italic'));
+  document.getElementById('btn-underline').addEventListener('click', () => formatText('underline'));
+  document.getElementById('btn-bullet').addEventListener('click', () => formatText('insertUnorderedList'));
+  document.getElementById('btn-number').addEventListener('click', () => formatText('insertOrderedList'));
+  document.getElementById('btn-clear').addEventListener('click', clearFormatting);
+
+  // Fullscreen change handler
+  document.addEventListener('fullscreenchange', () => {
+    isFullscreen = !!document.fullscreenElement;
+  });
+
+  // Initialize
+  updateFontSize(fontSize);
+  setIsEditing(true);
+})();
+</script>
+{% endblock %}

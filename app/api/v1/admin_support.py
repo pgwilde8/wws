@@ -14,31 +14,34 @@ async def support_inbox(
     session: AsyncSession = Depends(get_session)
 ):
     """
-    Contract: return support threads and total pages
+    Contract: return support tickets grouped by client
     """
     q = f"%{search}%"
 
-    # Get 12 most recent support threads (grouped by client email)
+    # Get support tickets ordered by most recent
     result = await session.execute(
-        "SELECT DISTINCT ON (client_email) id, client_email, plan_name, created_at "
-        "FROM support_messages "
-        "WHERE client_email ILIKE :q "
-        "ORDER BY client_email, created_at DESC "
-        "LIMIT 12 OFFSET :offset",
-        {"q": q, "offset": (page - 1) * 12}
+        "SELECT st.id, st.client_id, st.subject, st.status, st.priority, st.created_at, st.updated_at, "
+        "       COUNT(sm.id) as message_count "
+        "FROM support_tickets st "
+        "LEFT JOIN support_messages sm ON sm.ticket_id = st.id "
+        "WHERE st.subject ILIKE :q "
+        "GROUP BY st.id "
+        "ORDER BY st.updated_at DESC "
+        "LIMIT 20 OFFSET :offset",
+        {"q": q, "offset": (page - 1) * 20}
     )
-    threads = result.fetchall()
+    tickets = [dict(row) for row in result.mappings().all()]
 
     # Count pages
     count = await session.execute(
-        "SELECT COUNT(DISTINCT client_email) FROM support_messages WHERE client_email ILIKE :q",
+        "SELECT COUNT(*) FROM support_tickets WHERE subject ILIKE :q",
         {"q": q}
     )
     total = count.scalar() or 0
-    total_pages = ceil(total / 12)
+    total_pages = ceil(total / 20)
 
     return {
-        "threads": threads,
+        "tickets": tickets,
         "page": page,
         "search": search,
         "total_pages": total_pages

@@ -28,7 +28,8 @@ templates = Jinja2Templates(directory="app/templates")
 load_dotenv()
 
 openai_client = None
-ASSISTANT_ID = os.getenv("OPENAI_ASSISTANT_ID", "")
+ASSISTANT_ID_CHAT = os.getenv("OPENAI_ASSISTANT_ID_CHAT", "")
+ASSISTANT_ID_MARKETER = os.getenv("OPENAI_ASSISTANT_ID_MARKETER", "")
 
 
 def get_openai_client():
@@ -49,11 +50,12 @@ def get_openai_client():
     return openai_client
 
 
-def get_or_create_assistant(client):
+def get_or_create_assistant(client, assistant_type="chat"):
     """Reuse existing assistant or create one with legacy instructions."""
-    global ASSISTANT_ID
-    if ASSISTANT_ID:
-        return ASSISTANT_ID
+    global ASSISTANT_ID_CHAT, ASSISTANT_ID_MARKETER
+    assistant_id = ASSISTANT_ID_CHAT if assistant_type == "chat" else ASSISTANT_ID_MARKETER
+    if assistant_id:
+        return assistant_id
 
     instructions = """
 You are the AI assistant for WebWise Solutions, a done-for-you automation company that builds fully automated, AI-powered businesses from scratch. Be conversational and helpful. Guide visitors on packages (Starter $1,997; Growth $3,997; Scale $5,997), process (choose package -> onboarding -> setup -> build -> launch -> support), tech stack (FastAPI, Stripe, OpenAI, CRM, automations), and always offer to book a call if serious. Avoid hard-selling; focus on clarity and value.

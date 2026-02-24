@@ -199,9 +199,76 @@
     .faq-item p {
         color: #555;
         line-height: 1.7;
+        margin: 0;
     }
     
-    @media (max-width: 768px) {
+    .addon-section {
+        background: white;
+        padding: 3rem 2rem;
+        border-radius: 12px;
+        margin-top: 4rem;
+        border: 2px solid #e5e7eb;
+    }
+    
+    .addon-section h2 {
+        text-align: center;
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 2rem;
+        color: #1f2937;
+    }
+    
+    .addon-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+    }
+    
+    .addon-list li {
+        padding: 1.5rem;
+        background: #f9fafb;
+        border-radius: 8px;
+        border-left: 4px solid #667eea;
+    }
+    
+    .addon-list li h3 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-bottom: 0.75rem;
+        color: #1f2937;
+    }
+    
+    .addon-list li p {
+        color: #6b7280;
+        line-height: 1.6;
+        margin: 0;
+    }
+    
+    .guarantee-section {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        color: white;
+        padding: 3rem 2rem;
+        border-radius: 12px;
+        margin-top: 4rem;
+        text-align: center;
+    }
+    
+    .guarantee-section h2 {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        color: white;
+    }
+    
+    .guarantee-section p {
+        font-size: 1.1rem;
+        line-height: 1.8;
+        max-width: 600px;
+        margin: 0 auto;
+    }
         .pricing-hero h1 {
             font-size: 2rem;
         }
@@ -225,8 +292,8 @@
 
 <!-- Hero Section -->
 <div class="pricing-hero">
-    <h1>Simple, Transparent Pricing</h1>
-    <p>Choose the build that matches your business needs. No hidden fees, no surprises.</p>
+    <h1>Choose Your Build</h1>
+    <p>Pick the build that matches where your business is today — from fast setup to fully custom systems. No upsells, just the right depth for your needs.</p>
 </div>
 
 <!-- Pricing Cards -->
@@ -238,20 +305,67 @@
             <div class="plan-price">
                 $1,997<span>/one-time</span>
             </div>
-            <p class="plan-tagline">Clean execution. Real automation. No overbuilding.</p>
+            <p class="plan-tagline">Standard Build Foundation</p>
             <p class="plan-description">
-                Starter is for founders who want a real system in place fast using proven patterns that already work. Lead capture, basic automation, and payments or booking — wired correctly and built to run without babysitting. This path is for implementation, not invention. If your idea already exists and just needs to be done right, start here.
+                Best for small businesses & founders launching fast. A complete, lead-ready business website built on a secure foundation — including AI chat, search indexing, scheduling, owner SMS alerts, admin visibility, and privacy-first boundaries. Built once. Runs 24/7. You own everything.
             </p>
             <ul class="plan-features">
-                <li>Modern custom website (5–7 pages)</li>
-                <li>Branding setup (colors, fonts, layout)</li>
-                <li>Simple lead funnel (opt-in → thank you)</li>
-                <li>Basic email automation</li>
-                <li>Stripe setup for payments</li>
-                <li>Admin dashboard</li>
-                <li>Basic AI assistant</li>
-                <li>Domain & DNS configuration</li>
-                <li>Google SEO & indexing</li>
+                <li><strong>Professional Website Foundation</strong>
+                    <ul style="margin-top: 0.5rem; font-size: 0.9rem; color: #6b7280;">
+                        <li>All essential business pages (Home, About, Services, Contact, etc.)</li>
+                        <li>Fully responsive and branded</li>
+                        <li>AI-generated logo + curated image pack</li>
+                    </ul>
+                </li>
+                <li><strong>Lead & Booking Engine</strong>
+                    <ul style="margin-top: 0.5rem; font-size: 0.9rem; color: #6b7280;">
+                        <li>Lead capture forms (spam-protected, owner-only access)</li>
+                        <li>Scheduling system (Cal.com/Calendly integrated)</li>
+                        <li>Email alerts to owner for new leads & bookings</li>
+                    </ul>
+                </li>
+                <li><strong>AI Chat Assistant (Standard)</strong>
+                    <ul style="margin-top: 0.5rem; font-size: 0.9rem; color: #6b7280;">
+                        <li>OpenAI chatbot integrated into your site</li>
+                        <li>Trained to understand your business at launch</li>
+                        <li>Guides users to booking or contact actions</li>
+                    </ul>
+                </li>
+                <li><strong>SMS Notifications (Twilio)</strong>
+                    <ul style="margin-top: 0.5rem; font-size: 0.9rem; color: #6b7280;">
+                        <li>API keys installed and tested</li>
+                        <li>Owner-only SMS alerts for leads & bookings</li>
+                        <li>No voice call flows in Starter tier</li>
+                    </ul>
+                </li>
+                <li><strong>SEO & Indexing Setup</strong>
+                    <ul style="margin-top: 0.5rem; font-size: 0.9rem; color: #6b7280;">
+                        <li>Sitemap generated and validated</li>
+                        <li>Google Search Console property created & verified</li>
+                        <li>Submitted to search engines</li>
+                    </ul>
+                </li>
+                <li><strong>Transactional Email</strong>
+                    <ul style="margin-top: 0.5rem; font-size: 0.9rem; color: #6b7280;">
+                        <li>Receipts, booking confirmations configured</li>
+                        <li>SMTP or email provider keys installed & tested</li>
+                    </ul>
+                </li>
+                <li><strong>Trust & Security</strong>
+                    <ul style="margin-top: 0.5rem; font-size: 0.9rem; color: #6b7280;">
+                        <li>HTTPS enforced (secure access)</li>
+                        <li>Auth-protected admin dashboard with professional-grade encryption</li>
+                        <li>Client/user login fully protected (if applicable to your build)</li>
+                        <li>Anti-spam protection included</li>
+                    </ul>
+                </li>
+                <li><strong>Ownership & Boundaries</strong>
+                    <ul style="margin-top: 0.5rem; font-size: 0.9rem; color: #6b7280;">
+                        <li>You retain full ownership of wallets & business data</li>
+                        <li>We do not custody funds or customer personal data</li>
+                        <li>We operate as middleware only</li>
+                    </ul>
+                </li>
             </ul>
             <form onsubmit="return handleCheckout(event, 'starter')">
                 <div style="margin: 1rem 0; text-align: left;">
@@ -260,7 +374,7 @@
                         I agree to the <a href="/tos" target="_blank">Terms of Service</a>
                     </label>
                 </div>
-                <button type="submit" class="plan-button" id="pay-btn-starter" disabled>Pay $1,997 →</button>
+                <button type="submit" class="plan-button" id="pay-btn-starter" disabled>Start Starter Build →</button>
             </form>
         </div>
 
@@ -270,20 +384,67 @@
             <div class="plan-price">
                 $3,997<span>/one-time</span>
             </div>
-            <p class="plan-tagline">Leverage. Orchestration. A system that works ahead of you.</p>
+            <p class="plan-tagline">AI Sales + Business Automation Engine</p>
             <p class="plan-description">
-                Growth Build is for founders who are done doing everything manually. This is where systems start working together — capturing, responding, following up, routing, and converting without reminders. It includes deeper automation, smarter logic, and CRM-style organization to reduce revenue leakage. Choose Growth when you want leverage, not more effort.
+                Everything in Starter, plus inbound/outbound phone sales AI, CRM automation, and multi-step workflows. Stripe processes payments. WebWise handles everything that makes payments profitable — automation, scheduling, AI sales agents, follow-ups, monitoring, CRM, scripts, admin visibility, and business intelligence.
             </p>
             <ul class="plan-features">
-                <li>Everything in Starter</li>
-                <li>Multi-step funnels (opt-in, sales, upsell)</li>
-                <li>Deeper automation and workflows</li>
-                <li>Smart follow-up logic</li>
-                <li>CRM-style organization</li>
-                <li>Outbound calling AI for lead follow-up</li>
-                <li>Advanced email nurture campaigns</li>
-                <li>Booking flows + reminders</li>
-                <li>A build designed to grow with you</li>
+                <li><strong>All Starter Features</strong></li>
+                <li><strong>AI Phone Sales Agent (Inbound + Outbound)</strong>
+                    <ul style="margin-top: 0.5rem; font-size: 0.9rem; color: #6b7280;">
+                        <li>Twilio Voice integrated</li>
+                        <li>AI handles live conversations & books calls</li>
+                        <li>Inbound routing + outbound lead follow-up</li>
+                        <li>Call scripts engineered for your business</li>
+                    </ul>
+                </li>
+                <li><strong>Advanced Automation Workflows</strong>
+                    <ul style="margin-top: 0.5rem; font-size: 0.9rem; color: #6b7280;">
+                        <li>Lead routing based on rules</li>
+                        <li>Multi-step email + SMS follow-ups</li>
+                        <li>Phone follow-up automation</li>
+                        <li>CRM connected, segmented & triggered</li>
+                    </ul>
+                </li>
+                <li><strong>Business Tool Orchestration</strong>
+                    <ul style="margin-top: 0.5rem; font-size: 0.9rem; color: #6b7280;">
+                        <li>CRM setup with records, tags & segments</li>
+                        <li>Scheduling connected & automated</li>
+                        <li>Email + SMS delivery tested end-to-end</li>
+                        <li>Analytics & event tracking enabled</li>
+                    </ul>
+                </li>
+                <li><strong>Conversion & Sales Optimization</strong>
+                    <ul style="margin-top: 0.5rem; font-size: 0.9rem; color: #6b7280;">
+                        <li>Funnel pages built & optimized</li>
+                        <li>Owner alerts by booking/lead status</li>
+                        <li>Objection-handling in phone agent</li>
+                    </ul>
+                </li>
+                <li><strong>Scalable Media Support</strong>
+                    <ul style="margin-top: 0.5rem; font-size: 0.9rem; color: #6b7280;">
+                        <li>Gallery page installed (optional)</li>
+                        <li>Admin upload portal for images</li>
+                        <li>You approve/publish — no per-job redesign</li>
+                    </ul>
+                </li>
+                <li><strong>Enterprise-Grade Security</strong>
+                    <ul style="margin-top: 0.5rem; font-size: 0.9rem; color: #6b7280;">
+                        <li>HTTPS + encryption for all data in transit</li>
+                        <li>Admin dashboard with professional-grade auth protection</li>
+                        <li>Client/user login fully protected (if applicable to your build)</li>
+                        <li>CRM data encrypted at rest</li>
+                        <li>Anti-spam + bot protection on all forms</li>
+                    </ul>
+                </li>
+                <li><strong>Trust & Operational Boundaries</strong>
+                    <ul style="margin-top: 0.5rem; font-size: 0.9rem; color: #6b7280;">
+                        <li>You own wallets & business data</li>
+                        <li>WebWise never custodies funds</li>
+                        <li>No customer personal data stored</li>
+                        <li>Stripe Connect handles compliance</li>
+                    </ul>
+                </li>
             </ul>
             <form onsubmit="return handleCheckout(event, 'growth')">
                 <div style="margin: 1rem 0; text-align: left;">
@@ -292,7 +453,7 @@
                         I agree to the <a href="/tos" target="_blank">Terms of Service</a>
                     </label>
                 </div>
-                <button type="submit" class="plan-button featured-button" id="pay-btn-growth" disabled>Pay $3,997 →</button>
+                <button type="submit" class="plan-button featured-button" id="pay-btn-growth" disabled>Launch My Growth System →</button>
             </form>
         </div>
 
@@ -302,23 +463,65 @@
             <div class="plan-price">
                 Custom<span></span>
             </div>
-            <p class="plan-tagline">Deeper engineering for systems that must be built carefully.</p>
+            <p class="plan-tagline">Enterprise + AI Orchestration</p>
             <p class="plan-description">
-                Scale is for systems where engineering decisions matter. Choose this path when what you’re building doesn’t exist off-the-shelf and data, AI, or custom logic are core to the product. Scale includes deeper planning, architecture, and system design to ensure correctness, reliability, and long-term growth. This is infrastructure, not a one-off build.
+                Everything in Growth, plus enterprise backend engineering, multiple AI agents, advanced call trees, and corporate deployment. Stripe processes payments. Scale clients hire WebWise to engineer and operate the automation layer on top.
             </p>
             <ul class="plan-features">
-                <li>Everything in Growth</li>
-                <li>More planning and careful execution</li>
-                <li>Deeper logic and system design</li>
-                <li>Custom Python / FastAPI backend</li>
-                <li>Advanced data structures</li>
-                <li>ML integrations & algorithms</li>
-                <li>Multi-user auth & role management</li>
-                <li>Real-time dashboards & analytics</li>
-                <li>Infrastructure, not a one-off project</li>
+                <li><strong>All Growth Features</strong></li>
+                <li><strong>AI-Driven Business Orchestration</strong>
+                    <ul style="margin-top: 0.5rem; font-size: 0.9rem; color: #6b7280;">
+                        <li>Multiple AI agents working together</li>
+                        <li>Intelligent routing between chat, SMS, phone, email</li>
+                        <li>AI-triggered workflows based on behavior</li>
+                        <li>Custom knowledge training per business unit</li>
+                    </ul>
+                </li>
+                <li><strong>Custom Backend Engineering</strong>
+                    <ul style="margin-top: 0.5rem; font-size: 0.9rem; color: #6b7280;">
+                        <li>Custom API development (FastAPI, Node, etc.)</li>
+                        <li>Webhook orchestration at scale</li>
+                        <li>Scalable database architecture</li>
+                        <li>Enterprise caching & queuing layers</li>
+                    </ul>
+                </li>
+                <li><strong>Advanced Communication Systems</strong>
+                    <ul style="margin-top: 0.5rem; font-size: 0.9rem; color: #6b7280;">
+                        <li>Complex Twilio call flows & IVR trees</li>
+                        <li>Inbound/outbound sales calling at scale</li>
+                        <li>Optional 2-way SMS AI chat</li>
+                        <li>Call recording & analytics</li>
+                    </ul>
+                </li>
+                <li><strong>Enterprise Security & Compliance</strong>
+                    <ul style="margin-top: 0.5rem; font-size: 0.9rem; color: #6b7280;">
+                        <li>Role-based access control (RBAC) with granular permissions</li>
+                        <li>Team/department-level access segregation</li>
+                        <li>Admin dashboard with professional-grade multi-factor auth ready</li>
+                        <li>Client/user login fully protected (if applicable to your build)</li>
+                        <li>All data encrypted in transit and at rest</li>
+                        <li>Audit logs for all system events and user actions</li>
+                        <li>Data segregation per business unit</li>
+                    </ul>
+                </li>
+                <li><strong>Corporate Deployment</strong>
+                    <ul style="margin-top: 0.5rem; font-size: 0.9rem; color: #6b7280;">
+                        <li>Multi-location business support</li>
+                        <li>Optional white-label deployment</li>
+                        <li>Custom reporting dashboards</li>
+                        <li>24/7 uptime monitoring & recovery</li>
+                    </ul>
+                </li>
+                <li><strong>Ownership & Boundaries</strong>
+                    <ul style="margin-top: 0.5rem; font-size: 0.9rem; color: #6b7280;">
+                        <li>Client retains full ownership</li>
+                        <li>WebWise operates the automation layer</li>
+                        <li>Stripe carries payment compliance</li>
+                    </ul>
+                </li>
             </ul>
             <div style="margin-top:auto;">
-                <a href="/book-call" class="plan-button">Let's talk</a>
+                <a href="/book-call" class="plan-button">Book a Tailored Strategy Call</a>
             </div>
 
         <script src="https://js.stripe.com/v3/"></script>
@@ -411,6 +614,145 @@
                 <strong>Scale</strong> if what you want doesn't exist yet and requires custom engineering, data, or AI.
             </p>
         </div>
+        
+        <div class="faq-item">
+            <h3>What happens with Stripe compliance?</h3>
+            <p>
+                Stripe handles payment compliance through Stripe Connect. WebWise never custodies funds or stores customer personal data. 
+                You own your business relationships and payment data—we just ensure the automation runs smoothly.
+            </p>
+        </div>
+    </div>
+
+    <!-- Testimonials Carousel Section -->
+    {% if testimonials %}
+    <div class="testimonials-carousel-section" style="max-width: 900px; margin: 4rem auto; padding: 0 1.5rem;">
+        <h2 style="text-align: center; margin-bottom: 2rem;">What Our Clients Say</h2>
+        
+        <div style="background: #f9fafb; border-radius: 8px; padding: 2rem; position: relative; min-height: 280px;">
+            <!-- Testimonial Container -->
+            <div id="testimonial-container" style="display: flex; flex-direction: column; justify-content: space-between; height: 100%;">
+                <!-- Star Rating -->
+                <div id="testimonial-rating" style="display: flex; gap: 0.25rem; margin-bottom: 1rem;">
+                    <!-- Stars will be populated by JavaScript -->
+                </div>
+                
+                <!-- Testimonial Text -->
+                <div id="testimonial-text" style="font-size: 1rem; line-height: 1.6; color: #374151; font-style: italic; margin-bottom: 1.5rem;">
+                    <!-- Text will be populated by JavaScript -->
+                </div>
+                
+                <!-- Client Info -->
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <div id="testimonial-name" style="font-weight: 600; color: #111827; margin-bottom: 0.25rem;">
+                            <!-- Name will be populated by JavaScript -->
+                        </div>
+                        <div id="testimonial-location" style="font-size: 0.875rem; color: #6b7280; margin-bottom: 0.25rem;">
+                            <!-- Location will be populated by JavaScript -->
+                        </div>
+                        <div id="testimonial-website" style="font-size: 0.875rem;">
+                            <!-- Website link will be populated by JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <!-- Next Button -->
+                    <button id="next-testimonial-btn" style="
+                        background: linear-gradient(135deg, #10b981, #059669);
+                        color: white;
+                        border: none;
+                        padding: 0.75rem 1.5rem;
+                        border-radius: 6px;
+                        font-weight: 600;
+                        cursor: pointer;
+                        transition: all 0.3s ease;
+                    " onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                        Next
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    (function() {
+        const testimonials = JSON.parse('{{ testimonials | tojson }}');
+        let currentIndex = 0;
+
+        function displayTestimonial(index) {
+            if (!testimonials || testimonials.length === 0) return;
+            
+            const t = testimonials[index];
+            
+            // Display rating stars
+            const starsHtml = Array(5).fill(0).map((_, i) => 
+                i < (t.rating || 5) ? '⭐' : '☆'
+            ).join('');
+            document.getElementById('testimonial-rating').textContent = starsHtml;
+            
+            // Display testimonial text
+            document.getElementById('testimonial-text').textContent = `"${t.testimonial_text}"`;
+            
+            // Display client name
+            document.getElementById('testimonial-name').textContent = t.client_name || 'Anonymous';
+            
+            // Display location (with event type if available)
+            const locationParts = [];
+            if (t.client_location) locationParts.push(t.client_location);
+            if (t.event_type) locationParts.push(t.event_type);
+            document.getElementById('testimonial-location').textContent = locationParts.join(' • ') || '';
+            
+            // Display website link if available
+            const websiteDiv = document.getElementById('testimonial-website');
+            if (t.website_url) {
+                websiteDiv.innerHTML = `<a href="${t.website_url}" target="_blank" rel="noopener noreferrer" style="color:#2563eb; text-decoration:none; font-weight:600;">Visit Website →</a>`;
+            } else {
+                websiteDiv.innerHTML = '';
+            }
+        }
+
+        // Initialize with first testimonial
+        displayTestimonial(0);
+
+        // Next button handler
+        document.getElementById('next-testimonial-btn').addEventListener('click', function() {
+            currentIndex = (currentIndex + 1) % testimonials.length;
+            displayTestimonial(currentIndex);
+        });
+    })();
+    </script>
+    {% endif %}
+
+    <!-- Add-On Services Section -->
+    <div class="addon-section">
+        <h2>Optional Add-On Services</h2>
+        <ul class="addon-list">
+            <li>
+                <h3>Video Content Creation</h3>
+                <p>Script + produced videos for tutorials, demos, or sales pages. Available as one-time or 3-pack options.</p>
+            </li>
+            <li>
+                <h3>Image Update Retainer</h3>
+                <p>For businesses that need frequent photo updates. Upload images anytime through your admin portal, and we approve/publish without redesigning.</p>
+            </li>
+            <li>
+                <h3>Gallery Page & Upload Portal</h3>
+                <p>Self-service image upload system where you manage your own gallery without waiting on us.</p>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Satisfaction Guarantee Section -->
+    <div class="guarantee-section">
+        <h2>Satisfaction Guarantee</h2>
+        <p>
+            We guarantee that your website foundation, automation, and integrations will be delivered exactly as described, 
+            professionally configured, secure, and fully operational at launch. If anything does not meet your expectations, 
+            we commit to revising, improving, and refining it until you are completely satisfied — at no additional cost.
+        </p>
+        <p style="margin-top: 1.5rem; font-style: italic;">
+            You own your business. We own your satisfaction.
+        </p>
     </div>
 </div>
 

@@ -230,7 +230,13 @@ https://webwisesolutions.dev
         return False
 
 
-async def send_welcome_email(customer_email: str, customer_name: Optional[str] = None, plan_name: Optional[str] = None, dashboard_link: Optional[str] = None, temp_password: Optional[str] = None) -> bool:
+async def send_welcome_email(
+    customer_email: str,
+    customer_name: Optional[str] = None,
+    plan_name: Optional[str] = None,
+    dashboard_link: Optional[str] = None,
+    temp_password: Optional[str] = None,
+) -> bool:
     """Send welcome email to customer after successful purchase."""
     
     try:
@@ -256,12 +262,18 @@ async def send_welcome_email(customer_email: str, customer_name: Optional[str] =
                 print(f"[Attempt {attempt}/{max_retries}] Preparing welcome email for {customer_email}")
                 
                 # Prepare template context
+                domain_url = settings.DOMAIN_URL.rstrip("/") if settings.DOMAIN_URL else ""
+                project_name = settings.PROJECT_NAME or "Our Team"
                 context = {
                     "customer_name": customer_name,
                     "customer_email": customer_email,
                     "plan_name": plan_name,
                     "dashboard_link": dashboard_link,
-                    "temp_password": temp_password
+                    "temp_password": temp_password,
+                    "project_name": project_name,
+                    "domain_url": domain_url,
+                    "contact_url": f"{domain_url}/contact" if domain_url else "",
+                    "login_url": f"{domain_url}/login" if domain_url else "",
                 }
                 
                 # Render HTML template
@@ -276,7 +288,7 @@ async def send_welcome_email(customer_email: str, customer_name: Optional[str] =
                 msg = MIMEMultipart("alternative")
                 msg["From"] = settings.SMTP_FROM_EMAIL
                 msg["To"] = customer_email
-                msg["Subject"] = "Welcome to WebWise Solutions - Your Build Has Started!"
+                msg["Subject"] = f"Welcome to {project_name} - Your Build Has Started!"
                 
                 # Attach both plain text and HTML versions
                 msg.attach(MIMEText(text_body, "plain"))

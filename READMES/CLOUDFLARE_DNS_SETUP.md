@@ -360,3 +360,20 @@ For issues or questions:
 
 The system is production-ready and will automatically configure DNS for every client domain submission!
 
+WebWise DNS Automations API token summary
+This API token will affect the below accounts and zones, along with their respective permissions
+
+
+Webwises@webwisesolutions.dev's Account - Account Settings:Read
+All zones - DNS Settings:Edit, Zone Settings:Read
+Client IP Address Filtering
+
+Is in - 134.199.242.254, 129.212.147.207
+TTL
+
+Start Date - December 9, 2025
+End Date - December 31, 2026
+
+webwises@webwisesolutions.dev
+Blue12Stone$
+

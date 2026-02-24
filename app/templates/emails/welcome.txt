@@ -1,6 +1,6 @@
 Hi {{ customer_name or 'there' }},
 
-Thank you for choosing WebWise Solutions! We're excited to start building your automated business.
+Thank you for choosing {{ project_name or 'our team' }}! We're excited to start building your automated business.
 
 {% if temp_password %}
 YOUR ACCOUNT CREDENTIALS:
@@ -24,18 +24,20 @@ Your Package: {{ plan_name }}
 Access Your Dashboard: {{ dashboard_link }}
 
 {% if temp_password %}
-You can also log in at https://webwisesolutions.dev/login using your email and password above.
+{% if login_url %}
+You can also log in at {{ login_url }} using your email and password above.
+{% endif %}
 {% else %}
 This link will automatically log you in and is valid for 30 days.
 {% endif %}
 {% endif %}
 
-If you have any questions in the meantime, feel free to reply to this email or visit our contact page at https://webwisesolutions.dev/contact.
+If you have any questions in the meantime, feel free to reply to this email{% if contact_url %} or visit our contact page at {{ contact_url }}{% endif %}.
 
 We're here to help you succeed!
 
 Best regards,
-The WebWise Solutions Team
+The {{ project_name or 'our' }} Team
 
-© 2025 WebWise Solutions LLC | webwisesolutions.dev
+© 2025 {{ project_name or 'Our Team' }}{% if domain_url %} | {{ domain_url | replace('https://', '') | replace('http://', '') }}{% endif %}
 

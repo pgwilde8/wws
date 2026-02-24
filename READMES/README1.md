@@ -1,5 +1,5 @@
 wws: 134.199.242.254:8888
-tree /srv/projects/wws/app/models
+tree /srv/projects/wws/app/templates/admin
 /srv/projects/wws/app/models
 
 1: su - webadmin
@@ -19,12 +19,8 @@ SELECT id, email, hashed_password FROM users WHERE email='678@webwisesolutions.d
 \d users
 fg %2
 
-
-python - <<'PY'
-from openai import OpenAI
-client = OpenAI(api_key="k-proj-lRr6e5VAKf8FYbHsz2MKwIjtmQSZ56KwA5C8TaQ6xlilSC2H1LCOCXhTl5LVOHO4GrmWj7Yoo1T3BlbkFJWric9Z8hRH-AM8bolj96Ih6crrr2vBYb2YyJjgBiYqLPWK52xYZB4ErfznZ1iBNljovBfuvoYA")
-print(client.models.list())
-PY
+namecheap:https://namecheap.pxf.io/c/6543813/1632743/5618
+wwsclients | Blue9Stone$
 
 /admin/login
 Email: admin@webwisesolutions.dev
@@ -38,7 +34,13 @@ starter: prod_TdQijJms4jaRRc, price_1Sg9rHRzRv6CTjxR69nkwXrx
 build; prod_TdQkXuk1BBULCb, price_1Sg9t0RzRv6CTjxRDJZdEq5y
 scale' prod_TdQm4ocyVXU2A5, price_1Sg9uTRzRv6CTjxR0It8rVkC
 
+https://app.lili.co/login
+support@webwisesolutions.dev
+Blue9Stone$
 
+santanderbank.com
+pgwilde
+Blue19Stone$
 
 =======================================================================
 Add lead capture endpoint and ticket creation only if you plan to use them.
@@ -49,67 +51,18 @@ git commit -m "happy-happy"
 git push
 
 
+# Stop the service
+sudo systemctl stop wws.service
 
-app/templates/
-├── home.html                   ← public marketing home
-├── contact.html
-├── faq.html
-├── login.html
-├── services.html
-├── testimonials.html
-├── testimonials/ (optional future folder if you expand)
-│
-├── layout/
-│   └── base.html               ← global layout shell
-│
-├── admin/                      ← internal staff UI
-│   ├── clients.html            ← admin client cards listing
-│   ├── client_detail.html      ← admin client detail view
-│   ├── projects.html           ← admin projects listing
-│   ├── project_detail.html     ← admin project detail view
-│   ├── calls.html              ← admin calls listing
-│   ├── call_detail.html        ← admin call detail view
-│   ├── support_inbox.html      ← admin support ticket listing
-│   ├── support_detail.html     ← single support ticket view
-│   ├── support_thread.html     ← thread view (if used)
-│   ├── webhooks.html           ← webhook listing
-│   ├── webhook_detail.html     ← single webhook event view
-│   └── webhook_events.html     ← optional (if splitting events)
-│
-└── dashboard/                  ← client UI after login
-    ├── dashboard.html          ← client main dashboard  ✔ keep name
-    ├── credentials.html        ← client API keys form
-    ├── domain.html             ← domain submit UI
-    ├── project_overview.html   ← client purchased project overview
-    ├── support.html            ← client support inbox (tickets)
-    └── orders.html             ← optional future (client purchases)
+# Restart the service
+sudo systemctl restart wws.service
 
-    app/api/v1/
-├── public_pages.py          → serves public templates
-├── dashboard_projects.py    → serves client dashboard pages
-├── dashboard_orders.py      → serves orders.html
-├── admin_clients.py         → serves clients + client cards
-├── admin_projects.py        → serves admin project listings
-├── admin_webhooks.py        → serves admin webhook UI
-└── admin_support.py         → serves support inbox/thread UI
+# View live logs
+sudo journalctl -u wws.service -f
 
-/srv/projects/wws/app/api/v1
-├── admin_calls.py
-├── admin_calls_detail.py
-├── admin_clients.py
-├── admin_projects.py
-├── admin_projects_detail.py
-├── admin_support.py
-├── admin_webhook_detail.py
-├── admin_webhook_events.py
-├── admin_webhooks.py
-├── clients_router.py
-├── dashboard_orders.py
-├── dashboard_projects.py
-├── projects_router.py
-├── public_pages.py
-├── testimonials_router.py
-└── webhooks.py
+# View recent logs
+sudo journalctl -u wws.service -n 50
+sudo journalctl -u wws.service -f 200
 
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.orm import sessionmaker
@@ -129,10 +82,64 @@ async def get_session() -> AsyncSession:
 app.include_router(public_pages_router)
 
 twillio: Account SID, Auth Token
+===========
+systemd;
+# 4. Start the service
+sudo systemctl start wws.service
+
+# 5. Check the status
+sudo systemctl status wws.service
+
+# 6. View logs if needed
+sudo journalctl -u wws.service -f
+sudo journalctl -u wws.service -p err
+sudo journalctl -u wws.service -n 10
+sudo journalctl -u wws.service -n 200
+sudo journalctl -u wws.service -n 50
+
+# Stop the service
+sudo systemctl stop wws.service
+
+# Restart the service
+sudo systemctl restart wws.service
+
+# View live logs
+sudo journalctl -u wws.service -f
+
+# View recent logs
+sudo journalctl -u wws.service -n 50
+================
 
 
 admin:
+https://webwisesolutions.dev/admin/login
 https://webwisesolutions.dev/admin/dashboard
 https://webwisesolutions.dev/admin/clients/15
+https://webwisesolutions.dev/admin/testimonials/
+https://webwisesolutions.dev/admin/testimonials/
 
+
+Client login: https://webwisesolutions.dev/dashboard/login & https://webwisesolutions.dev/login
+/dashboard (if onboarding complete) → serves dashboard.html
+/dashboard/welcome-instructions (if onboarding incomplete)
+So they're two different login pages that both lead to the same dashboard after successful authentication.Both forms POST to /login, which authenticates the user and redirects to /dashboard/welcome-instructions if they haven't completed onboarding yet.
+
+https://webwisesolutions.dev/dashboard/welcome-instructions
 https://webwisesolutions.dev/dashboard/onboarding
+
+-----------------
+https://webwisesolutions.dev/admin/login
+admin@webwisesolutions.dev
+/admin/login
+Email: admin@webwisesolutions.dev
+Password: Securepass9
+
+personal stroage:
+https://webwisesolutions.dev/admin/file-upload/login
+admin@webwisesolutions.dev
+Securepass9
+
+
+https://webwisesolutions.dev/admin/personal/login
+admin@webwisesolutions.dev
+Securepass9

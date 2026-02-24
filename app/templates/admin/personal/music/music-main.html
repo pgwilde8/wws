@@ -1,0 +1,49 @@
+{% extends "layout/base.html" %}
+{% block title %}Music Library{% endblock %}
+{% block header %}{% endblock %}
+{% block footer %}{% endblock %}
+{% block content %}
+<div class="min-h-screen bg-gray-50 py-12 px-4">
+  <div class="max-w-4xl mx-auto">
+    
+    <!-- Header -->
+    <div class="bg-white border border-gray-200 rounded-2xl shadow-sm p-8 mb-6">
+      <h1 class="text-4xl font-extrabold text-gray-900 text-center">Music Library</h1>
+      <p class="text-sm text-gray-500 text-center mt-2">Access your personal music collection</p>
+    </div>
+
+    <!-- Music Folder Links -->
+    <div class="bg-white border border-gray-200 rounded-2xl shadow-sm p-8">
+      <h2 class="text-xl font-semibold text-gray-900 mb-6">Folders</h2>
+      
+      <div class="space-y-3">
+        <a href="/admin/personal/music/relaxing" class="block text-lg text-gray-700 hover:text-blue-600 hover:underline transition py-2">
+          Relaxing & Meditative Music
+        </a>
+        
+        <a href="/admin/personal/music/soc" class="block text-lg text-gray-700 hover:text-blue-600 hover:underline transition py-2">
+          Sound of Chi Music
+        </a>
+        
+        <a href="/admin/music/folder/lorem-ipsum-3" class="block text-lg text-gray-700 hover:text-blue-600 hover:underline transition py-2">
+          Incididunt ut labore et dolore magna
+        </a>
+        
+        <a href="/admin/music/folder/lorem-ipsum-4" class="block text-lg text-gray-700 hover:text-blue-600 hover:underline transition py-2">
+          Aliqua enim ad minim veniam quis
+        </a>
+        
+        <a href="/admin/music/folder/lorem-ipsum-5" class="block text-lg text-gray-700 hover:text-blue-600 hover:underline transition py-2">
+          Nostrud exercitation ullamco laboris
+        </a>
+        
+        <a href="/admin/music/folder/lorem-ipsum-6" class="block text-lg text-gray-700 hover:text-blue-600 hover:underline transition py-2">
+          Nisi ut aliquip ex ea commodo consequat
+        </a>
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}
+

@@ -58,7 +58,44 @@
         Support Inbox
       </a>
 
+      <a href="/admin/testimonials" class="px-5 py-2 {% if pending_testimonials_count > 0 %}bg-amber-600{% else %}bg-indigo-600{% endif %} text-white text-sm font-bold rounded-full hover:opacity-90 transition">
+        Testimonials{% if pending_testimonials_count > 0 %} ({{ pending_testimonials_count }} pending){% endif %}
+      </a>
+
+      <a href="/admin/marketer" class="px-5 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white text-sm font-bold rounded-full hover:opacity-90 transition">
+        🎯 Marketing Assistant
+      </a>
+
+      <a href="/admin/change-password" class="px-5 py-2 bg-purple-600 text-white text-sm font-bold rounded-full hover:opacity-90 transition">
+        Change Password
+      </a>
+
     </div>
+  </section>
+
+  <!-- LANDLORD: Tenant usage & cost (Webwise accounting) -->
+  <section class="bg-white p-4 rounded-2xl border shadow-sm border-amber-200">
+    <h2 class="text-lg font-bold text-gray-900 mb-1">Tenant usage & cost (Landlord)</h2>
+    <p class="text-xs text-gray-500 mb-3 uppercase tracking-wider">Webwise Admin — one project per app; split by sub_account in your DB</p>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-3">
+      <div class="bg-amber-50 p-3 rounded-xl border border-amber-200">
+        <div class="text-xs text-amber-800 uppercase">OpenAI project</div>
+        <div class="text-sm font-semibold text-gray-900">{{ openai_project_label or 'ClosingPitch_Prod (env)' }}</div>
+      </div>
+      <div class="bg-amber-50 p-3 rounded-xl border border-amber-200">
+        <div class="text-xs text-amber-800 uppercase">Admin key</div>
+        <div class="text-sm font-semibold {{ 'text-green-700' if openai_admin_configured else 'text-amber-700' }}">{{ 'Configured' if openai_admin_configured else 'Not set' }}</div>
+      </div>
+      <div class="bg-amber-50 p-3 rounded-xl border border-amber-200">
+        <div class="text-xs text-amber-800 uppercase">Cost reconciler</div>
+        <div class="text-sm text-gray-700">Run daily job: usage vs call minutes</div>
+      </div>
+      <div class="bg-amber-50 p-3 rounded-xl border border-amber-200">
+        <div class="text-xs text-amber-800 uppercase">15% margin</div>
+        <div class="text-sm text-gray-700">Applied at invoice from reconciled cost</div>
+      </div>
+    </div>
+    <p class="text-xs text-gray-500">Tenant apps (e.g. ClosingPitch) use <code class="bg-gray-100 px-1 rounded">OPENAI_PROJECT_ID</code> in their .env. This dashboard uses the Admin Key for usage/cost pull only.</p>
   </section>
 
   <!-- SYSTEM HEALTH + WEBHOOK MONITOR -->

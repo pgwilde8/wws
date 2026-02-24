@@ -1,0 +1,326 @@
+{% extends "layout/base.html" %}
+{% block title %}Welcome – Get Ready for Onboarding{% endblock %}
+{% block header %}{% endblock %}
+{% block footer %}{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto p-4 sm:p-6 space-y-6">
+  
+  <!-- Welcome Header -->
+  <header class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
+    <h1 class="text-2xl sm:text-3xl font-extrabold text-gray-900 mb-3">Welcome! Let's Get You Set Up</h1>
+    <p class="text-base sm:text-lg text-gray-700">
+      Before you start the onboarding form, let's make sure you have everything you need. This will save you time and ensure a smooth setup process.
+    </p>
+  </header>
+
+  <!-- Important Notice -->
+  <section class="bg-blue-50 border-l-4 border-blue-600 p-5 rounded-lg">
+    <div class="flex items-start gap-3">
+      <div class="flex-shrink-0">
+        <svg class="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+      </div>
+      <div>
+        <h2 class="text-lg font-bold text-blue-900 mb-2">Important: Your 21-Day Clock</h2>
+        <p class="text-sm text-blue-800">
+          <strong>Your 21-day build period does NOT start until you complete the onboarding form 100%.</strong> 
+          Take your time to gather everything you need. The clock only begins ticking once you submit a fully completed onboarding form.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- What You'll Need -->
+  <section class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
+    <h2 class="text-xl font-bold text-gray-900 mb-4">What You'll Need</h2>
+    <p class="text-sm text-gray-600 mb-6">
+      Below is a checklist of everything you'll need to complete onboarding. We recommend gathering these items before starting the form.
+    </p>
+
+    <div class="space-y-6">
+      <!-- Section 1: Business Info -->
+      <div class="border-l-4 border-gray-300 pl-4">
+        <h3 class="text-lg font-semibold text-gray-900 mb-2">1. Business Information</h3>
+        <p class="text-sm text-gray-600 mb-3">Basic details about your business:</p>
+        <ul class="list-disc list-inside space-y-1 text-sm text-gray-700 ml-4">
+          <li>Your full name</li>
+          <li>Business or brand name</li>
+          <li>Industry type</li>
+          <li>Phone number (optional)</li>
+          <li>Detailed description of your services, offers, policies, and how you want leads handled</li>
+          <li>Target audience description (optional)</li>
+        </ul>
+        <p class="text-xs text-gray-500 mt-2">
+          <strong>Tip:</strong> The site description becomes your AI assistant's "rule book" - be as detailed as possible!
+        </p>
+      </div>
+
+      <!-- Section 2: Branding -->
+      <div class="border-l-4 border-gray-300 pl-4">
+        <h3 class="text-lg font-semibold text-gray-900 mb-2">2. Branding (Optional)</h3>
+        <p class="text-sm text-gray-600 mb-3">If you have branding materials:</p>
+        <ul class="list-disc list-inside space-y-1 text-sm text-gray-700 ml-4">
+          <li>Logo file (PNG or JPG format)</li>
+          <li>Brand colors (if you have specific colors you want to use)</li>
+          <li>Preferred site tone (modern, bold, luxury, cozy, or minimal)</li>
+        </ul>
+      </div>
+
+      <!-- Section 3: OpenAI -->
+      <div class="border-l-4 border-purple-300 pl-4">
+        <h3 class="text-lg font-semibold text-gray-900 mb-2">3. OpenAI Account (Required for AI Assistant)</h3>
+        <p class="text-sm text-gray-600 mb-3">
+          If you want an AI chat assistant on your website, you'll need an OpenAI API key:
+        </p>
+        <ul class="list-disc list-inside space-y-1 text-sm text-gray-700 ml-4 mb-3">
+          <li>Create an account at OpenAI</li>
+          <li>Generate an API key from your account settings</li>
+          <li>Have the API key ready to paste (it starts with "sk-")</li>
+        </ul>
+        <div class="flex gap-2 flex-wrap">
+          <a href="https://platform.openai.com/signup" target="_blank"
+             class="px-4 py-2 bg-gray-900 text-white text-sm font-bold rounded-full hover:opacity-90 transition">
+            Create OpenAI Account
+          </a>
+          <button type="button" class="px-4 py-2 bg-gray-700 text-white text-sm font-bold rounded-full hover:opacity-90 transition" data-video="https://our-cloud-storage.sfo3.cdn.digitaloceanspaces.com/webwisesolutions.dev/Video/popenai-tut2.mp4">
+            Watch Tutorial
+          </button>
+        </div>
+      </div>
+
+      <!-- Section 4: Twilio (Optional) -->
+      <div class="border-l-4 border-purple-300 pl-4">
+        <h3 class="text-lg font-semibold text-gray-900 mb-2">4. Twilio Account (Optional - Only if you want calling/SMS)</h3>
+        <p class="text-sm text-gray-600 mb-3">
+          Only needed if you want to enable phone calling or SMS features:
+        </p>
+        <ul class="list-disc list-inside space-y-1 text-sm text-gray-700 ml-4 mb-3">
+          <li>Create a Twilio account</li>
+          <li>Get your Account SID (starts with "AC")</li>
+          <li>Get your Auth Token</li>
+          <li>Purchase a phone number (if you don't have one)</li>
+          <li>Have the phone number in E.164 format (e.g., +8482257510)</li>
+        </ul>
+        <div class="flex gap-2 flex-wrap">
+          <a href="https://www.twilio.com/try-twilio" target="_blank"
+             class="px-4 py-2 bg-purple-600 text-white text-sm font-bold rounded-full hover:opacity-90 transition">
+            Create Twilio Account
+          </a>
+          <button type="button" class="px-4 py-2 bg-gray-700 text-white text-sm font-bold rounded-full hover:opacity-90 transition" data-video="https://our-cloud-storage.sfo3.cdn.digitaloceanspaces.com/webwisesolutions.dev/Video/twillio%20tut.mp4">
+            Watch Tutorial
+          </button>
+        </div>
+      </div>
+
+      <!-- Section 5: Domain -->
+      <div class="border-l-4 border-orange-300 pl-4">
+        <h3 class="text-lg font-semibold text-gray-900 mb-2">5. Domain Name (Required)</h3>
+        <p class="text-sm text-gray-600 mb-3">
+          You'll need a domain name for your website :
+        </p>
+        <ul class="list-disc list-inside space-y-1 text-sm text-gray-700 ml-4 mb-3">
+          <li>If you already have a domain, have it ready (e.g., example.com)</li>
+          <li>If you don't have one, you can purchase one from Namecheap</li>
+          <li>Know if you're using Cloudflare (optional, but helpful for DNS management)</li>
+          <li>If using Cloudflare, have your Cloudflare email ready (optional)</li>
+        </ul>
+        <div class="flex gap-2 flex-wrap">
+          <a href="https://namecheap.pxf.io/c/6543813/1632743/5618" target="_blank"
+             class="px-4 py-2 bg-orange-600 text-white text-sm font-bold rounded-full hover:opacity-90 transition">
+            Get Domain on Namecheap
+          </a>
+          <button type="button" class="px-4 py-2 bg-gray-700 text-white text-sm font-bold rounded-full hover:opacity-90 transition" data-video="https://our-cloud-storage.sfo3.cdn.digitaloceanspaces.com/webwisesolutions.dev/Video/namecheapt-tut.mp4">
+            Watch Tutorial on setting DNS
+          </button>
+        </div>
+      </div>
+
+      <!-- Section 6: Stripe (Optional) -->
+      <div class="border-l-4 border-purple-300 pl-4">
+        <h3 class="text-lg font-semibold text-gray-900 mb-2">6. Stripe Account (Optional - Only if you want payments)</h3>
+        <p class="text-sm text-gray-600 mb-3">
+          Only needed if you want to accept payments or paid bookings:
+        </p>
+        <ul class="list-disc list-inside space-y-1 text-sm text-gray-700 ml-4 mb-3">
+          <li>Create a Stripe account</li>
+          <li>Get your Publishable Key (starts with "pk_")</li>
+          <li>Get your Secret Key (starts with "sk_")</li>
+        </ul>
+        <div class="flex gap-2 flex-wrap">
+          <a href="https://dashboard.stripe.com/register" target="_blank"
+             class="px-4 py-2 bg-purple-700 text-white text-sm font-bold rounded-full hover:opacity-90 transition">
+            Create Stripe Account
+          </a>
+
+        </div>
+      </div>
+
+      <!-- Section 7: Email -->
+      <div class="border-l-4 border-gray-300 pl-4">
+        <h3 class="text-lg font-semibold text-gray-900 mb-2">7. Lead Forwarding Email (Required)</h3>
+        <p class="text-sm text-gray-600 mb-3">
+          Where should we forward leads captured from your website?
+        </p>
+        <ul class="list-disc list-inside space-y-1 text-sm text-gray-700 ml-4">
+          <li>Have an email address ready where you want to receive leads</li>
+          <li>This can be your personal or business email</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- After Successful Submission -->
+    <div class="mt-6 space-y-4">
+      <div class="border-l-4 border-gray-300 pl-4">
+        <h3 class="text-lg font-semibold text-gray-900 mb-2">After Successful Submission</h3>
+        <p class="text-sm text-gray-600">
+          Upon successful submission of your onboarding form, log out. When you log back in using your email and temporary password, you'll be taken to your dashboard for the first time, where you can change your password and access your account.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
+    <h2 class="text-xl font-bold text-gray-900 mb-4">How the Onboarding Process Works</h2>
+    <div class="space-y-4">
+      <div class="flex gap-4">
+        <div class="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">1</div>
+        <div>
+          <h3 class="font-semibold text-gray-900 mb-1">Gather Everything</h3>
+          <p class="text-sm text-gray-600">Use the checklist above to collect all the information and accounts you'll need.</p>
+        </div>
+      </div>
+      <div class="flex gap-4">
+        <div class="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">2</div>
+        <div>
+          <h3 class="font-semibold text-gray-900 mb-1">Complete the Form</h3>
+          <p class="text-sm text-gray-600">Fill out the onboarding form completely. You can save progress, but the 21-day clock only starts when you submit 100%.</p>
+        </div>
+      </div>
+      <div class="flex gap-4">
+        <div class="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">3</div>
+        <div>
+          <h3 class="font-semibold text-gray-900 mb-1">We Build Your System</h3>
+          <p class="text-sm text-gray-600">Once submitted, we start building your website, AI assistant, and configuring all integrations. Your 21-day build period begins.</p>
+        </div>
+      </div>
+      <div class="flex gap-4">
+        <div class="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">4</div>
+        <div>
+          <h3 class="font-semibold text-gray-900 mb-1">Launch & Support</h3>
+          <p class="text-sm text-gray-600">We'll keep you updated on progress and launch your system when ready. You'll have access to support throughout.</p>
+        </div>
+      </div>
+      <div class="flex gap-4">
+        <div class="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">5</div>
+        <div>
+          <h3 class="font-semibold text-gray-900 mb-1">System Configuration</h3>
+          <p class="text-sm text-gray-600">We configure your domain, DNS settings, and all integrations based on the information you provided during onboarding.</p>
+        </div>
+      </div>
+      <div class="flex gap-4">
+        <div class="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">6</div>
+        <div>
+          <h3 class="font-semibold text-gray-900 mb-1">Testing & Quality Assurance</h3>
+          <p class="text-sm text-gray-600">We thoroughly test your website, AI assistant, and all features to ensure everything works perfectly before launch.</p>
+        </div>
+      </div>
+      <div class="flex gap-4">
+        <div class="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">7</div>
+        <div>
+          <h3 class="font-semibold text-gray-900 mb-1">Final Review</h3>
+          <p class="text-sm text-gray-600">We conduct a final review of your system to ensure all requirements are met and everything is ready for launch.</p>
+        </div>
+      </div>
+      <div class="flex gap-4">
+        <div class="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">8</div>
+        <div>
+          <h3 class="font-semibold text-gray-900 mb-1">After Successful Submission</h3>
+          <p class="text-sm text-gray-600">Upon successful submission of your onboarding form, you will be automatically logged out. When you log back in using your email and temporary password, you'll be taken to your dashboard for the first time, where you can change your password and access your account.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Ready to Start -->
+  <section class="bg-gradient-to-r from-blue-600 to-purple-600 p-6 rounded-2xl text-white">
+    <h2 class="text-xl font-bold mb-3">Ready to Start?</h2>
+    <p class="text-sm mb-6 opacity-90">
+      Once you have everything gathered, click the button below to begin the onboarding form. Remember, you can take your time - the clock doesn't start until you submit!
+    </p>
+    <a href="/dashboard/onboarding" class="inline-block px-6 py-3 bg-white text-blue-600 text-sm font-bold rounded-xl hover:opacity-90 transition">
+      Start Onboarding Form →
+    </a>
+  </section>
+
+</div>
+
+<!-- Video Modal Script (same as onboarding page) -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const modal = document.createElement('div');
+    modal.id = 'tutorialModal';
+    modal.style.position = 'fixed';
+    modal.style.inset = '0';
+    modal.style.background = 'rgba(0,0,0,0.65)';
+    modal.style.display = 'none';
+    modal.style.alignItems = 'center';
+    modal.style.justifyContent = 'center';
+    modal.style.zIndex = '9999';
+
+    modal.innerHTML = `
+      <div style="position: relative; width: min(900px, 92vw); aspect-ratio: 16 / 9; background: #000; border-radius: 12px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.35);">
+        <iframe id="tutorialFrame" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="width: 100%; height: 100%; display: none;"></iframe>
+        <video id="tutorialVideo" controls style="width: 100%; height: 100%; display: none;"></video>
+        <button id="tutorialClose" style="position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.6); color: white; border: none; border-radius: 50%; width: 36px; height: 36px; font-size: 18px; cursor: pointer; z-index: 10;">×</button>
+      </div>
+    `;
+    document.body.appendChild(modal);
+
+    const frame = document.getElementById('tutorialFrame');
+    const video = document.getElementById('tutorialVideo');
+    const closeBtn = document.getElementById('tutorialClose');
+
+    function openModal(src) {
+      // Check if it's a video file (mp4, webm, etc.) or YouTube embed
+      if (src.endsWith('.mp4') || src.endsWith('.webm') || src.endsWith('.mov') || src.includes('.cdn.digitaloceanspaces.com')) {
+        video.src = src;
+        video.style.display = 'block';
+        frame.style.display = 'none';
+        video.play();
+      } else {
+        frame.src = src;
+        frame.style.display = 'block';
+        video.style.display = 'none';
+      }
+      modal.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+    }
+    function closeModal() {
+      frame.src = '';
+      video.src = '';
+      video.pause();
+      modal.style.display = 'none';
+      document.body.style.overflow = '';
+    }
+
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) closeModal();
+    });
+    closeBtn.addEventListener('click', closeModal);
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeModal();
+    });
+
+    document.querySelectorAll('[data-video]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const src = btn.getAttribute('data-video');
+        if (src) openModal(src);
+      });
+    });
+  });
+</script>
+{% endblock %}
+

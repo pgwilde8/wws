@@ -1,0 +1,100 @@
+{% extends "layout/base.html" %}
+
+{% block title %}Submit Testimonial - WebWise Solutions{% endblock %}
+
+{% block content %}
+<section class="page-header" style="text-align:center; padding:4rem 1rem; background: linear-gradient(135deg, rgba(0,0,0,0.8), rgba(15,23,42,0.9)), url('/static/img/logo4.png') center/cover no-repeat; color:white;">
+    <div class="container" style="max-width:1100px; margin:0 auto;">
+        <h1 style="font-size:2.6rem; font-weight:800; margin-bottom:0.75rem;">Share Your Experience</h1>
+        <p style="font-size:1.15rem; max-width:760px; margin:0 auto; line-height:1.6;">We'd love to hear about your experience with our services</p>
+    </div>
+</section>
+
+<section class="content-section" style="padding:3rem 1rem;">
+    <div class="container" style="max-width:900px; margin:0 auto;">
+        {% if success %}
+        <div class="alert alert-success" style="background:#d1fae5; border-left:4px solid #10b981; padding:1rem 1.5rem; border-radius:4px; margin-bottom:2rem; color:#065f46;">
+            {{ message }}
+        </div>
+        <div class="text-center" style="margin-top: 2rem;">
+            <a href="/testimonials" class="btn" style="display:inline-block; background:#2563eb; color:white; padding:0.9rem 2rem; border-radius:6px; text-decoration:none; font-weight:600; margin-right:1rem;">View All Testimonials</a>
+            <a href="/" class="btn" style="display:inline-block; background:#6b7280; color:white; padding:0.9rem 2rem; border-radius:6px; text-decoration:none; font-weight:600;">Return Home</a>
+        </div>
+        {% elif error %}
+        <div class="alert alert-error" style="background:#fee2e2; border-left:4px solid #ef4444; padding:1rem 1.5rem; border-radius:4px; margin-bottom:2rem; color:#991b1b;">
+            {{ message }}
+        </div>
+        {% endif %}
+        
+        {% if not success %}
+        <div class="form-container" style="background:white; border:1px solid #e5e7eb; border-radius:12px; padding:2rem; box-shadow:0 4px 6px rgba(0,0,0,0.1);">
+            <form method="POST" action="/testimonials/submit" class="contact-form">
+                <div class="form-group" style="margin-bottom:1.5rem;">
+                    <label for="client_name" style="display:block; margin-bottom:0.5rem; font-weight:600; color:#2c3e50;">Your Name *</label>
+                    <input type="text" id="client_name" name="client_name" required placeholder="John Smith" style="width:100%; padding:0.75rem; border:1px solid #d1d5db; border-radius:6px; font-size:1rem;">
+                </div>
+                
+                <div class="form-row" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(250px, 1fr)); gap:1.5rem; margin-bottom:1.5rem;">
+                    <div class="form-group">
+                        <label for="email" style="display:block; margin-bottom:0.5rem; font-weight:600; color:#2c3e50;">Email (Optional)</label>
+                        <input type="email" id="email" name="email" placeholder="your@email.com" style="width:100%; padding:0.75rem; border:1px solid #d1d5db; border-radius:6px; font-size:1rem;">
+                        <small style="color: #7f8c8d; font-size: 0.9rem; display:block; margin-top:0.25rem;">We won't display your email publicly</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="client_location" style="display:block; margin-bottom:0.5rem; font-weight:600; color:#2c3e50;">Location (Optional)</label>
+                        <input type="text" id="client_location" name="client_location" placeholder="City, State" style="width:100%; padding:0.75rem; border:1px solid #d1d5db; border-radius:6px; font-size:1rem;">
+                    </div>
+                </div>
+                
+                <div class="form-group" style="margin-bottom:1.5rem;">
+                    <label for="website_url" style="display:block; margin-bottom:0.5rem; font-weight:600; color:#2c3e50;">Website URL (Optional)</label>
+                    <input type="url" id="website_url" name="website_url" placeholder="https://yourbusiness.com" style="width:100%; padding:0.75rem; border:1px solid #d1d5db; border-radius:6px; font-size:1rem;">
+                    <small style="color: #7f8c8d; font-size: 0.9rem; display:block; margin-top:0.25rem;">Share your business website for added credibility</small>
+                </div>
+                
+                <div class="form-row" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(250px, 1fr)); gap:1.5rem; margin-bottom:1.5rem;">
+                    <div class="form-group">
+                        <label for="event_type" style="display:block; margin-bottom:0.5rem; font-weight:600; color:#2c3e50;">Service Type (Optional)</label>
+                        <select id="event_type" name="event_type" style="width:100%; padding:0.75rem; border:1px solid #d1d5db; border-radius:6px; font-size:1rem; background:white;">
+                            <option value="">Select...</option>
+                            <option value="Web Development">Web Development</option>
+                            <option value="Hosting">Hosting</option>
+                            <option value="Maintenance">Maintenance</option>
+                            <option value="Automation">Automation</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="rating" style="display:block; margin-bottom:0.5rem; font-weight:600; color:#2c3e50;">Rating (Optional)</label>
+                        <select id="rating" name="rating" style="width:100%; padding:0.75rem; border:1px solid #d1d5db; border-radius:6px; font-size:1rem; background:white;">
+                            <option value="">Select...</option>
+                            <option value="5">5 Stars - Excellent</option>
+                            <option value="4">4 Stars - Very Good</option>
+                            <option value="3">3 Stars - Good</option>
+                            <option value="2">2 Stars - Fair</option>
+                            <option value="1">1 Star - Poor</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group" style="margin-bottom:1.5rem;">
+                    <label for="testimonial_text" style="display:block; margin-bottom:0.5rem; font-weight:600; color:#2c3e50;">Your Testimonial *</label>
+                    <textarea id="testimonial_text" name="testimonial_text" rows="6" required placeholder="Tell us about your experience... What did you like? How did our services help make your event special?" style="width:100%; padding:0.75rem; border:1px solid #d1d5db; border-radius:6px; font-size:1rem; font-family:inherit; resize:vertical;"></textarea>
+                    <small style="color: #7f8c8d; font-size: 0.9rem; display:block; margin-top:0.25rem;">Your testimonial will be reviewed before being published on our website.</small>
+                </div>
+                
+                <button type="submit" class="btn btn-large" style="background:#2563eb; color:white; padding:0.9rem 2rem; border-radius:6px; border:none; font-size:1.1rem; font-weight:600; cursor:pointer; transition:background 0.3s; width:100%;">Submit Testimonial</button>
+            </form>
+        </div>
+        
+        <div class="info-box" style="background:#f8f9fa; border-left:4px solid #3498db; padding:1.5rem; margin-top:2rem; border-radius:4px;">
+            <h3 style="margin-top:0; color:#2c3e50; font-size:1.25rem; margin-bottom:0.5rem;">Thank You!</h3>
+            <p style="color:#2c3e50; margin:0; line-height:1.6;">We truly appreciate you taking the time to share your experience. Your feedback helps us improve and helps others discover our services.</p>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}
+

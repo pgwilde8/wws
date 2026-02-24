@@ -1,9 +1,15 @@
 # app/api/v1/public_pages.py
 from datetime import datetime
 from types import SimpleNamespace
-from fastapi import APIRouter, Request
+from fastapi import APIRouter, Request, Depends, Form, HTTPException
 from fastapi.templating import Jinja2Templates
+from fastapi.responses import RedirectResponse
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import select
+from pathlib import Path
 from app.core.config import settings
+from app.db.session import get_session
+from app.models.testimonial import Testimonial
 from app.services.email import (
     send_call_booking_confirmation,
     send_call_booking_email,
@@ -14,9 +20,65 @@ router = APIRouter(tags=["Public Pages"])
 templates = Jinja2Templates(directory="app/templates")
 templates.env.globals["now"] = datetime.utcnow
 
+BLOG_POSTS = [
+    {
+        "slug": "automate-lead-generation",
+        "title": "Automated Lead Generation Systems That Work 24/7",
+        "excerpt": "How to build inbound engines that capture and qualify leads on autopilot.",
+        "category": "Automation",
+        "template": "automate_lead_generation.html",
+        "published_at": datetime(2025, 12, 1),
+    },
+    {
+        "slug": "automated-booking-system-for-business",
+        "title": "Automated Booking Systems for Business",
+        "excerpt": "Reduce no-shows and manual scheduling with smart booking flows.",
+        "category": "Operations",
+        "template": "automated_booking_system_for_business.html",
+        "published_at": datetime(2025, 11, 20),
+    },
+    {
+        "slug": "automated-business-systems",
+        "title": "Automated Business Systems",
+        "excerpt": "Design the backbone that keeps sales, service, and fulfillment synchronized.",
+        "category": "Systems",
+        "template": "automated_business_systems.html",
+        "published_at": datetime(2025, 11, 5),
+    },
+    {
+        "slug": "custom-business-automation",
+        "title": "Custom Business Automation",
+        "excerpt": "Tailored workflows that match your real-world operations, not templates.",
+        "category": "Automation",
+        "template": "custom_business_automation.html",
+        "published_at": datetime(2025, 10, 18),
+    },
+    {
+        "slug": "website-automation-services",
+        "title": "Website Automation Services",
+        "excerpt": "Turn your site into a self-service, conversion-focused engine.",
+        "category": "Web",
+        "template": "website_automation_services.html",
+        "published_at": datetime(2025, 10, 2),
+    },
+]
+
 @router.get("/")
-async def home(request: Request):
-    return templates.TemplateResponse("public/home.html", {"request": request})
+async def home(request: Request, db: AsyncSession = Depends(get_session)):
+    # Fetch 3 approved testimonials for homepage
+    testimonials_query = (
+        select(Testimonial)
+        .where(Testimonial.is_approved.is_(True))
+        .order_by(Testimonial.created_at.desc())
+        .limit(6)
+    )
+    testimonials_result = await db.execute(testimonials_query)
+    testimonials = testimonials_result.scalars().all()
+    
+    return templates.TemplateResponse(
+        "public/home.html",
+        {"request": request, "testimonials": testimonials}
+    )
 # ...rest unchanged ...
 
 @router.get("/faq")
@@ -32,8 +94,75 @@ async def services(request: Request):
     return templates.TemplateResponse("public/services.html", {"request": request})
 
 @router.get("/testimonials")
-async def testimonials(request: Request):
-    return templates.TemplateResponse("public/testimonials.html", {"request": request})
+async def testimonials(request: Request, db: AsyncSession = Depends(get_session)):
+    # Fetch approved testimonials
+    query = select(Testimonial).where(
+        Testimonial.is_approved == True
+    ).order_by(Testimonial.created_at.desc())
+    result = await db.execute(query)
+    testimonials_list = result.scalars().all()
+    
+    return templates.TemplateResponse(
+        "public/testimonials.html",
+        {"request": request, "testimonials": testimonials_list}
+    )
+
+@router.get("/testimonials/submit")
+async def testimonial_submit_page(request: Request):
+    return templates.TemplateResponse(
+        "public/testimonial_submit.html",
+        {"request": request}
+    )
+
+@router.post("/testimonials/submit")
+async def testimonial_submit(
+    request: Request,
+    db: AsyncSession = Depends(get_session),
+    client_name: str = Form(...),
+    testimonial_text: str = Form(...),
+    email: str = Form(None),
+    client_location: str = Form(None),
+    website_url: str = Form(None),
+    event_type: str = Form(None),
+    rating: str = Form(None),
+
+):
+    try:
+        # Convert rating to int if provided
+        rating_int = int(rating) if rating and rating.isdigit() else None
+        
+        # Create testimonial (defaults to not approved, needs admin approval)
+        testimonial = Testimonial(
+            client_name=client_name,
+            testimonial_text=testimonial_text,
+            client_location=client_location,
+            website_url=website_url,
+            event_type=event_type,
+            rating=rating_int,
+            is_approved=False,  # Requires admin approval
+        )
+        
+        db.add(testimonial)
+        await db.commit()
+        await db.refresh(testimonial)
+        
+        return templates.TemplateResponse(
+            "public/testimonial_submit.html",
+            {
+                "request": request,
+                "success": True,
+                "message": "Thank you for your testimonial! We'll review it and publish it on our website soon.",
+            }
+        )
+    except Exception as e:
+        return templates.TemplateResponse(
+            "public/testimonial_submit.html",
+            {
+                "request": request,
+                "error": True,
+                "message": f"Sorry, there was an error submitting your testimonial. Please try again. Error: {str(e)}",
+            }
+        )
 
 @router.get("/tos")
 async def tos(request: Request):
@@ -61,8 +190,30 @@ def _stripe_context():
 
 
 @router.get("/choose-your-build")
-async def choose_your_build(request: Request):
-    ctx = {"request": request}
+async def choose_your_build(request: Request, db: AsyncSession = Depends(get_session)):
+    # Fetch approved testimonials for carousel
+    testimonials_query = (
+        select(Testimonial)
+        .where(Testimonial.is_approved.is_(True))
+        .order_by(Testimonial.created_at.desc())
+    )
+    testimonials_result = await db.execute(testimonials_query)
+    testimonials = testimonials_result.scalars().all()
+    
+    # Convert to dict for JSON serialization
+    testimonials_data = [
+        {
+            "client_name": t.client_name,
+            "client_location": t.client_location,
+            "event_type": t.event_type,
+            "testimonial_text": t.testimonial_text,
+            "rating": t.rating or 5,
+            "website_url": t.website_url,
+        }
+        for t in testimonials
+    ]
+    
+    ctx = {"request": request, "testimonials": testimonials_data}
     ctx.update(_stripe_context())
     return templates.TemplateResponse("public/choose-your-build.html", ctx)
 
@@ -111,8 +262,30 @@ async def start_your_project(request: Request):
     return templates.TemplateResponse("public/start-your-project.html", {"request": request})    
     
 @router.get("/pricing")
-async def pricing(request: Request):
-    ctx = {"request": request}
+async def pricing(request: Request, db: AsyncSession = Depends(get_session)):
+    # Fetch approved testimonials for carousel
+    testimonials_query = (
+        select(Testimonial)
+        .where(Testimonial.is_approved.is_(True))
+        .order_by(Testimonial.created_at.desc())
+    )
+    testimonials_result = await db.execute(testimonials_query)
+    testimonials = testimonials_result.scalars().all()
+    
+    # Convert to dict for JSON serialization
+    testimonials_data = [
+        {
+            "client_name": t.client_name,
+            "client_location": t.client_location,
+            "event_type": t.event_type,
+            "testimonial_text": t.testimonial_text,
+            "rating": t.rating or 5,
+            "website_url": t.website_url,
+        }
+        for t in testimonials
+    ]
+    
+    ctx = {"request": request, "testimonials": testimonials_data}
     ctx.update(_stripe_context())
     return templates.TemplateResponse("public/pricing.html", ctx)
 
@@ -125,9 +298,33 @@ async def checkout_success(request: Request):
 async def portfolio(request: Request):
     return templates.TemplateResponse("public/portfolio.html", {"request": request})  
 
+@router.get("/blog")
+async def blog_index(request: Request):
+    return templates.TemplateResponse("blog/our_blog.html", {"request": request, "blog_posts": BLOG_POSTS})
+
 @router.get("/about")
 async def about(request: Request):
     return templates.TemplateResponse("public/about.html", {"request": request})
+
+@router.get("/blog/{slug}")
+async def blog_detail(slug: str, request: Request):
+    # Map slug to template file
+    post = next((p for p in BLOG_POSTS if p["slug"] == slug), None)
+    if not post:
+        raise HTTPException(status_code=404, detail="Post not found")
+
+    template_name = post.get("template")
+    template_path = Path("app/templates/blog") / template_name
+    if not template_path.exists():
+        raise HTTPException(status_code=404, detail="Post not found")
+
+    return templates.TemplateResponse(
+        f"blog/{template_name}",
+        {
+            "request": request,
+            "post": post,
+        },
+    )
 
 @router.get("/client-quiz")
 async def client_quiz(request: Request):

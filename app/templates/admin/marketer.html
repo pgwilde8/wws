@@ -1,0 +1,432 @@
+{% extends "layout/base.html" %}
+{% block title %}Marketing Assistant{% endblock %}
+
+{% block extra_head %}
+<style>
+  .marketer-container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+  }
+  
+  .marketer-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 2rem;
+    border-radius: 12px;
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+  
+  .marketer-header h1 {
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+  }
+  
+  .marketer-header p {
+    opacity: 0.9;
+    font-size: 1rem;
+  }
+  
+  .chat-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  
+  .chat-box {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    overflow: hidden;
+  }
+  
+  .chat-messages {
+    height: 500px;
+    overflow-y: auto;
+    padding: 1.5rem;
+    background: #f9fafb;
+  }
+  
+  .message {
+    margin-bottom: 1rem;
+    display: flex;
+    gap: 0.75rem;
+  }
+  
+  .message.user {
+    flex-direction: row-reverse;
+  }
+  
+  .message-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 0.875rem;
+    flex-shrink: 0;
+  }
+  
+  .message.assistant .message-avatar {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+  }
+  
+  .message.user .message-avatar {
+    background: #2563eb;
+    color: white;
+  }
+  
+  .message-content {
+    max-width: 70%;
+    padding: 0.75rem 1rem;
+    border-radius: 12px;
+    line-height: 1.6;
+  }
+  
+  .message.assistant .message-content {
+    background: white;
+    color: #1f2937;
+    border: 1px solid #e5e7eb;
+  }
+  
+  .message.user .message-content {
+    background: #2563eb;
+    color: white;
+  }
+  
+  .message-time {
+    font-size: 0.75rem;
+    opacity: 0.6;
+    margin-top: 0.25rem;
+  }
+  
+  .chat-input-container {
+    padding: 1.5rem;
+    background: white;
+    border-top: 1px solid #e5e7eb;
+  }
+  
+  .chat-input-form {
+    display: flex;
+    gap: 0.75rem;
+  }
+  
+  .chat-input {
+    flex: 1;
+    padding: 0.75rem 1rem;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    resize: none;
+    min-height: 44px;
+    max-height: 120px;
+  }
+  
+  .chat-input:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  }
+  
+  .chat-send-btn {
+    padding: 0.75rem 1.5rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+  
+  .chat-send-btn:hover {
+    opacity: 0.9;
+  }
+  
+  .chat-send-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  
+  .typing-indicator {
+    display: none;
+    padding: 0.75rem 1rem;
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    width: fit-content;
+  }
+  
+  .typing-indicator.active {
+    display: block;
+  }
+  
+  .typing-dots {
+    display: flex;
+    gap: 4px;
+  }
+  
+  .typing-dots span {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #667eea;
+    animation: typing 1.4s infinite;
+  }
+  
+  .typing-dots span:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+  
+  .typing-dots span:nth-child(3) {
+    animation-delay: 0.4s;
+  }
+  
+  @keyframes typing {
+    0%, 60%, 100% {
+      transform: translateY(0);
+      opacity: 0.6;
+    }
+    30% {
+      transform: translateY(-8px);
+      opacity: 1;
+    }
+  }
+  
+  .suggested-prompts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+  
+  .prompt-card {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  
+  .prompt-card:hover {
+    border-color: #667eea;
+    box-shadow: 0 4px 6px rgba(102, 126, 234, 0.1);
+  }
+  
+  .prompt-card h3 {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 0.5rem;
+  }
+  
+  .prompt-card p {
+    font-size: 0.8rem;
+    color: #6b7280;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="marketer-container">
+  <div class="marketer-header">
+    <h1>🎯 Marketing Assistant</h1>
+    <p>AI-powered marketing strategist to help plan campaigns, write copy, and analyze opportunities</p>
+  </div>
+
+  <div class="chat-container">
+    <div class="chat-box">
+      <div class="chat-messages" id="chat-messages">
+        <div class="message assistant">
+          <div class="message-avatar">AI</div>
+          <div>
+            <div class="message-content">
+              Hi! I'm your marketing strategist assistant. I can help you with:<br><br>
+              • Campaign strategy and planning<br>
+              • Ad copy and email sequences<br>
+              • Content ideas and SEO keywords<br>
+              • Competitor analysis<br>
+              • Social media strategies<br><br>
+              What would you like to work on today?
+            </div>
+            <div class="message-time">Just now</div>
+          </div>
+        </div>
+        <div class="message assistant" style="display:none;">
+          <div class="message-avatar">AI</div>
+          <div class="typing-indicator" id="typing-indicator">
+            <div class="typing-dots">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="chat-input-container">
+        <form class="chat-input-form" id="chat-form">
+          <textarea 
+            class="chat-input" 
+            id="chat-input" 
+            placeholder="Ask about marketing strategy, copy, campaigns..."
+            rows="1"
+          ></textarea>
+          <button type="submit" class="chat-send-btn" id="send-btn">Send</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="suggested-prompts">
+      <div class="prompt-card" data-prompt="Write an email sequence for a new product launch targeting small business owners">
+        <h3>📧 Email Sequence</h3>
+        <p>Generate launch emails for your product</p>
+      </div>
+      <div class="prompt-card" data-prompt="Create 5 Facebook ad headlines and body copy for our automation services">
+        <h3>📱 Facebook Ads</h3>
+        <p>Write compelling ad copy</p>
+      </div>
+      <div class="prompt-card" data-prompt="Suggest 10 blog topics about business automation and AI for SEO">
+        <h3>📝 Content Ideas</h3>
+        <p>Blog topics for organic traffic</p>
+      </div>
+      <div class="prompt-card" data-prompt="Analyze our competitor's positioning and suggest how we can differentiate">
+        <h3>🎯 Competitive Analysis</h3>
+        <p>Find your unique angle</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+let sessionId = null;
+
+async function sendMessage(message) {
+  if (!message.trim()) return;
+  
+  const chatMessages = document.getElementById('chat-messages');
+  const chatInput = document.getElementById('chat-input');
+  const sendBtn = document.getElementById('send-btn');
+  const typingIndicator = document.getElementById('typing-indicator');
+  
+  // Add user message
+  const userMsg = document.createElement('div');
+  userMsg.className = 'message user';
+  userMsg.innerHTML = `
+    <div class="message-avatar">You</div>
+    <div>
+      <div class="message-content">${escapeHtml(message)}</div>
+      <div class="message-time">${new Date().toLocaleTimeString()}</div>
+    </div>
+  `;
+  chatMessages.appendChild(userMsg);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+  
+  // Clear input and disable
+  chatInput.value = '';
+  chatInput.disabled = true;
+  sendBtn.disabled = true;
+  
+  // Show typing indicator
+  typingIndicator.classList.add('active');
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+  
+  try {
+    const response = await fetch('/api/admin/marketer/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({ 
+        message: message,
+        session_id: sessionId 
+      })
+    });
+    
+    const data = await response.json();
+    
+    if (!sessionId) {
+      sessionId = data.session_id;
+    }
+    
+    // Hide typing indicator
+    typingIndicator.classList.remove('active');
+    
+    // Add assistant response
+    const assistantMsg = document.createElement('div');
+    assistantMsg.className = 'message assistant';
+    assistantMsg.innerHTML = `
+      <div class="message-avatar">AI</div>
+      <div>
+        <div class="message-content">${formatMessage(data.response)}</div>
+        <div class="message-time">${new Date().toLocaleTimeString()}</div>
+      </div>
+    `;
+    chatMessages.appendChild(assistantMsg);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+    
+  } catch (error) {
+    console.error('Chat error:', error);
+    typingIndicator.classList.remove('active');
+    
+    const errorMsg = document.createElement('div');
+    errorMsg.className = 'message assistant';
+    errorMsg.innerHTML = `
+      <div class="message-avatar">AI</div>
+      <div>
+        <div class="message-content" style="color: #dc2626;">Sorry, I encountered an error. Please try again.</div>
+        <div class="message-time">${new Date().toLocaleTimeString()}</div>
+      </div>
+    `;
+    chatMessages.appendChild(errorMsg);
+  } finally {
+    chatInput.disabled = false;
+    sendBtn.disabled = false;
+    chatInput.focus();
+  }
+}
+
+function escapeHtml(text) {
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
+}
+
+function formatMessage(text) {
+  // Convert markdown-style formatting
+  text = escapeHtml(text);
+  text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+  text = text.replace(/\n/g, '<br>');
+  return text;
+}
+
+// Form submit
+document.getElementById('chat-form').addEventListener('submit', (e) => {
+  e.preventDefault();
+  const input = document.getElementById('chat-input');
+  sendMessage(input.value);
+});
+
+// Auto-resize textarea
+document.getElementById('chat-input').addEventListener('input', function() {
+  this.style.height = 'auto';
+  this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+});
+
+// Suggested prompts
+document.querySelectorAll('.prompt-card').forEach(card => {
+  card.addEventListener('click', () => {
+    const prompt = card.dataset.prompt;
+    document.getElementById('chat-input').value = prompt;
+    document.getElementById('chat-input').focus();
+  });
+});
+</script>
+{% endblock %}
